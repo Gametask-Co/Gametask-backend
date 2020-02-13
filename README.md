@@ -273,11 +273,11 @@ Nota: Toda sexta depois da aula (18:15)
 
 | Contribuintes                     | Total de horas Semanais |
 | --------------------------------- | :---------------------: |
+| Arthur Meireles da Silva          |           10h           |
 | Breno Pereira Alves               |           15h           |
 | Euller Henrique F. de Albuquerque |           15h           |
 | Jonathan Cardoso F. de Moura      |           15h           |
 | Jonatas Melo Silva                |           15h           |
-| Arthur Meireles da Silva          |            x            |
 
 #### 5.3.3 Iterações
 
@@ -297,7 +297,7 @@ Nota: Toda sexta depois da aula (18:15)
 
 | Contribuintes               | Descrição                                    | Concluído |
 | --------------------------- | -------------------------------------------- | :-------: |
-| Arthur Meireles da Silva    |                                              |     -     |
+| Arthur Meireles da Silva    | Produção dos Casos de uso UC02 e UC03        |     -     |
 | Breno Pereira Alves         | Produção dos Casos de uso UC05, UC06 e UC07  |     -     |
 | Euller H. F. de Albuquerque | Produção e Validação dos Protótipos de Tela  |     -     |
 | Jonatas Melo Silva          | Revisão e Apresentação das Regras de Negócio |     -     |
