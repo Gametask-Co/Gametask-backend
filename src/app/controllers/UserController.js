@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import authConfig from '../config/auth';
+import * as Yup from 'yup';
 
 import User from '../models/User';
 
@@ -12,6 +13,20 @@ function generateToken(params = {}) {
 
 class UserController {
     async store(req, res) {
+        const schema = Yup.object().shape({
+            name: Yup.string().required(),
+            email: Yup.string()
+                .email()
+                .required(),
+            password_hash: Yup.string()
+                .required()
+                .min(6)
+        });
+
+        if (!(await schema.isValid(req.body))) {
+            return res.status(400).send({ message: 'Validation error' });
+        }
+
         const { email } = req.body;
         const userExists = await User.findOne({ email });
 
