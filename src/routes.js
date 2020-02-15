@@ -9,8 +9,8 @@ const routes = new Router();
 
 // ROTA DE USUARIOS
 
-routes.post('/sessions', UserController.store);
-routes.post('/auth', UserController.auth);
+routes.post('/user/', UserController.store);
+routes.post('/user/auth', UserController.auth);
 
 // rota de teste (exemplo de como usar middle de autenticacao)
 

@@ -16,21 +16,57 @@ API da plataforma Gametask
 
 # Endpoints
 
-## Get list of Things
+## Create User
 
 ### Request
 
-`GET /thing/`
+`POST /user/`
 
-    curl -i -H 'Accept: application/json' http://localhost:7000/thing/
+```json
+{
+    "name": "Joaozinho",
+    "email": "test@gametask.com",
+    "password_hash": "test123"
+}
+```
 
 ### Response
 
-    HTTP/1.1 200 OK
-    Date: Thu, 24 Feb 2011 12:36:30 GMT
-    Status: 200 OK
-    Connection: close
-    Content-Type: application/json
-    Content-Length: 2
+```json
+{
+    "user": {
+        "_id": "5e4795dc828a0b3d24ce05b4",
+        "name": "Joaozinho",
+        "email": "test@gametask.com",
+        "createdAt": "2020-02-15T06:55:24.258Z"
+    },
+    "token": "xxxxxxxxxxxxxxx"
+}
+```
 
-    []
+## Authorization - Get Token
+
+### Request
+
+`POST /user/auth`
+
+```json
+{
+    "email": "test@gametask.com",
+    "password_hash": "test123"
+}
+```
+
+### Response
+
+```json
+{
+    "user": {
+        "_id": "5e4785c0bad8242467d23ec0",
+        "name": "Joaozinho",
+        "email": "test@gametask.com",
+        "createdAt": "2020-02-15T05:46:40.076Z"
+    },
+    "token": "xxxxxxxxxxxxxxxxx"
+}
+```
