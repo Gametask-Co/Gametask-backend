@@ -1,0 +1,17 @@
+{
+    "name": "GT-API",
+    "version": "1.0.0",
+    "main": "index.js",
+    "repository": "https://github.com/Gametask-Inc/GT-API",
+    "scripts": {
+        "dev": "nodemon src/server.js"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "express": "^4.17.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.2",
+        "sucrase": "^3.12.1"
+    }
+}
