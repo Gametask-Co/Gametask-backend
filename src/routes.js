@@ -9,10 +9,15 @@ const routes = new Router();
 
 // ROTA DE USUARIOS
 
-routes.get('/user/:id', UserController.index);
+// GET
+routes.get('/user/', UserController.index);
 
+// POST
 routes.post('/user/', UserController.store);
 routes.post('/user/auth', UserController.auth);
+
+// PUT
+routes.put('/user/', UserController.update);
 
 // rota de teste (exemplo de como usar middle de autenticacao)
 

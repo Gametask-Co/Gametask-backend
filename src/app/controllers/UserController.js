@@ -49,17 +49,51 @@ class UserController {
     }
 
     async index(req, res) {
-        const { id } = req.params;
-        const user = await User.findById({ _id: id });
+        const user = await User.findByPk(req.userId);
 
         if (!user) return res.status(400).send({ message: 'User not found' });
 
         return res.send({ user });
     }
 
-    async update(req, res) {}
+    async update(req, res) {
+        const user = await User.findByPk(req.userId);
 
-    async delete(req, res) {}
+        if (!user) return res.status(400).send({ message: 'User not found' });
+
+        const { email, oldPassword } = req.body;
+
+        if (email != user.email) {
+            const userExists = await user.findOne({ email });
+
+            if (userExists)
+                return res.status(400).send({ message: 'Email already taken' });
+        }
+
+        if (oldPassword && !(await user.checkPassword(oldPassword)))
+            return res.status(401).send({ message: 'Password does not match' });
+
+        const { id, name } = await user.update(req.body);
+
+        return res.send({
+            id,
+            name,
+            email
+        });
+    }
+
+    async delete(req, res) {
+        const user = await user.findByPk(req.userId);
+
+        if (!user) return res.status(400).send({ message: 'User not found' });
+
+        try {
+            user.delete();
+            return res.send({ message: 'Delete successfully' });
+        } catch (err) {
+            return res.send({ message: 'Error while deleting' });
+        }
+    }
 
     async auth(req, res) {
         const schema = Yup.object().shape({
