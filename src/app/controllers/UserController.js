@@ -114,7 +114,7 @@ class UserController {
         if (!user || !(await bcrypt.compare(password, user.password_hash))) {
             return res
                 .status(400)
-                .json({ message: 'User not found or Invalid password' });
+                .send({ message: 'User not found or Invalid password' });
         }
 
         user.password_hash = undefined;

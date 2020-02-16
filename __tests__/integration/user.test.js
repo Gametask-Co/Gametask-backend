@@ -40,6 +40,20 @@ describe('User', () => {
         expect(response.body).toEqual({ message: 'User already exists!' });
     });
 
+    it('should receive user not found or invalid password', async () => {
+        const response = await request(app)
+            .post('/user/auth')
+            .set('Authorization', 'Bearer ' + token)
+            .send({
+                email: 'gametask@gametask.com',
+                password: 'test12333333'
+            });
+
+        expect(response.body).toEqual({
+            message: 'User not found or Invalid password'
+        });
+    });
+
     it('should authenticate as user', async () => {
         const response = await request(app)
             .post('/user/auth')
