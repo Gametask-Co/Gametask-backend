@@ -4,6 +4,7 @@
     "main": "index.js",
     "repository": "https://github.com/Gametask-Inc/GT-API",
     "scripts": {
+        "start": "sucrase-node src/server.js",
         "dev": "nodemon src/server.js",
         "pretest": "NODE_ENV=test",
         "test": "NODE_ENV=test jest --detectOpenHandles"
