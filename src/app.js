@@ -1,10 +1,11 @@
+import './bootstrap';
+
 import express from 'express';
 import mongoose from 'mongoose';
 
-import routes from './routes';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
-import dotenv from 'dotenv';
-dotenv.config();
+import routes from './routes';
 
 class App {
     constructor() {
@@ -15,11 +16,20 @@ class App {
         this.routes();
     }
 
-    database() {
-        mongoose.connect(process.env.DB_CONNECTION, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
+    async database() {
+        if (process.env.NODE_ENV == 'test') {
+            const mongod = new MongoMemoryServer();
+            const uri = await mongod.getUri();
+            mongoose.connect(uri, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            });
+        } else {
+            mongoose.connect(process.env.DB_CONNECTION, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            });
+        }
     }
 
     middlewares() {

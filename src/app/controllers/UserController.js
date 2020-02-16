@@ -23,9 +23,8 @@ class UserController {
                 .min(6)
         });
 
-        if (!(await schema.isValid(req.body))) {
+        if (!(await schema.isValid(req.body)))
             return res.status(400).send({ message: 'Validation error' });
-        }
 
         const { email } = req.body;
         const userExists = await User.findOne({ email });
@@ -42,25 +41,80 @@ class UserController {
             } catch (err) {
                 return res
                     .status(400)
-                    .json({ message: 'Account creating error' });
+                    .send({ message: 'Account creating error' });
             }
         }
 
-        return res.status(400).json({ message: 'User already exists!' });
+        return res.status(400).send({ message: 'User already exists!' });
+    }
+
+    async index(req, res) {
+        const user = await User.findById(req.userId);
+
+        if (!user) return res.status(400).send({ message: 'User not found' });
+
+        return res.send({ user });
+    }
+
+    async update(req, res) {
+        const user = await User.findById(req.userId);
+
+        if (!user) return res.status(400).send({ message: 'User not found' });
+
+        const { email, oldPassword } = req.body;
+
+        if (email != user.email) {
+            const userExists = await user.findOne({ email });
+
+            if (userExists)
+                return res.status(400).send({ message: 'Email already taken' });
+        }
+
+        if (oldPassword && !(await user.checkPassword(oldPassword)))
+            return res.status(401).send({ message: 'Password does not match' });
+
+        const { id, name } = await user.update(req.body);
+
+        return res.send({
+            id,
+            name,
+            email
+        });
+    }
+
+    async delete(req, res) {
+        const user = await user.findById(req.userId);
+
+        if (!user) return res.status(400).send({ message: 'User not found' });
+
+        try {
+            user.delete();
+            return res.send({ message: 'Delete successfully' });
+        } catch (err) {
+            return res.send({ message: 'Error while deleting' });
+        }
     }
 
     async auth(req, res) {
-        const { email, password_hash } = req.body;
+        const schema = Yup.object().shape({
+            email: Yup.string()
+                .email()
+                .required(),
+            password: Yup.string().required()
+        });
+
+        if (!(await schema.isValid(req.body))) {
+            return res.status(400).send({ message: 'Validation error' });
+        }
+
+        const { email, password } = req.body;
 
         const user = await User.findOne({ email }).select('+password_hash');
 
-        if (
-            !user ||
-            !(await bcrypt.compare(password_hash, user.password_hash))
-        ) {
+        if (!user || !(await bcrypt.compare(password, user.password_hash))) {
             return res
                 .status(400)
-                .json({ message: 'User not found or Invalid password' });
+                .send({ message: 'User not found or Invalid password' });
         }
 
         user.password_hash = undefined;

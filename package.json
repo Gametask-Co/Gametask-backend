@@ -4,7 +4,9 @@
     "main": "index.js",
     "repository": "https://github.com/Gametask-Inc/GT-API",
     "scripts": {
-        "dev": "nodemon src/server.js"
+        "dev": "nodemon src/server.js",
+        "pretest": "NODE_ENV=test",
+        "test": "NODE_ENV=test jest --detectOpenHandles"
     },
     "license": "MIT",
     "dependencies": {
@@ -16,7 +18,12 @@
         "yup": "^0.28.1"
     },
     "devDependencies": {
+        "@sucrase/jest-plugin": "^2.0.0",
+        "@types/jest": "^25.1.2",
+        "jest": "^25.1.0",
+        "mongodb-memory-server": "^6.2.4",
         "nodemon": "^2.0.2",
-        "sucrase": "^3.12.1"
+        "sucrase": "^3.12.1",
+        "supertest": "^4.0.2"
     }
 }
