@@ -4,7 +4,7 @@
     "main": "index.js",
     "repository": "https://github.com/Gametask-Inc/GT-API",
     "scripts": {
-        "start": "yarn install && yarn deploy",
+        "start": "npm install && npm run-script deploy",
         "deploy": "sucrase-node src/server.js",
         "dev": "nodemon src/server.js",
         "pretest": "NODE_ENV=test",
