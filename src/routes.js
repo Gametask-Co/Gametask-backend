@@ -10,11 +10,11 @@ const routes = new Router();
 // ROTA DE USUARIOS
 
 // GET
-routes.get('/user/', UserController.index);
+routes.get('/user/', authMiddleware, UserController.index);
 
 // POST
 routes.post('/user/', UserController.store);
-routes.post('/user/auth', UserController.auth);
+routes.post('/user/auth', authMiddleware, UserController.auth);
 
 // PUT
 routes.put('/user/', UserController.update);

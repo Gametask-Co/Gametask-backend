@@ -41,15 +41,15 @@ class UserController {
             } catch (err) {
                 return res
                     .status(400)
-                    .json({ message: 'Account creating error' });
+                    .send({ message: 'Account creating error' });
             }
         }
 
-        return res.status(400).json({ message: 'User already exists!' });
+        return res.status(400).send({ message: 'User already exists!' });
     }
 
     async index(req, res) {
-        const user = await User.findByPk(req.userId);
+        const user = await User.findById(req.userId);
 
         if (!user) return res.status(400).send({ message: 'User not found' });
 
@@ -57,7 +57,7 @@ class UserController {
     }
 
     async update(req, res) {
-        const user = await User.findByPk(req.userId);
+        const user = await User.findById(req.userId);
 
         if (!user) return res.status(400).send({ message: 'User not found' });
 
@@ -83,7 +83,7 @@ class UserController {
     }
 
     async delete(req, res) {
-        const user = await user.findByPk(req.userId);
+        const user = await user.findById(req.userId);
 
         if (!user) return res.status(400).send({ message: 'User not found' });
 

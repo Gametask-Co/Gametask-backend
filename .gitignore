@@ -19,3 +19,6 @@ jspm_packages/
 
 # vscode
 .vscode/
+
+# coverage
+__tests__/coverage
