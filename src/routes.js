@@ -4,7 +4,6 @@ import UserController from './app/controllers/UserController';
 import ProjectController from './app/controllers/ProjectController';
 
 import authMiddleware from './app/middlewares/auth';
-import soon from './views';
 
 const routes = new Router();
 
@@ -24,8 +23,8 @@ routes.put('/user/', UserController.update);
 routes.get('/project', authMiddleware, ProjectController.test);
 
 // rota principal ( Em breve )
-routes.get('/', (req, res) => {
-    res.send(soon)
+routes.get('/', function(req, res) {
+    res.sendFile('views/index.html', { root: __dirname });
 });
 
 export default routes;
