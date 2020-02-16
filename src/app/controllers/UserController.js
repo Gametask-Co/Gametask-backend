@@ -23,9 +23,8 @@ class UserController {
                 .min(6)
         });
 
-        if (!(await schema.isValid(req.body))) {
+        if (!(await schema.isValid(req.body)))
             return res.status(400).send({ message: 'Validation error' });
-        }
 
         const { email } = req.body;
         const userExists = await User.findOne({ email });
@@ -49,15 +48,36 @@ class UserController {
         return res.status(400).json({ message: 'User already exists!' });
     }
 
+    async index(req, res) {
+        const { id } = req.params;
+        const user = await User.findById({ _id: id });
+
+        if (!user) return res.status(400).send({ message: 'User not found' });
+
+        return res.send({ user });
+    }
+
+    async update(req, res) {}
+
+    async delete(req, res) {}
+
     async auth(req, res) {
-        const { email, password_hash } = req.body;
+        const schema = Yup.object().shape({
+            email: Yup.string()
+                .email()
+                .required(),
+            password: Yup.string().required()
+        });
+
+        if (!(await schema.isValid(req.body))) {
+            return res.status(400).send({ message: 'Validation error' });
+        }
+
+        const { email, password } = req.body;
 
         const user = await User.findOne({ email }).select('+password_hash');
 
-        if (
-            !user ||
-            !(await bcrypt.compare(password_hash, user.password_hash))
-        ) {
+        if (!user || !(await bcrypt.compare(password, user.password_hash))) {
             return res
                 .status(400)
                 .json({ message: 'User not found or Invalid password' });

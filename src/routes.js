@@ -9,6 +9,8 @@ const routes = new Router();
 
 // ROTA DE USUARIOS
 
+routes.get('/user/:id', UserController.index);
+
 routes.post('/user/', UserController.store);
 routes.post('/user/auth', UserController.auth);
 
