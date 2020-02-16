@@ -25,10 +25,18 @@ class App {
                 useUnifiedTopology: true
             });
         } else {
-            mongoose.connect(process.env.DB_CONNECTION, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true
-            });
+            mongoose
+                .connect(process.env.DB_CONNECTION, {
+                    useNewUrlParser: true,
+                    useUnifiedTopology: true
+                })
+                .then(() => {
+                    console.log('Successfully connected with database...');
+                })
+                .catch(err => {
+                    console.error(`Mongoose connection error: ${err}`);
+                    process.exit(1);
+                });
         }
     }
 
