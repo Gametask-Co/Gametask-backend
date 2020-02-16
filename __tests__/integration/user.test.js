@@ -40,6 +40,14 @@ describe('User', () => {
         expect(response.body).toEqual({ message: 'User already exists!' });
     });
 
+    it('should receive information about user', async () => {
+        const response = await request(app)
+            .get('/user/')
+            .set('Authorization', 'Bearer ' + token);
+
+        expect(response.body).toHaveProperty('user');
+    });
+
     it('should receive user not found or invalid password', async () => {
         const response = await request(app)
             .post('/user/auth')
@@ -64,14 +72,6 @@ describe('User', () => {
             });
 
         expect(response.body.token).toEqual(token);
-    });
-
-    it('should receive information about user', async () => {
-        const response = await request(app)
-            .get('/user/')
-            .set('Authorization', 'Bearer ' + token);
-
-        expect(response.body).toHaveProperty('user');
     });
 
     // TODO: update and delete

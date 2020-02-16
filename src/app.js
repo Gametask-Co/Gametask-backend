@@ -1,4 +1,4 @@
-import './boostrap';
+import './bootstrap';
 
 import express from 'express';
 import mongoose from 'mongoose';
