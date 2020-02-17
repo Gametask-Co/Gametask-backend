@@ -74,7 +74,7 @@ describe('User', () => {
         });
     });
 
-    // TODO: update and delete
+    // TODO: delete
 
     it('should receive email already taken', async () => {
         await request(app)
