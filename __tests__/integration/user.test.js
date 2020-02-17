@@ -24,7 +24,19 @@ describe('User', () => {
             });
 
         token = response.body.token;
+        expect(response.body).toHaveProperty('token');
+    });
 
+    it('should authenticate as user', async () => {
+        const response = await request(app)
+            .post('/user/auth')
+            .set('Authorization', 'Bearer ' + token)
+            .send({
+                email: 'gametask@gametask.com',
+                password: 'test123'
+            });
+
+        token = response.body.token;
         expect(response.body).toHaveProperty('token');
     });
 
@@ -62,17 +74,59 @@ describe('User', () => {
         });
     });
 
-    it('should authenticate as user', async () => {
-        const response = await request(app)
-            .post('/user/auth')
-            .set('Authorization', 'Bearer ' + token)
+    // TODO: update and delete
+
+    it('should receive email already taken', async () => {
+        await request(app)
+            .post('/user')
             .send({
-                email: 'gametask@gametask.com',
-                password: 'test123'
+                name: 'test gametask',
+                email: 'newgametask@gametask.com',
+                password_hash: 'test123'
             });
 
-        expect(response.body.token).toEqual(token);
+        const response = await request(app)
+            .put('/user')
+            .set('Authorization', 'Bearer ' + token)
+            .send({
+                email: 'newgametask@gametask.com'
+            });
+
+        expect(response.body).toEqual({ message: 'Email already taken' });
     });
 
-    // TODO: update and delete
+    it('should receive password does not match', async () => {
+        const response = await request(app)
+            .put('/user')
+            .set('Authorization', 'Bearer ' + token)
+            .send({
+                oldPassword: 'notsamepassword'
+            });
+
+        expect(response.body).toEqual({ message: 'Password does not match' });
+    });
+
+    it('should receive updated info', async () => {
+        const prev_response = await request(app)
+            .get('/user/')
+            .set('Authorization', 'Bearer ' + token);
+
+        const new_info = {
+            name: 'New name',
+            email: 'newemail@gametask.com'
+        };
+
+        await request(app)
+            .put('/user')
+            .set('Authorization', 'Bearer ' + token)
+            .send(new_info);
+
+        const response = await request(app)
+            .get('/user/')
+            .set('Authorization', 'Bearer ' + token);
+
+        const { name, email } = response.body.user;
+
+        expect({ name, email }).toEqual(new_info);
+    });
 });

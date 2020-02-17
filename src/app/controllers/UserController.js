@@ -51,26 +51,26 @@ class UserController {
     async index(req, res) {
         const user = await User.findById(req.userId);
 
-        if (!user) return res.status(400).send({ message: 'User not found' });
-
         return res.send({ user });
     }
 
     async update(req, res) {
-        const user = await User.findById(req.userId);
-
-        if (!user) return res.status(400).send({ message: 'User not found' });
+        const user = await User.findById(req.userId).select('+password_hash');
 
         const { email, oldPassword } = req.body;
 
         if (email != user.email) {
-            const userExists = await user.findOne({ email });
+            const userExists = await User.findOne({ email });
 
             if (userExists)
                 return res.status(400).send({ message: 'Email already taken' });
         }
 
-        if (oldPassword && !(await user.checkPassword(oldPassword)))
+        //implementar troca de senha
+        if (
+            oldPassword &&
+            !(await bcrypt.compare(oldPassword, user.password_hash))
+        )
             return res.status(401).send({ message: 'Password does not match' });
 
         const { id, name } = await user.update(req.body);
@@ -83,7 +83,7 @@ class UserController {
     }
 
     async delete(req, res) {
-        const user = await user.findById(req.userId);
+        const user = await user.findOne(req.userId);
 
         if (!user) return res.status(400).send({ message: 'User not found' });
 
