@@ -18,6 +18,7 @@ class UserController {
             email: Yup.string()
                 .email()
                 .required(),
+            birthday: Yup.date().required(),
             password_hash: Yup.string()
                 .required()
                 .min(6)
@@ -83,7 +84,7 @@ class UserController {
     }
 
     async delete(req, res) {
-        const user = await user.findOne(req.userId);
+        const user = await User.findById(req.userId);
 
         if (!user) return res.status(400).send({ message: 'User not found' });
 

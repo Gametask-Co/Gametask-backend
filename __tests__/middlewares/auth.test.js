@@ -10,6 +10,7 @@ describe('Auth', () => {
             .send({
                 name: 'test gametask auth',
                 email: 'gametaskauth@gametask.com',
+                birthday: '10/11/1995',
                 password_hash: 'test123'
             });
 

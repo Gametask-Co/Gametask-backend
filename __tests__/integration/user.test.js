@@ -20,6 +20,7 @@ describe('User', () => {
             .send({
                 name: 'test gametask',
                 email: 'gametask@gametask.com',
+                birthday: '10/11/1995',
                 password_hash: 'test123'
             });
 
@@ -46,6 +47,7 @@ describe('User', () => {
             .send({
                 name: 'test gametask',
                 email: 'gametask@gametask.com',
+                birthday: '10/11/1995',
                 password_hash: 'test123'
             });
 
@@ -74,7 +76,16 @@ describe('User', () => {
         });
     });
 
-    // TODO: delete
+    it('should receive validation error', async () => {
+        const response = await request(app)
+            .post('/user/auth')
+            .set('Authorization', 'Bearer ' + token)
+            .send({
+                email: 'gametask@gametask.com'
+            });
+
+        expect(response.body).toEqual({ message: 'Validation error' });
+    });
 
     it('should receive email already taken', async () => {
         await request(app)
@@ -82,6 +93,7 @@ describe('User', () => {
             .send({
                 name: 'test gametask',
                 email: 'newgametask@gametask.com',
+                birthday: '10/11/1995',
                 password_hash: 'test123'
             });
 
@@ -107,7 +119,7 @@ describe('User', () => {
     });
 
     it('should receive updated info', async () => {
-        const prev_response = await request(app)
+        const { p_name, p_email } = await request(app)
             .get('/user/')
             .set('Authorization', 'Bearer ' + token);
 
@@ -126,7 +138,23 @@ describe('User', () => {
             .set('Authorization', 'Bearer ' + token);
 
         const { name, email } = response.body.user;
-
+        expect({ name, email }).not.toEqual(p_name, p_email);
         expect({ name, email }).toEqual(new_info);
+    });
+
+    it('should delete user from database', async () => {
+        const response = await request(app)
+            .delete('/user/')
+            .set('Authorization', 'Bearer ' + token);
+
+        expect(response.body).toEqual({ message: 'Delete successfully' });
+    });
+
+    it('should receive user not found because user is already deleted', async () => {
+        const response = await request(app)
+            .delete('/user/')
+            .set('Authorization', 'Bearer ' + token);
+
+        expect(response.body).toEqual({ message: 'User not found' });
     });
 });

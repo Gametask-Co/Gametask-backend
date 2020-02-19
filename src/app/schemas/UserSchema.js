@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { Schema, Mongoose } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 const UserSchema = new Schema({
@@ -6,19 +6,36 @@ const UserSchema = new Schema({
         type: String,
         require: true
     },
+
     email: {
         type: String,
         require: true
     },
+
+    birthday: {
+        type: Date,
+        require: true
+    },
+
     password_hash: {
         type: String,
         required: true,
         select: false
     },
+
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+
+    friend_list: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            name: String,
+            email: String
+        }
+    ]
 });
 
 UserSchema.pre('save', async function(next) {
