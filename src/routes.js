@@ -7,7 +7,7 @@ import authMiddleware from './app/middlewares/auth';
 
 const routes = new Router();
 
-// ROTA DE USUARIOS
+// USER ROUTES
 
 // GET
 routes.get('/user/', authMiddleware, UserController.index);
@@ -18,6 +18,15 @@ routes.post('/user/auth', authMiddleware, UserController.auth);
 
 // PUT
 routes.put('/user/', authMiddleware, UserController.update);
+
+// DELETE
+routes.delete('/user/', authMiddleware, UserController.delete);
+
+// FRIENDSHIP ROUTES
+
+// POST
+
+// ROTA DE PROJECT (TEST)
 
 // rota de teste (exemplo de como usar middle de autenticacao)
 routes.get('/project', authMiddleware, ProjectController.test);
