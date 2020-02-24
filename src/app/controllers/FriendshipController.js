@@ -2,18 +2,43 @@ import * as Yup from 'yup';
 
 import User from '../models/User';
 
+function isValidMongoDbID(str) {
+    const checkForValidMongoDbID = new RegExp('^[0-9a-fA-F]{24}$');
+    return checkForValidMongoDbID.test(str);
+}
+
+function setFriend(f1, f2) {
+    let f1_friend_list = f1.friend_list,
+        f2_friend_list = f2.friend_list;
+
+    f1_friend_list.push({ friend_id: f2._id });
+    f2_friend_list.push({ friend_id: f1._id });
+
+    return { f1: f1_friend_list, f2: f2_friend_list };
+}
+
+function checkFriendship(f1, f2) {
+    let f1_flag = false,
+        f2_flag = false;
+
+    Object.keys(f1.friend_list).forEach(function(key) {
+        if (f1.friend_list[key].friend_id == f2._id) f1_flag = true;
+    });
+
+    Object.keys(f2.friend_list).forEach(function(key) {
+        if (f2.friend_list[key].friend_id == f1._id) f2_flag = true;
+    });
+
+    return f1_flag && f2_flag;
+}
+
 class FriendshipController {
     async store(req, res) {
         const schema = Yup.object().shape({
             id: Yup.string().required()
         });
 
-        let checkForValidMongoDbID = new RegExp('^[0-9a-fA-F]{24}$');
-
-        if (
-            !(await schema.isValid(req.body)) ||
-            !checkForValidMongoDbID.test(req.body.id)
-        )
+        if (!(await schema.isValid(req.body)) || !isValidMongoDbID(req.body.id))
             return res.status(400).send({ message: 'Validation error' });
 
         const friend = await User.findById(req.body.id);
@@ -22,18 +47,9 @@ class FriendshipController {
             return res.status(400).send({ message: 'Friend not found' });
 
         const user = await User.findById(req.userId);
-        const { friend_list } = user;
-
-        friend_list.push({
-            friend_id: friend._id
-        });
-        user.friend_list = friend_list;
-
-        const friend_list_friend = friend.friend_list;
-        friend_list_friend.push({
-            friend_id: user._id
-        });
-        friend.friend_list = friend_list_friend;
+        const { f1, f2 } = setFriend(user, friend);
+        user.friend_list = f1;
+        friend.friend_list = f2;
 
         await user.updateOne(user);
         await friend.updateOne(friend);
@@ -46,12 +62,7 @@ class FriendshipController {
             id: Yup.string().required()
         });
 
-        let checkForValidMongoDbID = new RegExp('^[0-9a-fA-F]{24}$');
-
-        if (
-            !(await schema.isValid(req.body)) ||
-            !checkForValidMongoDbID.test(req.body.id)
-        )
+        if (!(await schema.isValid(req.body)) || !isValidMongoDbID(req.body.id))
             return res.status(400).send({ message: 'Validation error' });
 
         const friend = await User.findById(req.body.id);
@@ -62,13 +73,7 @@ class FriendshipController {
         const user = await User.findById(req.userId);
         let { friend_list } = user;
 
-        let friend_flag = false;
-
-        Object.keys(friend_list).forEach(function(key) {
-            if (friend_list[key].friend_id == friend._id) friend_flag = true;
-        });
-
-        if (!friend_flag)
+        if (!checkFriendship(user, friend))
             return res.status(400).send({ message: 'Not friends' });
 
         friend_list = friend_list.filter(
