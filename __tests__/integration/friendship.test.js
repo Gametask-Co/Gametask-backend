@@ -144,4 +144,97 @@ describe('User', () => {
         expect(response.body).toEqual({ message: 'Succefully operation' });
         expect(flag1 && flag2).toBeTruthy();
     });
+
+    it('should receive validation error for invalid JSON format when deleting', async () => {
+        const user1 = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'friend1@gametask.com',
+                password: 'friend1'
+            });
+
+        const user2 = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'friend2@gametask.com',
+                password: 'friend2'
+            });
+
+        const response = await request(app)
+            .delete('/friend')
+            .set('Authorization', 'Bearer ' + user1.body.token)
+            .send({
+                email: user2.body.user._id
+            });
+
+        expect(response.body).toEqual({ message: 'Validation error' });
+    });
+
+    it('should receive validation error for invalid mongo db id when deleting', async () => {
+        const user1 = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'friend1@gametask.com',
+                password: 'friend1'
+            });
+
+        const user2 = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'friend2@gametask.com',
+                password: 'friend2'
+            });
+
+        const response = await request(app)
+            .delete('/friend')
+            .set('Authorization', 'Bearer ' + user1.body.token)
+            .send({
+                id: user2.body.user._id + '22'
+            });
+
+        expect(response.body).toEqual({ message: 'Validation error' });
+    });
+
+    it('should receive friend not found while deleting', async () => {
+        const user1 = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'friend1@gametask.com',
+                password: 'friend1'
+            });
+
+        const response = await request(app)
+            .delete('/friend')
+            .set('Authorization', 'Bearer ' + user1.body.token)
+            .send({
+                id: '5e533d45b8511c3e7aefa666'
+            });
+
+        expect(response.body).toEqual({ message: 'Friend not found' });
+    });
+
+    it('should receive not friends while deleting', async () => {
+        const user1 = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'friend1@gametask.com',
+                password: 'friend1'
+            });
+
+        const user2 = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'friend2@gametask.com',
+                password: 'friend2'
+            });
+
+        const response = await request(app)
+            .delete('/friend')
+            .set('Authorization', 'Bearer ' + user1.body.token)
+            .send({
+                id: user2.body.user._id
+            });
+
+        expect(response.body).toEqual({ message: 'Not friends' });
+    });
 });
