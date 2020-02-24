@@ -57,6 +57,11 @@ class FriendshipController {
         return res.send({ message: 'Succefully operation' });
     }
 
+    async index(req, res) {
+        const user = await User.findById(req.userId);
+        return res.send(user.friend_list);
+    }
+
     async delete(req, res) {
         const schema = Yup.object().shape({
             id: Yup.string().required()

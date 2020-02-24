@@ -237,4 +237,19 @@ describe('User', () => {
 
         expect(response.body).toEqual({ message: 'Not friends' });
     });
+
+    it('should receive user friend_list', async () => {
+        const user1 = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'friend1@gametask.com',
+                password: 'friend1'
+            });
+
+        const response = await request(app)
+            .get('/friend/')
+            .set('Authorization', 'Bearer ' + user1.body.token);
+
+        expect(Array.isArray(response.body)).toBeTruthy();
+    });
 });
