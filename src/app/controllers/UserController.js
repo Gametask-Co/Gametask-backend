@@ -51,7 +51,6 @@ class UserController {
 
     async index(req, res) {
         const user = await User.findById(req.userId);
-
         return res.send({ user });
     }
 

@@ -21,7 +21,7 @@ describe('Auth', () => {
 
     it('should receive no token provided', async () => {
         const response = await request(app)
-            .post('/user/auth')
+            .get('/user/')
             .send({
                 email: 'gametaskauth@gametask.com',
                 password: 'test123'
@@ -32,7 +32,7 @@ describe('Auth', () => {
 
     it('should receive invalid token', async () => {
         const response = await request(app)
-            .post('/user/auth')
+            .get('/user/')
             .set('Authorization', 'Bearer ' + token + 'l')
             .send({
                 email: 'gametaskauth@gametask.com',
@@ -44,7 +44,7 @@ describe('Auth', () => {
 
     it('should receive token malformatted', async () => {
         const response = await request(app)
-            .post('/user/auth')
+            .get('/user/')
             .set('Authorization', 'Bearer' + token)
             .send({
                 email: 'gametaskauth@gametask.com',
