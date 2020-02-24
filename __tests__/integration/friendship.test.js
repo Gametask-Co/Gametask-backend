@@ -96,7 +96,7 @@ describe('User', () => {
             });
 
         const response = await request(app)
-            .post('/friend/delete')
+            .delete('/friend')
             .set('Authorization', 'Bearer ' + user1.body.token)
             .send({
                 id: user2.body.user._id

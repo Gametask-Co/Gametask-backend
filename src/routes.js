@@ -29,7 +29,7 @@ routes.delete('/user/', authMiddleware, UserController.delete);
 routes.post('/friend/', authMiddleware, FriendshipController.store);
 
 // DELETE
-routes.post('/friend/delete', authMiddleware, FriendshipController.delete);
+routes.delete('/friend', authMiddleware, FriendshipController.delete);
 
 // ROTA DE PROJECT (TEST)
 
