@@ -30,8 +30,7 @@ const UserSchema = new Schema({
 
     friend_list: [
         {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
+            friend_id: String,
             name: String,
             email: String
         }

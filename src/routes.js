@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import UserController from './app/controllers/UserController';
+import FriendshipController from './app/controllers/FriendshipController';
 import ProjectController from './app/controllers/ProjectController';
 
 import authMiddleware from './app/middlewares/auth';
@@ -25,6 +26,7 @@ routes.delete('/user/', authMiddleware, UserController.delete);
 // FRIENDSHIP ROUTES
 
 // POST
+routes.post('/friend/', authMiddleware, FriendshipController.store);
 
 // ROTA DE PROJECT (TEST)
 
