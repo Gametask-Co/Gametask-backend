@@ -15,7 +15,7 @@ routes.get('/user/', authMiddleware, UserController.index);
 
 // POST
 routes.post('/user/', UserController.store);
-routes.post('/user/auth', authMiddleware, UserController.auth);
+routes.post('/user/auth', UserController.auth);
 
 // PUT
 routes.put('/user/', authMiddleware, UserController.update);
@@ -27,6 +27,9 @@ routes.delete('/user/', authMiddleware, UserController.delete);
 
 // POST
 routes.post('/friend/', authMiddleware, FriendshipController.store);
+
+// DELETE
+routes.post('/friend/delete', authMiddleware, FriendshipController.delete);
 
 // ROTA DE PROJECT (TEST)
 

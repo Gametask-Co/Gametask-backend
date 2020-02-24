@@ -25,7 +25,7 @@ describe('User', () => {
             .post('/friend')
             .set('Authorization', 'Bearer ' + user1.body.token)
             .send({
-                id: user2.body.user._id
+                email: user2.body.user._id
             });
 
         expect(response.body).toEqual({ message: 'Validation error' });
@@ -45,9 +45,7 @@ describe('User', () => {
             .post('/friend')
             .set('Authorization', 'Bearer ' + user1.body.token)
             .send({
-                id: '123456789999',
-                email: 'friend404@gametask.com',
-                name: 'friend 404'
+                id: '5e533d45b8511c3e7aefa666'
             });
 
         expect(response.body).toEqual({ message: 'Friend not found' });
@@ -76,11 +74,74 @@ describe('User', () => {
             .post('/friend')
             .set('Authorization', 'Bearer ' + user1.body.token)
             .send({
-                id: user2.body.user._id,
-                name: user2.body.user.name,
-                email: user2.body.user.email
+                id: user2.body.user._id
             });
 
         expect(response.body).toEqual({ message: 'Succefully operation' });
+    });
+
+    it('should delete friendship', async () => {
+        const user1 = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'friend1@gametask.com',
+                password: 'friend1'
+            });
+
+        const user2 = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'friend2@gametask.com',
+                password: 'friend2'
+            });
+
+        const response = await request(app)
+            .post('/friend/delete')
+            .set('Authorization', 'Bearer ' + user1.body.token)
+            .send({
+                id: user2.body.user._id
+            });
+
+        const user1_af = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'friend1@gametask.com',
+                password: 'friend1'
+            });
+
+        const user2_af = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'friend2@gametask.com',
+                password: 'friend2'
+            });
+
+        let flag1 = true,
+            flag2 = true;
+
+        Object.keys(user1_af.body.user.friend_list).forEach(function(key) {
+            if (
+                user1_af.body.user.friend_list[key].friend_id ==
+                user2.body.user._id
+            )
+                flag1 = false;
+        });
+
+        if (user1_af.body.user.friend_list.includes(user2.body.user._id))
+            flag1 = false;
+
+        Object.keys(user2_af.body.user.friend_list).forEach(function(key) {
+            if (
+                user2_af.body.user.friend_list[key].friend_id ==
+                user1.body.user._id
+            )
+                flag2 = false;
+        });
+
+        if (user2_af.body.user.friend_list.includes(user1.body.user._id))
+            flag2 = false;
+
+        expect(response.body).toEqual({ message: 'Succefully operation' });
+        expect(flag1 && flag2).toBeTruthy();
     });
 });

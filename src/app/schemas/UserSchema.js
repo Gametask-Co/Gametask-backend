@@ -30,9 +30,7 @@ const UserSchema = new Schema({
 
     friend_list: [
         {
-            friend_id: String,
-            name: String,
-            email: String
+            friend_id: String
         }
     ]
 });
