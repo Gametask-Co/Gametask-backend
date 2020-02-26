@@ -27,6 +27,9 @@ class UserController {
         if (!(await schema.isValid(req.body)))
             return res.status(400).send({ message: 'Validation error' });
 
+        if (new Date(req.body.birthday) >= Date.now())
+            return res.status(400).send({ message: 'Invalid birthday' });
+
         const { email } = req.body;
         const userExists = await User.findOne({ email });
 
@@ -46,7 +49,9 @@ class UserController {
             }
         }
 
-        return res.status(400).send({ message: 'User already exists!' });
+        return res.status(400).send({
+            message: 'User already exists!'
+        });
     }
 
     async index(req, res) {
