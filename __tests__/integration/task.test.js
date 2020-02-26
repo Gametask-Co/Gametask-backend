@@ -28,4 +28,26 @@ describe('Task', () => {
             'createdAt'
         );
     });
+	
+	it('should receive validation error', async () => {
+		 const user = await request(app)
+            .post('/user/auth/')
+            .send({
+                email: 'tasktest@gametask.com',
+                password: 'taskaccount'
+            });
+
+		const response = await request(app)
+			.post('/task/')	
+			.set('Authorization', 'Bearer ' + user.body.token)
+			.send({
+				namee: 'testes'
+			});
+
+		expect(response.body).toEqual({ message : 'Validation error' });
+	});
+	
+	// it('', async () => {
+	
+	// });
 });
