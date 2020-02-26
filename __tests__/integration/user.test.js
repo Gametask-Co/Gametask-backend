@@ -2,16 +2,27 @@ import request from 'supertest';
 import app from '../../src/app';
 
 describe('User', () => {
-    let token;
-
     it('should receive Validation error', async () => {
         const response = await request(app)
-            .post('/user')
+            .post('/user/')
             .send({
                 name: 'test gametask'
             });
 
         expect(response.body).toEqual({ message: 'Validation error' });
+    });
+
+    it('should receive invalid birthday', async () => {
+        const response = await request(app)
+            .post('/user/')
+            .send({
+                name: 'test gametask',
+                email: 'gametask@gametask.com',
+                birthday: '10/11/2050',
+                password_hash: 'test123'
+            });
+
+        expect(response.body).toEqual({ message: 'Invalid birthday' });
     });
 
     it('should create user', async () => {
@@ -24,20 +35,17 @@ describe('User', () => {
                 password_hash: 'test123'
             });
 
-        token = response.body.token;
         expect(response.body).toHaveProperty('token');
     });
 
     it('should authenticate as user', async () => {
         const response = await request(app)
             .post('/user/auth')
-            .set('Authorization', 'Bearer ' + token)
             .send({
                 email: 'gametask@gametask.com',
                 password: 'test123'
             });
 
-        token = response.body.token;
         expect(response.body).toHaveProperty('token');
     });
 
@@ -55,6 +63,15 @@ describe('User', () => {
     });
 
     it('should receive information about user', async () => {
+        const auth_response = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'gametask@gametask.com',
+                password: 'test123'
+            });
+
+        const { token } = auth_response.body;
+
         const response = await request(app)
             .get('/user/')
             .set('Authorization', 'Bearer ' + token);
@@ -65,7 +82,6 @@ describe('User', () => {
     it('should receive user not found or invalid password', async () => {
         const response = await request(app)
             .post('/user/auth')
-            .set('Authorization', 'Bearer ' + token)
             .send({
                 email: 'gametask@gametask.com',
                 password: 'test12333333'
@@ -79,7 +95,6 @@ describe('User', () => {
     it('should receive validation error', async () => {
         const response = await request(app)
             .post('/user/auth')
-            .set('Authorization', 'Bearer ' + token)
             .send({
                 email: 'gametask@gametask.com'
             });
@@ -97,6 +112,15 @@ describe('User', () => {
                 password_hash: 'test123'
             });
 
+        const auth_response = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'gametask@gametask.com',
+                password: 'test123'
+            });
+
+        const { token } = auth_response.body;
+
         const response = await request(app)
             .put('/user')
             .set('Authorization', 'Bearer ' + token)
@@ -108,6 +132,15 @@ describe('User', () => {
     });
 
     it('should receive password does not match', async () => {
+        const auth_response = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'gametask@gametask.com',
+                password: 'test123'
+            });
+
+        const { token } = auth_response.body;
+
         const response = await request(app)
             .put('/user')
             .set('Authorization', 'Bearer ' + token)
@@ -119,6 +152,15 @@ describe('User', () => {
     });
 
     it('should receive updated info', async () => {
+        const auth_response = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'gametask@gametask.com',
+                password: 'test123'
+            });
+
+        const { token } = auth_response.body;
+
         const { p_name, p_email } = await request(app)
             .get('/user/')
             .set('Authorization', 'Bearer ' + token);
@@ -142,7 +184,19 @@ describe('User', () => {
         expect({ name, email }).toEqual(new_info);
     });
 
+    let old_token;
+
     it('should delete user from database', async () => {
+        const auth_response = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'newgametask@gametask.com',
+                password: 'test123'
+            });
+
+        const { token } = auth_response.body;
+        old_token = token;
+
         const response = await request(app)
             .delete('/user/')
             .set('Authorization', 'Bearer ' + token);
@@ -153,7 +207,7 @@ describe('User', () => {
     it('should receive user not found because user is already deleted', async () => {
         const response = await request(app)
             .delete('/user/')
-            .set('Authorization', 'Bearer ' + token);
+            .set('Authorization', 'Bearer ' + old_token);
 
         expect(response.body).toEqual({ message: 'User not found' });
     });

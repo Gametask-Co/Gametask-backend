@@ -2,8 +2,6 @@ import request from 'supertest';
 import app from '../../src/app';
 
 describe('Auth', () => {
-    let token;
-
     it('should auth and receive token', async () => {
         const response = await request(app)
             .post('/user')
@@ -13,8 +11,6 @@ describe('Auth', () => {
                 birthday: '10/11/1995',
                 password_hash: 'test123'
             });
-
-        token = response.body.token;
 
         expect(response.body).toHaveProperty('token');
     });
@@ -31,6 +27,15 @@ describe('Auth', () => {
     });
 
     it('should receive invalid token', async () => {
+        const auth_response = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'gametask@gametask.com',
+                password: 'test123'
+            });
+
+        const { token } = auth_response.body;
+
         const response = await request(app)
             .get('/user/')
             .set('Authorization', 'Bearer ' + token + 'l')
@@ -43,6 +48,15 @@ describe('Auth', () => {
     });
 
     it('should receive token malformatted', async () => {
+        const auth_response = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'gametask@gametask.com',
+                password: 'test123'
+            });
+
+        const { token } = auth_response.body;
+
         const response = await request(app)
             .get('/user/')
             .set('Authorization', 'Bearer' + token)
