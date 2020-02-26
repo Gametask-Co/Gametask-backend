@@ -2,7 +2,6 @@ import { Router } from 'express';
 
 import UserController from './app/controllers/UserController';
 import FriendshipController from './app/controllers/FriendshipController';
-import ProjectController from './app/controllers/ProjectController';
 import TaskController from './app/controllers/TaskController';
 
 import authMiddleware from './app/middlewares/auth';
@@ -40,10 +39,6 @@ routes.delete('/friend/', authMiddleware, FriendshipController.delete);
 // POST
 routes.post('/task/', authMiddleware, TaskController.store);
 
-// -------- ROTA DE PROJECT (TEST) --------
-
-// rota de teste (exemplo de como usar middle de autenticacao)
-routes.get('/project/', authMiddleware, ProjectController.test);
 
 // rota principal ( Em breve )
 routes.get('/', function(req, res) {

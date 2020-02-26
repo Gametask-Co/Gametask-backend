@@ -27,6 +27,18 @@ class TaskController {
             return res.status(400).send({ err });
         }
     }
+	
+	async index(req, res) {
+		return res.send({ ok : true});
+	}
+
+	async delete(req, res) {
+		return res.send({ ok : true});
+	}
+	
+	async get_todo(req, res) {
+		return res.send({ ok : true});
+	}	
 }
 
 export default new TaskController();
