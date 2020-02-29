@@ -42,6 +42,8 @@ routes.get('/task/', authMiddleware, TaskController.index);
 // POST
 routes.post('/task/', authMiddleware, TaskController.store);
 
+// DELETE
+routes.delete('/task/', authMiddleware, TaskController.delete);
 
 // rota principal ( Em breve )
 routes.get('/', function(req, res) {
