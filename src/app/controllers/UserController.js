@@ -1,12 +1,14 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import authConfig from '../config/auth';
 import * as Yup from 'yup';
+import dotenv from 'dotenv';
 
 import User from '../models/User';
 
+dotenv.config();
+
 function generateToken(params = {}) {
-    return jwt.sign(params, authConfig.secret, {
+    return jwt.sign(params, process.env.SECRET, {
         expiresIn: 86400
     });
 }
