@@ -27,10 +27,11 @@ class TaskController {
             return res.status(400).send({ err });
         }
     }
-	
-	async index(req, res) {
-		return res.send({ ok : true});
-	}
+
+    async index(req, res) {
+        const { tasks } = await User.findById(req.userId);     
+        return res.send({ tasks });
+    }
 
 	async delete(req, res) {
 		return res.send({ ok : true});

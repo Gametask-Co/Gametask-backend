@@ -36,6 +36,9 @@ routes.delete('/friend/', authMiddleware, FriendshipController.delete);
 
 // -------- TASK ROUTES --------
 
+// GET
+routes.get('/task/', authMiddleware, TaskController.index);
+
 // POST
 routes.post('/task/', authMiddleware, TaskController.store);
 

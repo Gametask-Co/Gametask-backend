@@ -47,7 +47,18 @@ describe('Task', () => {
 		expect(response.body).toEqual({ message : 'Validation error' });
 	});
 	
-	// it('', async () => {
-	
-	// });
+    it('should receive task list', async () => {
+        const user = await request(app)
+            .post('/user/auth/')
+            .send({
+                email: 'tasktest@gametask.com',
+                password: 'taskaccount'
+            });
+        
+        const response = await request(app)
+            .get('/task/')
+            .set('Authorization', 'Bearer ' + user.body.token);
+        expect(Array.isArray(response.body.tasks)).toBeTruthy();
+    });
+    
 });
