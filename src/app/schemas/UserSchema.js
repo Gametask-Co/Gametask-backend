@@ -32,6 +32,13 @@ const UserSchema = new Schema({
         {
             friend_id: String
         }
+    ],
+
+    tasks: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Task'
+        }
     ]
 });
 

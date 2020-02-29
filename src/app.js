@@ -2,6 +2,7 @@ import './bootstrap';
 
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
@@ -42,6 +43,10 @@ class App {
 
     middlewares() {
         this.server.use(express.json());
+        this.server.use(cors({
+            origin: process.env.FRONT_URL,
+            optionsSucessStatus: 200
+        }));
     }
 
     routes() {
