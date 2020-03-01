@@ -39,15 +39,30 @@ class TaskController {
             user.tasks.push(task);
             await user.updateOne(user);
 
-            return res.send({ task });
+            return res.send(task);
         } catch (err) {
             return res.status(400).send({ err });
         }
     }
-
+    
     async index(req, res) {
+        const schema = Yup.object().shape({
+            task_id: Yup.string().required()
+        });
+
+        if (!(await schema.isValid(req.body)) || !isValidMongoDbID(req.body.task_id))
+            return res.send({ message: 'Validation error' });
+        
         const { tasks } = await User.findById(req.userId);
-        return res.send({ tasks });
+        const task_id = tasks.filter((item) => { return item == req.body.task_id });
+        const task = await Task.findById(task_id);
+
+        return res.send(task);
+    }
+    
+    async list(req, res) {
+        const { tasks } = await User.findById(req.userId);
+        return res.send(tasks);
     }
 
     async delete(req, res) {

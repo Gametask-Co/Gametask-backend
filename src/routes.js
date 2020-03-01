@@ -3,6 +3,7 @@ import { Router } from 'express';
 import UserController from './app/controllers/UserController';
 import FriendshipController from './app/controllers/FriendshipController';
 import TaskController from './app/controllers/TaskController';
+import TodoController from './app/controllers/TodoController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -37,13 +38,22 @@ routes.delete('/friend/', authMiddleware, FriendshipController.delete);
 // -------- TASK ROUTES --------
 
 // GET
-routes.get('/task/', authMiddleware, TaskController.index);
+routes.get('/task/index', authMiddleware, TaskController.index);
+routes.get('/task/list', authMiddleware, TaskController.list);
 
 // POST
 routes.post('/task/', authMiddleware, TaskController.store);
 
 // DELETE
 routes.delete('/task/', authMiddleware, TaskController.delete);
+
+// -------- TO DO ROUTES --------
+
+routes.post('/todo/', authMiddleware, TodoController.store);
+routes.get('/todo/index', authMiddleware, TodoController.index);
+routes.get('/todo/list', authMiddleware, TodoController.list);
+routes.delete('/todo/', authMiddleware, TodoController.delete);
+routes.put('/todo/', authMiddleware, TodoController.update);
 
 // rota principal ( Em breve )
 routes.get('/', function(req, res) {

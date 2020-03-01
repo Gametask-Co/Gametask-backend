@@ -21,7 +21,7 @@ describe('Task', () => {
                 due_date: '01/01/2005'
             });
 
-        expect(response.body.task).toHaveProperty(
+        expect(response.body).toHaveProperty(
             'name',
             'description',
             'user_id',
@@ -56,10 +56,10 @@ describe('Task', () => {
             });
 
         const response = await request(app)
-            .get('/task/')
+            .get('/task/list')
             .set('Authorization', 'Bearer ' + user.body.token);
 
-        expect(Array.isArray(response.body.tasks)).toBeTruthy();
+        expect(Array.isArray(response.body)).toBeTruthy();
     });
 
     it('should receive a no empty array ', async () => {
@@ -80,10 +80,37 @@ describe('Task', () => {
             });
 
         const response = await request(app)
-            .get('/task/')
+            .get('/task/list')
             .set('Authorization', 'Bearer ' + user.body.token);
 
-        expect(response.body.tasks.length > 0 ? true : false).toBeTruthy();
+        expect(response.body.length > 0 ? true : false).toBeTruthy();
+    });
+    
+    it('should receive single task', async () => {
+        const user = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'tasktest@gametask.com',
+                password: 'taskaccount'
+            });
+
+        const task = await request(app)
+            .post('/task/')
+            .set('Authorization', 'Bearer ' + user.body.token)
+            .send({
+                name: 'Task Example',
+                description: 'Task Description Example',
+                due_date: '01/01/2005'
+            });
+
+        let task_new = await request(app)
+            .get('/task/index')
+            .set('Authorization', 'Bearer ' + user.body.token)
+            .send({
+                task_id: task.body._id 
+            });
+
+        expect(task_new.body._id).toEqual(task.body._id);
     });
 
     let old_task_id;
@@ -106,10 +133,10 @@ describe('Task', () => {
             });
 
         let task_list = await request(app)
-            .get('/task/')
+            .get('/task/list')
             .set('Authorization', 'Bearer ' + user.body.token);
 
-        task_list = task_list.body.tasks;
+        task_list = task_list.body;
 
         const task_id = task_list[0];
         old_task_id = task_id;
@@ -122,10 +149,10 @@ describe('Task', () => {
             });
 
         let response = await request(app)
-            .get('/task/')
+            .get('/task/list')
             .set('Authorization', 'Bearer ' + user.body.token);
 
-        let task_list_new = response.body.tasks;
+        let task_list_new = response.body;
 
         expect(
             task_list.length > task_list_new.length ? true : false

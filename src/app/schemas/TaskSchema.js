@@ -22,7 +22,14 @@ const TaskSchema = new Schema({
     user_id: {
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+
+    todo_list: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Todo'
+        }
+    ]
 });
 
 export default TaskSchema;
