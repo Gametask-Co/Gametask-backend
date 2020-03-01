@@ -216,10 +216,10 @@ describe('Todo', () => {
 
         const task = await request(app)
             .post('/task/')
-            .set('Authorization', 'Bearer ' + user.body.token)
+            .set('authorization', 'bearer ' + user.body.token)
             .send({
-                name: 'Task Example',
-                description: 'Task Description Example',
+                name: 'task example',
+                description: 'task description example',
                 due_date: '01/01/2025'
             });
         
@@ -227,11 +227,11 @@ describe('Todo', () => {
 
         const todo = await request(app)
             .post('/todo/')
-            .set('Authorization', 'Bearer ' + user.body.token)
+            .set('authorization', 'bearer ' + user.body.token)
             .send({
                 task_id: task_id,
-                name: 'Test Todo 1',
-                description: 'Test Todo Describe Example'
+                name: 'test todo 1',
+                description: 'test todo describe example'
             });
 
         await request(app)
@@ -253,15 +253,55 @@ describe('Todo', () => {
         expect(response.body).toEqual({ message: 'Validation error' });
     });
 
-    let task_id_deleted;
+    let todo_id_deleted;
 
-    it('should delete task', async () => {
+    it('should delete a todo', async () => {
+        const user = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'testtodo@gametask.com',
+                password: 'testtodo'
+            });
+
+        const task = await request(app)
+            .post('/task/')
+            .set('authorization', 'bearer ' + user.body.token)
+            .send({
+                name: 'task example',
+                description: 'task description example',
+                due_date: '01/01/2025'
+            });
         
-    });
+        const task_id = task.body._id;
 
-    it('should receive task not found', async () => {
+        const todo = await request(app)
+            .post('/todo/')
+            .set('authorization', 'bearer ' + user.body.token)
+            .send({
+                task_id: task_id,
+                name: 'test todo 1',
+                description: 'test todo describe example'
+            });
         
-    });
+        const todo_id = todo.body._id;
+        todo_id_deleted = todo_id;
+        
+        const response = await request(app)
+            .delete('/todo/')
+            .set('authorization', 'bearer ' + user.body.token)
+            .send({
+                task_id: task_id,
+                todo_id: todo_id
+            });
+    
+        const not_found = await request(app)
+            .get('/todo/index')
+            .set('authorization', 'bearer ' + user.body.token)
+            .send({
+                todo_id: todo_id
+            });
 
-
+        expect(response.body).toEqual({ message: 'Successfully delete' });
+        expect(not_found.body).toEqual({ message: 'Todo not found' });
+    });   
 });
