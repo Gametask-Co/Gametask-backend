@@ -42,28 +42,52 @@ class TodoController {
 
         return res.send(todo);
     }
-
-    async index(req, res) {
-        return res.send({ ok: true });
-    }
     
-    async list(req, res) {
+    async index(req, res) {
         const schema = Yup.object().shape({
-            task_id: Yup.string().required()
+            todo_id: Yup.string().required()
         });
 
-        if(!(await schema.isValid(req.body)) || !isValidMongoDbID(task_id))
-            return res.send({ message: 'Validation error' });
+        if(!(await schema.isValid(req.body)) || !isValidMongoDbID(req.body.todo_id))
+            return res.status(400).send({ message: 'Validation error' });
         
-        return res.send({ ok: true });
+        const todo = Todo.findById(req.body.todo_id);
+
+        if(!todo)
+            return res.status(400).send({ message: 'Todo not found' });
+
+        return res.send(todo);
     }
+    
     async update(req, res) {
-        return res.send({ ok: true });
-    }
+        const schema = Yup.object().shape({
+            todo_id: Yup.string().required(),
+            name: Yup.string(),
+            description: Yup.string()
+        });
+        
+        if(!await schema.isValid(req.body))
+            return res.status(400).send({ message: 'Validation error' });
+
+        const todo = Todo.findById(req.body.todo_id);
+        
+        if(!todo)
+            return res.status(400).send({ message: 'Todo not found' });
+
+        if(req.body.name != undefined)
+            todo.name = req.body.name;
+
+        if(req.body.description != undefined)
+            todo.description = req.body.description;
+
+        const todo_updated = todo.updateOne(todo);
+        
+        return res.send(todo_update);
+   }
 
     async delete(req, res) {
         return res.send({ ok: true });
-    }
+    }   
 }
 
 export default new TodoController();

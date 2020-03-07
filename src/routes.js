@@ -38,8 +38,7 @@ routes.delete('/friend/', authMiddleware, FriendshipController.delete);
 // -------- TASK ROUTES --------
 
 // GET
-routes.get('/task/index', authMiddleware, TaskController.index);
-routes.get('/task/list', authMiddleware, TaskController.list);
+routes.get('/task/', authMiddleware, TaskController.index);
 
 // POST
 routes.post('/task/', authMiddleware, TaskController.store);
@@ -47,11 +46,13 @@ routes.post('/task/', authMiddleware, TaskController.store);
 // DELETE
 routes.delete('/task/', authMiddleware, TaskController.delete);
 
+// PUT
+routes.put('/task/', authMiddleware, TaskController.update);
+
 // -------- TO DO ROUTES --------
 
 routes.post('/todo/', authMiddleware, TodoController.store);
-routes.get('/todo/index', authMiddleware, TodoController.index);
-routes.get('/todo/list', authMiddleware, TodoController.list);
+routes.get('/todo/', authMiddleware, TodoController.index);
 routes.delete('/todo/', authMiddleware, TodoController.delete);
 routes.put('/todo/', authMiddleware, TodoController.update);
 

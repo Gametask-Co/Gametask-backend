@@ -54,17 +54,15 @@ class TaskController {
             return res.send({ message: 'Validation error' });
         
         const { tasks } = await User.findById(req.userId);
-        const task_id = tasks.filter((item) => { return item == req.body.task_id });
+        const task_id = tasks.filter((item) => { 
+            return item == req.body.task_id
+        });
+
         const task = await Task.findById(task_id);
 
         return res.send(task);
     }
-    
-    async list(req, res) {
-        const { tasks } = await User.findById(req.userId);
-        return res.send(tasks);
-    }
-
+   
     async delete(req, res) {
         const schema = Yup.object().shape({
             task_id: Yup.string().required()
@@ -90,6 +88,43 @@ class TaskController {
         await user.updateOne(user);
 
         return res.send(user);
+    }
+    
+    async update(req, res) {
+        const schema = Yup.object().shape({
+            _id: Yup.string().required(),
+            name: Yup.string().notRequired(),
+            description: Yup.string().notRequired(),
+            due_date: Yup.date().notRequired(),
+            active: Yup.boolean().notRequired()
+        });
+
+        const { _id, name, description, due_date, active } = req.body;
+       
+        if(!(await schema.isValid(req.body)) || !isValidMongoDbID(_id))
+            return res.status(400).send({ message: 'Validation error' });
+
+        const user = await User.findById(req.userId);
+        let tasks = user.tasks;
+
+        if(!taskExist(tasks, _id))
+            return res.status(400).send({ message: 'Task not found' });
+    
+        const task = await Task.findById(req.body._id);
+        if(name != undefined)
+            task.name = name;
+
+        if(description != undefined)
+            task.description = description;
+
+        if(due_date != undefined)
+            task.due_date = due_date;
+        
+        if(active != undefined)
+            task.active = active;
+
+        await task.updateOne(task);
+        return res.send(task);
     }
 
     async get_todo(req, res) {

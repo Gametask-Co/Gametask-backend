@@ -16,6 +16,11 @@ const TaskSchema = new Schema({
     due_date: {
         type: Date
     },
+    active: {
+        type: Boolean,
+        default: true,
+        required: true
+    },
     // subject_id: {
 
     // },
