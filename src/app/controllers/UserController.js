@@ -73,7 +73,6 @@ class UserController {
                 return res.status(400).send({ message: 'Email already taken' });
         }
 
-        //implementar troca de senha
         if (
             oldPassword &&
             !(await bcrypt.compare(oldPassword, user.password_hash))

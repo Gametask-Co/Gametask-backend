@@ -13,6 +13,10 @@ function taskExist(task_list, task_id){
     return task_list.includes(task_id);
 }
 
+function todoExist(task_id, todo_id) {
+    return true;
+}
+
 class TodoController {
     async store(req, res) {
         const schema = Yup.object().shape({
@@ -45,13 +49,13 @@ class TodoController {
     
     async index(req, res) {
         const schema = Yup.object().shape({
-            todo_id: Yup.string().required()
+            _id: Yup.string().required()
         });
 
-        if(!(await schema.isValid(req.body)) || !isValidMongoDbID(req.body.todo_id))
+        if(!(await schema.isValid(req.body)) || !isValidMongoDbID(req.body._id))
             return res.status(400).send({ message: 'Validation error' });
         
-        const todo = Todo.findById(req.body.todo_id);
+        const todo = await Todo.findById(req.body._id);
 
         if(!todo)
             return res.status(400).send({ message: 'Todo not found' });
@@ -66,11 +70,12 @@ class TodoController {
             description: Yup.string()
         });
         
-        if(!await schema.isValid(req.body))
+        if(!await schema.isValid(req.body) || !isValidMongoDbID(todo_id))
             return res.status(400).send({ message: 'Validation error' });
 
         const todo = Todo.findById(req.body.todo_id);
         
+        // verificar com lista da task
         if(!todo)
             return res.status(400).send({ message: 'Todo not found' });
 
@@ -86,7 +91,24 @@ class TodoController {
    }
 
     async delete(req, res) {
-        return res.send({ ok: true });
+        const schema = Yup.object().shape({
+            _id: Yup.string().required()
+        });
+
+        if(!await schema.isValid(req.body) || !isValidMongoDbID(_id))
+            return res.status(400).send({ message: 'Validation error' });
+
+        const todo = Todo.findById(req.body._id);
+       
+        // verificar com a lista da task
+        
+        try {
+            await todo.delete();
+        } catch (err) {
+            res.status(400).send({ message: 'Not able to delete' })
+        } 
+
+        res.send({ message: 'Successfully delete' });
     }   
 }
 

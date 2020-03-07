@@ -127,8 +127,24 @@ class TaskController {
         return res.send(task);
     }
 
-    async get_todo(req, res) {
-        return res.send({ ok: true });
+    async todo_list(req, res) {
+        const schema = Yup.object().shape({
+            _id: Yup.string().required()
+        });
+
+        const { _id } = req.body;
+
+        if(!(await schema.isValid(req.body)) || !isValidMongoDbID(_id))
+            return res.status(400).send({ message: 'Validation error' });
+
+        const user = await User.findById(req.userId);
+        let tasks = user.tasks;
+
+        if(!taskExist(tasks, _id))
+            return res.status(400).send({ message: 'Task not found' });
+
+        const task = await Task.findById(_id);
+        return res.send(task.todo_list);
     }
 }
 
