@@ -21,7 +21,7 @@ describe('Task', () => {
                 due_date: '01/01/2005'
             });
 
-        expect(response.body.task).toHaveProperty(
+        expect(response.body).toHaveProperty(
             'name',
             'description',
             'user_id',
@@ -46,23 +46,8 @@ describe('Task', () => {
 
         expect(response.body).toEqual({ message: 'Validation error' });
     });
-
-    it('should receive task list', async () => {
-        const user = await request(app)
-            .post('/user/auth/')
-            .send({
-                email: 'tasktest@gametask.com',
-                password: 'taskaccount'
-            });
-
-        const response = await request(app)
-            .get('/task/')
-            .set('Authorization', 'Bearer ' + user.body.token);
-
-        expect(Array.isArray(response.body.tasks)).toBeTruthy();
-    });
-
-    it('should receive a no empty array ', async () => {
+    
+    it('should receive single task', async () => {
         const user = await request(app)
             .post('/user/auth')
             .send({
@@ -70,7 +55,7 @@ describe('Task', () => {
                 password: 'taskaccount'
             });
 
-        await request(app)
+        const task = await request(app)
             .post('/task/')
             .set('Authorization', 'Bearer ' + user.body.token)
             .send({
@@ -79,11 +64,14 @@ describe('Task', () => {
                 due_date: '01/01/2005'
             });
 
-        const response = await request(app)
+        let task_new = await request(app)
             .get('/task/')
-            .set('Authorization', 'Bearer ' + user.body.token);
+            .set('Authorization', 'Bearer ' + user.body.token)
+            .send({
+                task_id: task.body._id 
+            });
 
-        expect(response.body.tasks.length > 0 ? true : false).toBeTruthy();
+        expect(task_new.body._id).toEqual(task.body._id);
     });
 
     let old_task_id;
@@ -104,13 +92,12 @@ describe('Task', () => {
                 description: 'Task Description Example',
                 due_date: '01/01/2005'
             });
-
-        let task_list = await request(app)
-            .get('/task/')
+        
+        const r_user = await request(app)
+            .get('/user/')
             .set('Authorization', 'Bearer ' + user.body.token);
 
-        task_list = task_list.body.tasks;
-
+        let task_list = r_user.body.user.tasks;
         const task_id = task_list[0];
         old_task_id = task_id;
 
@@ -120,13 +107,13 @@ describe('Task', () => {
             .send({
                 task_id: task_id
             });
-
+        
         let response = await request(app)
-            .get('/task/')
+            .get('/user/')
             .set('Authorization', 'Bearer ' + user.body.token);
 
-        let task_list_new = response.body.tasks;
-
+        let task_list_new = response.body.user.tasks;
+       
         expect(
             task_list.length > task_list_new.length ? true : false
         ).toBeTruthy();
@@ -167,5 +154,98 @@ describe('Task', () => {
             });
 
         expect(response.body).toEqual({ message: 'Validation error' });
+    });
+
+    it('should receive validation error', async () => {
+        const user = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'tasktest@gametask.com',
+                password: 'taskaccount'
+            });
+
+        const old_task = await request(app)
+            .post('/task/')
+            .set('Authorization', 'Bearer ' + user.body.token)
+            .send({
+                name: 'Test update task',
+                description: 'Test update task',
+                due_date: '10/10/2025'
+            });
+        
+        const response = await request(app)
+            .put('/task/')
+            .set('Authorization', 'Bearer ' + user.body.token)
+            .send({
+                id: old_task.body._id + '666'
+            });
+
+        expect(response.body).toEqual({ message: 'Validation error' });
+    });
+
+    it('should receive Task not found', async () => {
+        const user = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'tasktest@gametask.com',
+                password: 'taskaccount'
+            });
+
+        const old_task = await request(app)
+            .post('/task/')
+            .set('Authorization', 'Bearer ' + user.body.token)
+            .send({
+                name: 'Test update task',
+                description: 'Test update task',
+                due_date: '10/10/2025'
+            });
+        
+        await request(app)
+            .delete('/task/')
+            .set('Authorization', 'Bearer ' + user.body.token)
+            .send({
+                task_id: old_task.body._id
+            });
+
+        const response = await request(app)
+            .put('/task/')
+            .set('Authorization', 'Bearer ' + user.body.token)
+            .send({
+                _id: old_task.body._id,
+                name: 'New name',
+                description: 'New description',
+            });
+
+        expect(response.body).toEqual({ message: 'Task not found' });
+    });
+
+    it('should receive updated task', async () => {
+        const user = await request(app)
+            .post('/user/auth')
+            .send({
+                email: 'tasktest@gametask.com',
+                password: 'taskaccount'
+            });
+
+        const old_task = await request(app)
+            .post('/task/')
+            .set('Authorization', 'Bearer ' + user.body.token)
+            .send({
+                name: 'Test update task',
+                description: 'Test update task',
+                due_date: '10/10/2025'
+            });
+
+        const response = await request(app)
+            .put('/task/')
+            .set('Authorization', 'Bearer ' + user.body.token)
+            .send({
+                _id: old_task.body._id,
+                name: 'New name',
+                description: 'New description',
+            });
+        
+        expect(response.body.name).toEqual('New name');
+        expect(response.body.description).toEqual('New description');
     });
 });

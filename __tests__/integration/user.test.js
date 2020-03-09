@@ -18,7 +18,7 @@ describe('User', () => {
             .send({
                 name: 'test gametask',
                 email: 'gametask@gametask.com',
-                birthday: '10/11/2050',
+                birthday: '12/29/2050',
                 password_hash: 'test123'
             });
 

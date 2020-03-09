@@ -73,11 +73,7 @@ class UserController {
                 return res.status(400).send({ message: 'Email already taken' });
         }
 
-        //implementar troca de senha
-        if (
-            oldPassword &&
-            !(await bcrypt.compare(oldPassword, user.password_hash))
-        )
+        if (oldPassword && !(await bcrypt.compare(oldPassword, user.password_hash)))
             return res.status(401).send({ message: 'Password does not match' });
 
         const { id, name } = await user.updateOne(req.body);
