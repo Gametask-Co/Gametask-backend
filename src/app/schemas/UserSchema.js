@@ -22,6 +22,12 @@ const UserSchema = new Schema({
         required: true,
         select: false
     },
+    
+    exp : {
+        type: Number,
+        required: true,
+        default: 0
+    },
 
     createdAt: {
         type: Date,

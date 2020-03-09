@@ -151,7 +151,7 @@ describe('Todo', () => {
 
     let todo_id_deleted;
 
-    it('should delete a todo', async () => {
+    /*it('should delete a todo', async () => {
         const user = await request(app)
             .post('/user/auth')
             .send({
@@ -199,5 +199,5 @@ describe('Todo', () => {
 
         expect(response.body).toEqual({ message: 'Successfully delete' });
         expect(not_found.body).toEqual({ message: 'Todo not found' });
-    });  
+    };*/  
 });
