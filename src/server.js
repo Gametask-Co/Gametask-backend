@@ -1,3 +1,8 @@
 import app from './app';
+import dotenv from 'dotenv';
+dotenv.config();
 
-app.listen(3333);
+const port = process.env.PORT || 3000;
+app.listen(port, function() {
+    console.log('Umbler listening on port %s', port);
+});
