@@ -18,13 +18,16 @@ class User {
   email: string;
 
   @Column()
-  password: string;
-
-  @Column()
   birthday: Date;
 
   @Column()
   gender: string;
+
+  @Column()
+  avatar_url: string;
+
+  @Column()
+  password: string;
 
   @CreateDateColumn()
   created_at: Date;

@@ -4,7 +4,7 @@ export default class CreateUsers1601756613748 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'User',
+        name: 'users',
         columns: [
           {
             name: 'id',
@@ -32,6 +32,11 @@ export default class CreateUsers1601756613748 implements MigrationInterface {
           {
             name: 'gender',
             type: 'varchar',
+          },
+          {
+            name: 'avatar_url',
+            type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'created_at',
