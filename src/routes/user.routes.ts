@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
 import CreateUserService from '../services/CreateUserService';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 import User from '../models/User';
 
@@ -34,9 +35,9 @@ userRouter.post('/', async (request, response) => {
   }
 });
 
-userRouter.get('/:id', async (request, response) => {
+userRouter.get('/', ensureAuthenticated, async (request, response) => {
   try {
-    const { id } = request.params;
+    const { id } = request.user;
 
     const userRepository = getRepository(User);
 
@@ -48,9 +49,9 @@ userRouter.get('/:id', async (request, response) => {
   }
 });
 
-userRouter.delete('/:id', async (request, response) => {
+userRouter.delete('/', ensureAuthenticated, async (request, response) => {
   try {
-    const { id } = request.params;
+    const { id } = request.user;
 
     const userRepository = getRepository(User);
 
