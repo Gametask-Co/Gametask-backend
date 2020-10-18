@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { getRepository } from 'typeorm';
+import { getRepository, getCustomRepository } from 'typeorm';
+
+import TeacherRepository from '../repositories/TeacherRepository';
 
 import CreateTeacherService from '../services/CreateTeacherService';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 import User from '../models/User';
-import Teacher from '../models/Teacher';
 
 const teacherRouter = Router();
 
@@ -24,7 +25,7 @@ teacherRouter.post('/', ensureAuthenticated, async (request, response) => {
 
 teacherRouter.get('/', ensureAuthenticated, async (request, response) => {
   try {
-    const user_id = request.user;
+    const user_id = request.user.id;
 
     const userRepository = getRepository(User);
     const user = await userRepository.findOne(user_id);
@@ -33,8 +34,9 @@ teacherRouter.get('/', ensureAuthenticated, async (request, response) => {
       throw new Error('User not found!');
     }
 
-    const teacherRepository = getRepository(Teacher);
-    const teacher = await teacherRepository.findOne({ where: { user_id } });
+    const teacherRepository = getCustomRepository(TeacherRepository);
+
+    const teacher = await teacherRepository.findByUserId(user_id);
 
     if (!teacher) {
       return response.status(400).json({ message: 'Teacher not found!' });
@@ -54,7 +56,7 @@ teacherRouter.get('/', ensureAuthenticated, async (request, response) => {
 });
 
 teacherRouter.delete('/', ensureAuthenticated, async (request, response) => {
-  const user_id = request.user;
+  const user_id = request.user.id;
 
   const userRepository = getRepository(User);
   const userExists = await userRepository.findOne(user_id);
@@ -63,8 +65,8 @@ teacherRouter.delete('/', ensureAuthenticated, async (request, response) => {
     return response.status(400).json({ message: 'User not found!' });
   }
 
-  const teacherRepository = getRepository(Teacher);
-  const teacher = await teacherRepository.findOne({ where: { user_id } });
+  const teacherRepository = getCustomRepository(TeacherRepository);
+  const teacher = await teacherRepository.findByUserId(user_id);
 
   if (!teacher) {
     return response.status(400).json({ message: 'Teacher not found!' });

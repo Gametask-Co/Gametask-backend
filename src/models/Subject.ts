@@ -6,9 +6,11 @@ import {
   UpdateDateColumn,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 import Teacher from './Teacher';
+import Student from './Student';
 
 @Entity('subjects')
 class Subject {
@@ -27,6 +29,9 @@ class Subject {
 
   @Column()
   description: string;
+
+  @OneToMany(() => Student, student => student.id)
+  students: Student[];
 
   @CreateDateColumn()
   created_at: Date;

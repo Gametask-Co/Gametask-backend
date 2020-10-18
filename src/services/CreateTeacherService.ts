@@ -1,4 +1,6 @@
-import { getRepository } from 'typeorm';
+import { getRepository, getCustomRepository } from 'typeorm';
+
+import TeacherRepository from '../repositories/TeacherRepository';
 
 import Teacher from '../models/Teacher';
 import User from '../models/User';
@@ -10,17 +12,15 @@ interface RequestDTO {
 class CreateTeacherService {
   public async execute({ id }: RequestDTO): Promise<Teacher> {
     const userRepository = getRepository(User);
-    const userExists = await userRepository.findOne(id);
+    const userExists = await userRepository.findOne({ id });
 
     if (!userExists) {
       throw new Error('User not found!');
     }
 
-    const teacherRepository = getRepository(Teacher);
+    const teacherRepository = getCustomRepository(TeacherRepository);
 
-    const teacherExists = await teacherRepository.findOne({
-      where: { user_id: id },
-    });
+    const teacherExists = await teacherRepository.findByUserId(id);
 
     if (teacherExists) {
       throw new Error('Already an teacher!');
