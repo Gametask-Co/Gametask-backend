@@ -1,21 +1,22 @@
 import { Router } from 'express';
-import { getRepository } from 'typeorm';
+import { getRepository, getCustomRepository } from 'typeorm';
+
+import StudentRepository from '../repositories/StudentRepository';
 
 import CreateStudentService from '../services/CreateStudentService';
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
-import Student from '../models/Student';
 import User from '../models/User';
 
 const studentRouter = Router();
 
 studentRouter.post('/', ensureAuthenticated, async (request, response) => {
   try {
-    const user_id = request.user;
+    const user_id = request.user.id;
 
     const createStudentService = new CreateStudentService();
 
-    const student = await createStudentService.execute(user_id);
+    const student = await createStudentService.execute({ id: user_id });
 
     return response.json(student);
   } catch (err) {
@@ -25,10 +26,9 @@ studentRouter.post('/', ensureAuthenticated, async (request, response) => {
 
 studentRouter.get('/', ensureAuthenticated, async (request, response) => {
   try {
-    const user_id = request.user;
+    const user_id = request.user.id;
 
     const userRepository = getRepository(User);
-    const studentRepository = getRepository(Student);
 
     const user = await userRepository.findOne(user_id);
 
@@ -36,9 +36,9 @@ studentRouter.get('/', ensureAuthenticated, async (request, response) => {
       throw new Error('User not found!');
     }
 
-    const student = await studentRepository.findOne({
-      where: { user_id: user },
-    });
+    const studentRepository = getCustomRepository(StudentRepository);
+
+    const student = await studentRepository.findByUserId(user_id);
 
     if (!student) {
       return response.status(400).json({ message: 'Not an Student!' });
@@ -59,7 +59,7 @@ studentRouter.get('/', ensureAuthenticated, async (request, response) => {
 
 studentRouter.delete('/', ensureAuthenticated, async (request, response) => {
   try {
-    const user_id = request.user;
+    const user_id = request.user.id;
 
     const userRepository = getRepository(User);
     const userExists = await userRepository.findOne(user_id);
@@ -68,9 +68,9 @@ studentRouter.delete('/', ensureAuthenticated, async (request, response) => {
       throw new Error('User not found!');
     }
 
-    const studentRepository = getRepository(Student);
+    const studentRepository = getCustomRepository(StudentRepository);
 
-    const student = await studentRepository.findOne({ where: { user_id } });
+    const student = await studentRepository.findByUserId(user_id);
 
     if (!student) {
       return response.status(400).json({ message: 'Student not found!' });

@@ -1,5 +1,6 @@
-import { getRepository } from 'typeorm';
-import { hash } from 'bcryptjs';
+import { getRepository, getCustomRepository } from 'typeorm';
+
+import StudentRepository from '../repositories/StudentRepository';
 
 import Student from '../models/Student';
 import User from '../models/User';
@@ -11,17 +12,15 @@ interface RequestDTO {
 class CreateStudentService {
   public async execute({ id }: RequestDTO): Promise<Student> {
     const userRepository = getRepository(User);
-    const userExists = userRepository.findOne({ id });
+    const userExists = await userRepository.findOne({ id });
 
     if (!userExists) {
       throw new Error('User not found!');
     }
 
-    const studentRepository = getRepository(Student);
+    const studentRepository = getCustomRepository(StudentRepository);
 
-    const studentExists = await studentRepository.findOne({
-      where: { user_id: id },
-    });
+    const studentExists = await studentRepository.findByUserId(id);
 
     if (studentExists) {
       throw new Error('Already an Student!');
