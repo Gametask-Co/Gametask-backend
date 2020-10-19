@@ -18,6 +18,7 @@ class SubjectRepository extends Repository<Subject> {
 
     const findSubject = await this.find({
       where: { teacher_id: findTeacher.id },
+      relations: ['students'],
     });
 
     return findSubject || null;

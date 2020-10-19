@@ -3,12 +3,14 @@ import { getCustomRepository } from 'typeorm';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 import CreateSubjectService from '../services/CreateSubjectService';
+import AddStudentToSubjectService from '../services/AddStudentToSubjectService';
+import RemoveStudentFromSubjectService from '../services/RemoveStudentFromSubjectService';
 
 import SubjectRepository from '../repositories/SubjectRepository';
 
-const userRouter = Router();
+const subjectRouter = Router();
 
-userRouter.post('/', ensureAuthenticated, async (request, response) => {
+subjectRouter.post('/', ensureAuthenticated, async (request, response) => {
   try {
     const { name, description } = request.body;
     const user_id = request.user.id;
@@ -26,7 +28,7 @@ userRouter.post('/', ensureAuthenticated, async (request, response) => {
   }
 });
 
-userRouter.get('/', ensureAuthenticated, async (request, response) => {
+subjectRouter.get('/', ensureAuthenticated, async (request, response) => {
   try {
     const user_id = request.user.id;
 
@@ -42,4 +44,45 @@ userRouter.get('/', ensureAuthenticated, async (request, response) => {
   }
 });
 
-export default userRouter;
+subjectRouter.post(
+  '/student',
+  ensureAuthenticated,
+  async (request, response) => {
+    try {
+      const { subject_id, student_id } = request.body;
+
+      const addStudentToSubjectService = new AddStudentToSubjectService();
+      const subject = await addStudentToSubjectService.execute({
+        subject_id,
+        student_id,
+      });
+
+      return response.json(subject);
+    } catch (err) {
+      return response.status(400).json({ error: err.message });
+    }
+  },
+);
+
+subjectRouter.delete(
+  '/student',
+  ensureAuthenticated,
+  async (request, response) => {
+    try {
+      const { subject_id } = request.body;
+      const user_id = request.user.id;
+
+      const removeStudentFromSubjectService = new RemoveStudentFromSubjectService();
+      await removeStudentFromSubjectService.execute({
+        subject_id,
+        user_id,
+      });
+
+      return response.json({ message: 'ok' });
+    } catch (err) {
+      return response.status(400).json({ error: err.message });
+    }
+  },
+);
+
+export default subjectRouter;

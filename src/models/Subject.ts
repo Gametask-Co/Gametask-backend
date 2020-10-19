@@ -6,7 +6,8 @@ import {
   UpdateDateColumn,
   OneToOne,
   JoinColumn,
-  OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 import Teacher from './Teacher';
@@ -23,14 +24,15 @@ class Subject {
   @Column()
   teacher_id: string;
 
-  @OneToOne(() => Teacher)
+  @OneToOne(() => Teacher, (teacher: Teacher) => teacher.id)
   @JoinColumn({ name: 'teacher_id' })
   teacher: Teacher;
 
   @Column()
   description: string;
 
-  @OneToMany(() => Student, student => student.id)
+  @ManyToMany(() => Student)
+  @JoinTable()
   students: Student[];
 
   @CreateDateColumn()
