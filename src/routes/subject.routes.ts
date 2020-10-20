@@ -8,6 +8,7 @@ import AddStudentToSubjectService from '../services/AddStudentToSubjectService';
 import RemoveStudentFromSubjectService from '../services/RemoveStudentFromSubjectService';
 
 import SubjectRepository from '../repositories/SubjectRepository';
+import StudentRepository from '../repositories/StudentRepository';
 
 const subjectRouter = Router();
 
@@ -89,4 +90,32 @@ subjectRouter.delete(
   },
 );
 
+subjectRouter.post(
+  '/student/email',
+  ensureAuthenticated,
+  async (request, response) => {
+    try {
+      const { subject_id, student_email } = request.body;
+      const user_id = request.user.id;
+
+      const studentRepository = getCustomRepository(StudentRepository);
+      const student = await studentRepository.findByEmail(student_email);
+
+      if (!student) {
+        return response.status(400).json({ message: 'Student not found!' });
+      }
+
+      const addStudentToSubjectService = new AddStudentToSubjectService();
+      const subject = await addStudentToSubjectService.execute({
+        user_id,
+        subject_id,
+        student_id: student.id,
+      });
+
+      return response.json(subject);
+    } catch (err) {
+      return response.status(400).json({ error: err.message });
+    }
+  },
+);
 export default subjectRouter;

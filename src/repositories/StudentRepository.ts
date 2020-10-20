@@ -1,6 +1,7 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, Repository, getRepository } from 'typeorm';
 
 import Student from '../models/Student';
+import User from '../models/User';
 
 @EntityRepository(Student)
 class StudentRepository extends Repository<Student> {
@@ -11,7 +12,8 @@ class StudentRepository extends Repository<Student> {
   }
 
   public async findByEmail(email: string): Promise<Student | null> {
-    const findUser = await this.findOne({
+    const userRepository = getRepository(User);
+    const findUser = await userRepository.findOne({
       where: {
         email,
       },
