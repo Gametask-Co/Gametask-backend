@@ -9,6 +9,30 @@ class StudentRepository extends Repository<Student> {
 
     return findStudent || null;
   }
+
+  public async findByEmail(email: string): Promise<Student | null> {
+    const findUser = await this.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!findUser) {
+      throw new Error('Student not found!');
+    }
+
+    const findStudent = await this.findOne({
+      where: {
+        user_id: findUser.id,
+      },
+    });
+
+    if (!findStudent) {
+      throw new Error('Student not found!');
+    }
+
+    return findStudent || null;
+  }
 }
 
 export default StudentRepository;

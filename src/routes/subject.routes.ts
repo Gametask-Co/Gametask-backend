@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getCustomRepository } from 'typeorm';
 
 import ensureAuthenticated from '../middlewares/ensureAuthenticated';
+
 import CreateSubjectService from '../services/CreateSubjectService';
 import AddStudentToSubjectService from '../services/AddStudentToSubjectService';
 import RemoveStudentFromSubjectService from '../services/RemoveStudentFromSubjectService';
@@ -50,9 +51,11 @@ subjectRouter.post(
   async (request, response) => {
     try {
       const { subject_id, student_id } = request.body;
+      const user_id = request.user.id;
 
       const addStudentToSubjectService = new AddStudentToSubjectService();
       const subject = await addStudentToSubjectService.execute({
+        user_id,
         subject_id,
         student_id,
       });
@@ -69,13 +72,14 @@ subjectRouter.delete(
   ensureAuthenticated,
   async (request, response) => {
     try {
-      const { subject_id } = request.body;
+      const { subject_id, student_id } = request.body;
       const user_id = request.user.id;
 
       const removeStudentFromSubjectService = new RemoveStudentFromSubjectService();
       await removeStudentFromSubjectService.execute({
-        subject_id,
         user_id,
+        subject_id,
+        student_id,
       });
 
       return response.json({ message: 'ok' });
