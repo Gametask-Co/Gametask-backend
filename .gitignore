@@ -26,3 +26,5 @@ __tests__/coverage
 dist
 
 ormconfig.json
+
+coverage
