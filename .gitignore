@@ -22,3 +22,5 @@ jspm_packages/
 
 # coverage
 __tests__/coverage
+
+dist
