@@ -3,8 +3,8 @@
     "target": "es6",
     "module": "commonjs",
     "typeRoots": [
-      "src/@types", // custom merged types must be first in a list
-      "node_modules/@types",
+      "src/@types",
+      "node_modules/@types"
     ],
     "outDir": "./dist",
     "rootDir": "./src",
@@ -19,12 +19,12 @@
       ],
       "@shared/*": [
         "shared/*"
-      ],
+      ]
     },
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-  },
+    "forceConsistentCasingInFileNames": true
+  }
 }
