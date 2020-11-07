@@ -24,3 +24,5 @@ jspm_packages/
 __tests__/coverage
 
 dist
+
+ormconfig.json
