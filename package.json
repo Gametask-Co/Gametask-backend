@@ -8,6 +8,7 @@
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files",
     "start": "node dist/shared/infra/http/server.js",
+    "prod:database:run": "node ./node_modules/typeorm/cli.js migration:run",
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules ./src/shared/infra/http/server.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js"
   },
@@ -47,7 +48,6 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.3.3",
     "reflect-metadata": "^0.1.13",
-    "ts-node": "^9.0.0",
     "tsyringe": "^4.3.0",
     "typeorm": "^0.2.28",
     "uuidv4": "^6.2.3"
