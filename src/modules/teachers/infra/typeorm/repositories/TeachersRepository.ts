@@ -7,24 +7,24 @@ import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
 import ITeachersRepository from '@modules/teachers/repositories/ITeachersRepository';
 
 class TeachersRepository implements ITeachersRepository {
-  private ormRepository: Repository<Teacher>;
+  private teachersRepository: Repository<Teacher>;
 
   private usersRepository: Repository<User>;
 
   constructor() {
-    this.ormRepository = getRepository(Teacher);
+    this.teachersRepository = getRepository(Teacher);
     this.usersRepository = getRepository(User);
   }
 
   public async findByUserId(id: string): Promise<Teacher | undefined> {
-    const teacher = await this.ormRepository.findOne({
+    const teacher = await this.teachersRepository.findOne({
       where: { user_id: id },
     });
     return teacher;
   }
 
   public async findById(id: string): Promise<Teacher | undefined> {
-    const teacher = await this.ormRepository.findOne(id);
+    const teacher = await this.teachersRepository.findOne(id);
     return teacher;
   }
 
@@ -35,7 +35,7 @@ class TeachersRepository implements ITeachersRepository {
       throw new AppError('User not found!', 400);
     }
 
-    const teacher = await this.ormRepository.findOne({
+    const teacher = await this.teachersRepository.findOne({
       where: { user_id: user.id },
     });
 
@@ -43,14 +43,14 @@ class TeachersRepository implements ITeachersRepository {
   }
 
   public async create(userId: string): Promise<Teacher> {
-    const user = this.ormRepository.create({ user_id: userId });
-    await this.ormRepository.save(user);
+    const user = this.teachersRepository.create({ user_id: userId });
+    await this.teachersRepository.save(user);
 
     return user;
   }
 
   public async save(teacher: Teacher): Promise<Teacher> {
-    return this.ormRepository.save(teacher);
+    return this.teachersRepository.save(teacher);
   }
 }
 

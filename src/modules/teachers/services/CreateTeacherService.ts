@@ -1,27 +1,30 @@
-import { getRepository } from 'typeorm';
 import { injectable, inject } from 'tsyringe';
 
-import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
-import User from '@modules/users/infra/typeorm/entities/User';
 import AppError from '@shared/errors/AppError';
 
+import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
+
 import ITeachersRepository from '@modules/teachers/repositories/ITeachersRepository';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
 @injectable()
 class CreateTeacherService {
   private teachersRepository: ITeachersRepository;
 
-  // TODO: APLICAR USERREPOSITORY COM SINGLETON
+  private usersRepository: IUsersRepository;
+
   constructor(
     @inject('TeachersRepository')
     teachersRepository: ITeachersRepository,
+    @inject('UsersRepository')
+    usersRepository: IUsersRepository,
   ) {
     this.teachersRepository = teachersRepository;
+    this.usersRepository = usersRepository;
   }
 
   public async execute(id: string): Promise<Teacher> {
-    const userRepository = getRepository(User);
-    const userExists = await userRepository.findOne({ id });
+    const userExists = await this.usersRepository.findById(id);
 
     if (!userExists) {
       throw new AppError('User not found!');
