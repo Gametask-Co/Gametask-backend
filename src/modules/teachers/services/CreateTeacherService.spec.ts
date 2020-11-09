@@ -8,7 +8,7 @@ import FakeUsersRepository from '@modules/users/repositories/fakes/fakeUsersRepo
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
 
-describe('CreateUser', () => {
+describe('CreateTeacher', () => {
   let fakeUsersRepository: IUsersRepository;
 
   beforeEach(async () => {
@@ -20,7 +20,7 @@ describe('CreateUser', () => {
     });
   });
 
-  it('Should receive User not found', async () => {
+  it('Should create a teacher', async () => {
     const user = await fakeUsersRepository.findByEmail('johndoe@example.com');
 
     const fakeTeachersRepository = new FakeTeachersRepository(
