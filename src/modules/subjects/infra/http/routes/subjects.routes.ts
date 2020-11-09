@@ -1,35 +1,35 @@
 import { Router } from 'express';
+
 import SubjectsController from '@modules/subjects/infra/controllers/SubjectsController';
+import SubjectStudentsController from '@modules/subjects/infra/controllers/SubjectStudentsController';
+import SubjectStudentsByEmailController from '@modules/subjects/infra/controllers/SubjectStudentsByEmailController';
+
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 
 const subjectsRouter = Router();
 const subjectsController = new SubjectsController();
+const subjectStudentsController = new SubjectStudentsController();
+const subjectStudentsByEmailController = new SubjectStudentsByEmailController();
 
 subjectsRouter.post('/', ensureAuthenticated, subjectsController.create);
 
 subjectsRouter.get('/', ensureAuthenticated, subjectsController.show);
 
-// subjectsRouter.post(
-//   '/student',
-//   ensureAuthenticated,
-//   async (request, response) => {
-//     try {
-//       const { subject_id, student_id } = request.body;
-//       const user_id = request.user.id;
+// SubjectStudentsController
 
-//       const addStudentToSubjectService = new AddStudentToSubjectService();
-//       const subject = await addStudentToSubjectService.execute({
-//         user_id,
-//         subject_id,
-//         student_id,
-//       });
+subjectsRouter.post(
+  '/student',
+  ensureAuthenticated,
+  subjectStudentsController.create,
+);
 
-//       return response.json(subject);
-//     } catch (err) {
-//       return response.status(400).json({ error: err.message });
-//     }
-//   },
-// );
+// SubjectStudentsByEmailController
+
+subjectsRouter.post(
+  '/student/email',
+  ensureAuthenticated,
+  subjectStudentsByEmailController.create,
+);
 
 // subjectsRouter.delete(
 //   '/student',
@@ -47,35 +47,6 @@ subjectsRouter.get('/', ensureAuthenticated, subjectsController.show);
 //       });
 
 //       return response.json({ message: 'ok' });
-//     } catch (err) {
-//       return response.status(400).json({ error: err.message });
-//     }
-//   },
-// );
-
-// subjectsRouter.post(
-//   '/student/email',
-//   ensureAuthenticated,
-//   async (request, response) => {
-//     try {
-//       const { subject_id, student_email } = request.body;
-//       const user_id = request.user.id;
-
-//       const studentRepository = getCustomRepository(StudentRepository);
-//       const student = await studentRepository.findByEmail(student_email);
-
-//       if (!student) {
-//         return response.status(400).json({ message: 'Student not found!' });
-//       }
-
-//       const addStudentToSubjectService = new AddStudentToSubjectService();
-//       const subject = await addStudentToSubjectService.execute({
-//         user_id,
-//         subject_id,
-//         student_id: student.id,
-//       });
-
-//       return response.json(subject);
 //     } catch (err) {
 //       return response.status(400).json({ error: err.message });
 //     }
