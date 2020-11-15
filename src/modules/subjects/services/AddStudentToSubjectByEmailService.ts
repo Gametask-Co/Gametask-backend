@@ -44,6 +44,10 @@ class AddStudentToSubjectByEmailService {
       throw new AppError('Subject not found!');
     }
 
+    if (!subject.students) {
+      subject.students = [];
+    }
+
     const students = subject.students.filter(st => {
       return st.id !== student.id;
     });
