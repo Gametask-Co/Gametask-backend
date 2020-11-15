@@ -9,7 +9,7 @@ import AppError from '@shared/errors/AppError';
 interface RequestDTO {
   name: string;
   description: string;
-  user_id: string;
+  teacher_id: string;
 }
 
 @injectable()
@@ -31,9 +31,9 @@ class CreateSubjectService {
   public async execute({
     name,
     description,
-    user_id,
+    teacher_id,
   }: RequestDTO): Promise<Subject> {
-    const teacher = await this.teachersRepository.findByUserId(user_id);
+    const teacher = await this.teachersRepository.findById(teacher_id);
 
     if (!teacher) {
       throw new AppError('Teacher or User not found!');
