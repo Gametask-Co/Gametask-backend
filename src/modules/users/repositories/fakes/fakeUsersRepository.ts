@@ -1,7 +1,5 @@
 import { v4 } from 'uuid';
 
-import { getRepository, Repository } from 'typeorm';
-
 import IUserRepository from '@modules/users/repositories/IUsersRepository';
 
 import User from '@modules/users/infra/typeorm/entities/User';

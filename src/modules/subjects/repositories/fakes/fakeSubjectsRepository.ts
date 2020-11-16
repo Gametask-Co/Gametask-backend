@@ -1,4 +1,4 @@
-import { getRepository, Repository } from 'typeorm';
+import { v4 } from 'uuid';
 
 import ISubjectsRepository from '@modules/subjects/repositories/ISubjectsRepository';
 import Subject from '@modules/subjects/infra/typeorm/entities/Subject';
@@ -6,37 +6,37 @@ import Subject from '@modules/subjects/infra/typeorm/entities/Subject';
 import CreateSubjectDTO from '@modules/subjects/dtos/CreateSubjectDTO';
 
 class SubjectRepository implements ISubjectsRepository {
-  private ormRepository: Repository<Subject>;
+  private subjects: Subject[];
 
   constructor() {
-    this.ormRepository = getRepository(Subject);
+    this.subjects = [];
   }
 
   public async findById(id: string): Promise<Subject | undefined> {
-    const subject = this.ormRepository.findOne({
-      where: { id },
-      relations: ['students'],
-    });
-    return subject;
+    const findSubject = this.subjects.find(subject => subject.id === id);
+    return findSubject;
   }
 
   public async findAllByTeacherId(id: string): Promise<Subject[] | undefined> {
-    const subjects = this.ormRepository.find({
-      where: { teacher: id },
-      relations: ['students'],
+    const findSubjects = this.subjects.map(subject => {
+      return subject.teacher.id === id ? subject : undefined;
     });
-    return subjects;
+    return findSubjects;
   }
 
   public async create(data: CreateSubjectDTO): Promise<Subject> {
-    const subject = this.ormRepository.create(data);
-
-    await this.ormRepository.save(subject);
+    const subject = new Subject();
+    Object.assign(subject, { id: v4() }, data);
+    this.subjects.push(subject);
     return subject;
   }
 
   public async save(subject: Subject): Promise<Subject> {
-    return this.ormRepository.save(subject);
+    const findIndex = this.subjects.findIndex(
+      findSubject => findSubject.id === subject.id,
+    );
+    this.subjects[findIndex] = subject;
+    return subject;
   }
 }
 

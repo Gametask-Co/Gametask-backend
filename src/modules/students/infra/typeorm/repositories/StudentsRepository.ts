@@ -1,4 +1,5 @@
 import { Repository, getRepository } from 'typeorm';
+import AppError from '@shared/errors/AppError';
 
 import IStudentsRepository from '@modules/students/repositories/IStudentsRepository';
 
@@ -28,7 +29,7 @@ class StudentsRepository implements IStudentsRepository {
     });
 
     if (!findUser) {
-      throw new Error('Student not found!');
+      throw new AppError('Student not found!', 400);
     }
 
     const findStudent = await this.ormRepository.findOne({
@@ -38,7 +39,7 @@ class StudentsRepository implements IStudentsRepository {
     });
 
     if (!findStudent) {
-      throw new Error('Student not found!');
+      throw new AppError('Student not found!', 400);
     }
 
     return findStudent;

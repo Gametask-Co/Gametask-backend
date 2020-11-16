@@ -8,12 +8,12 @@ import IStudentsRepository from '@modules/students/repositories/IStudentsReposit
 import ISubjectsRepository from '../repositories/ISubjectsRepository';
 
 interface RequestDTO {
-  student_id: string;
+  student_email: string;
   subject_id: string;
 }
 
 @injectable()
-class AddStudentToSubjectService {
+class AddStudentToSubjectByEmailService {
   private subjectsRepository: ISubjectsRepository;
 
   private studentsRepository: IStudentsRepository;
@@ -29,10 +29,10 @@ class AddStudentToSubjectService {
   }
 
   public async execute({
-    student_id,
+    student_email,
     subject_id,
   }: RequestDTO): Promise<Subject> {
-    const student = await this.studentsRepository.findById(student_id);
+    const student = await this.studentsRepository.findByEmail(student_email);
 
     if (!student) {
       throw new AppError('Student not found!');
@@ -61,4 +61,4 @@ class AddStudentToSubjectService {
   }
 }
 
-export default AddStudentToSubjectService;
+export default AddStudentToSubjectByEmailService;

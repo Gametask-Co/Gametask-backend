@@ -1,11 +1,10 @@
 import { injectable, inject } from 'tsyringe';
-import { getRepository } from 'typeorm';
 import AppError from '@shared/errors/AppError';
 
 import Student from '@modules/students/infra/typeorm/entities/Student';
-import User from '@modules/users/infra/typeorm/entities/User';
 
 import IStudentsRepository from '@modules/students/repositories/IStudentsRepository';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
 interface IRequestDTO {
   id: string;
@@ -15,17 +14,20 @@ interface IRequestDTO {
 class CreateStudentService {
   private studentsRepository: IStudentsRepository;
 
-  // TODO: APLICAR USERREPOSITORY COM SINGLETON
+  private usersRepository: IUsersRepository;
+
   constructor(
     @inject('StudentsRepository')
     studentsRepository: IStudentsRepository,
+    @inject('UsersRepository')
+    usersRepository: IUsersRepository,
   ) {
     this.studentsRepository = studentsRepository;
+    this.usersRepository = usersRepository;
   }
 
   public async execute({ id }: IRequestDTO): Promise<Student> {
-    const userRepository = getRepository(User);
-    const userExists = await userRepository.findOne({ id });
+    const userExists = await this.usersRepository.findById(id);
 
     if (!userExists) {
       throw new AppError('User not found!');
