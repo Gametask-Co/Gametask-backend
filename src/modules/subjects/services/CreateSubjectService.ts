@@ -42,7 +42,7 @@ class CreateSubjectService {
     const subject = await this.subjectsRepository.create({
       name,
       description,
-      teacher,
+      teacher_id,
     });
 
     return subject;
