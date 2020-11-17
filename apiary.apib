@@ -1,80 +1,212 @@
 FORMAT: 1A
-HOST: https://polls.apiblueprint.org/
+HOST: https://gametask-api.herokuapp.com
 
 # Gametask-backend
 
-Polls is a simple API allowing consumers to view polls and vote in them.
+GT-API is a simple API allowing front-end to consume data.
 
-## Questions Collection [/questions]
+## User [/users]
 
-### List All Questions [GET]
+### Fetch Resource [GET]
 
 + Response 200 (application/json)
 
         [
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 2048
-                    }, {
-                        "choice": "Python",
-                        "votes": 1024
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 512
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 256
-                    }
-                ]
-            }
+            
         ]
 
-### Create a New Question [POST]
+### Create Resource [POST]
 
-You may create your own question using this action. It takes a JSON
-object containing a question and a collection of answers in the
-form of choices.
-
-+ Request (application/json)
++ Request 200 (application/json)
 
         {
-            "question": "Favourite programming language?",
-            "choices": [
-                "Swift",
-                "Python",
-                "Objective-C",
-                "Ruby"
-            ]
+            "name": "João",
+            "email": "joao11@gmail.com",
+            "birthday": "02/21/2000",
+            "gender": "masculino",
+            "avatar_url": "",
+            "password": "Jo@o123456"
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "id": "577830b2-5ba0-4fb9-b670-3f50e68e1061",
+            "name": "João",
+            "email": "joao11@gmail.com",
+            "birthday": "02/21/2000",
+            "gender": "masculino",
+            "avatar_url": null,
+            "created_at": "2020-11-17T19:12:58.767Z",
+            "updated_at": "2020-11-17T19:12:58.767Z"
         }
 
-+ Response 201 (application/json)
+### Update Resource [PUT]
 
-    + Headers
++ Request 200 (application/json)
 
-            Location: /questions/2
+        {
+        
+        }
+        
+### Delete Resource [DELETE]
 
-    + Body
++ Request 200 (application/json)
 
-            {
-                "question": "Favourite programming language?",
-                "published_at": "2015-08-05T08:40:51.620Z",
-                "choices": [
-                    {
-                        "choice": "Swift",
-                        "votes": 0
-                    }, {
-                        "choice": "Python",
-                        "votes": 0
-                    }, {
-                        "choice": "Objective-C",
-                        "votes": 0
-                    }, {
-                        "choice": "Ruby",
-                        "votes": 0
-                    }
-                ]
-            }
+        {
+        
+        }
+        
+## Sessions [/sessions]
+
+### Fetch Resource [GET]
+
++ Request 200 (application/json)
+
+        [
+            
+        ]
+
+### Create Resource [POST]
+
++ Request 200 (application/json)
+
+        {
+            "email": "joao11@gmail.com",
+            "password": "Jo@o123456"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "id": "577830b2-5ba0-4fb9-b670-3f50e68e1061",
+            "name": "João",
+            "email": "joao11@gmail.com",
+            "birthday": "2000-02-21T00:00:00.000Z",
+            "gender": "masculino",
+            "avatar_url": null,
+            "created_at": "2020-11-17T19:12:58.767Z",
+            "updated_at": "2020-11-17T19:12:58.767Z",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDU2NDA1MTMsImV4cCI6MTYwNTcyNjkxMywic3ViIjoiNTc3ODMwYjItNWJhMC00ZmI5LWI2NzAtM2Y1MGU2OGUxMDYxIn0.5zYwdoy-G0dfDMg-TzNST8Pxk9RwVDVca2MdGSdcgbQ"
+        }
+
+### Update Resource [PUT]
+
++ Request 200 (application/json)
+
+        {
+        
+        }
+  
+### Delete Resource [DELETE]
+
++ Request 200 (application/json)
+
+        {
+        
+        }
+        
+        
+## Students [/students]
+
+### Fetch Resource [GET]
+
++ Request 200 (application/json)
+
+        [
+            
+        ]
+
+### Create Resource [POST]
+
++ Request 200 (application/json)
+
+        {
+            
+        }
+
+### Update Resource [PUT]
+
++ Request 200 (application/json)
+
+        {
+        
+        }
+  
+### Delete Resource [DELETE]
+
++ Request 200 (application/json)
+
+        {
+        
+        }
+
+## Teachers [/teachers]
+
+### Fetch Resource [GET]
+
++ Request 200 (application/json)
+
+        [
+            
+        ]
+
+### Create Resource [POST]
+
++ Request 200 (application/json)
+
+        {
+            
+        }
+
+### Update Resource [PUT]
+
++ Request 200 (application/json)
+
+        {
+        
+        }
+  
+### Delete Resource [DELETE]
+
++ Request 200 (application/json)
+
+        {
+        
+        }
+
+## Subjects [/subjects]
+
+### Fetch Resource [GET]
+
++ Request 200 (application/json)
+
+        [
+            
+        ]
+
+### Create Resource [POST]
+
++ Request 200 (application/json)
+
+        {
+            
+        }
+        
++ Response 200 (application/json)
+
+### Update Resource [PUT]
+
++ Request 200 (application/json)
+
+        {
+        
+        }
+  
+### Delete Resource [DELETE]
+
++ Request 200 (application/json)
+
+        {
+        
+        }
