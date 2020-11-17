@@ -5,6 +5,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   Column,
+  JoinColumn,
 } from 'typeorm';
 
 import Block from './Block';
@@ -29,7 +30,11 @@ class Task {
   @Column({ default: 0 })
   total_score: number;
 
+  @Column()
+  block_id: string;
+
   @ManyToOne(() => Block, () => Task)
+  @JoinColumn({ name: 'block_id' })
   block: Block;
 
   @CreateDateColumn()

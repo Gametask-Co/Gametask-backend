@@ -8,6 +8,7 @@ import {
   ManyToMany,
   JoinTable,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
 
 import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
@@ -28,7 +29,11 @@ class Subject {
   @Column({ nullable: true })
   background_url: string;
 
+  @Column()
+  teacher_id: string;
+
   @ManyToOne(() => Teacher, () => Subject)
+  @JoinColumn({ name: 'teacher_id' })
   teacher: Teacher;
 
   @ManyToMany(() => Student)

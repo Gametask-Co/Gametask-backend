@@ -5,6 +5,8 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToOne,
+  Column,
+  JoinColumn,
 } from 'typeorm';
 
 import Task from './Task';
@@ -16,7 +18,11 @@ class Block {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column()
+  milestone_id: string;
+
   @ManyToOne(() => Milestone, () => Block)
+  @JoinColumn({ name: 'milestone_id' })
   milestone: Milestone;
 
   @OneToMany(() => Task, () => Block)

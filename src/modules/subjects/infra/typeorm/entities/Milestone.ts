@@ -6,6 +6,7 @@ import {
   OneToMany,
   ManyToOne,
   Column,
+  JoinColumn,
 } from 'typeorm';
 
 import Subject from './Subject';
@@ -22,7 +23,11 @@ class Milestone {
   @Column({ nullable: true })
   description: string;
 
+  @Column()
+  subject_id: string;
+
   @ManyToOne(() => Subject, () => Block)
+  @JoinColumn({ name: 'subject_id' })
   subject: Subject;
 
   @OneToMany(() => Block, () => Subject)

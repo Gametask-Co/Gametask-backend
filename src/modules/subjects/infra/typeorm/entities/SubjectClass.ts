@@ -5,6 +5,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   Column,
+  JoinColumn,
 } from 'typeorm';
 
 import Block from './Block';
@@ -20,7 +21,11 @@ class SubjectClass {
   @Column({ nullable: true })
   attachment_url: string;
 
+  @Column()
+  block_id: string;
+
   @ManyToOne(() => Block, () => SubjectClass)
+  @JoinColumn({ name: 'block_id' })
   block: Block;
 
   @CreateDateColumn()
