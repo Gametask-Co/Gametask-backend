@@ -1,8 +1,8 @@
-import Milestone from '@modules/subjects/infra/typeorm/entities/Milestone';
-import CreateMilestoneDTO from '../dtos/CreateMilestoneDTO';
+import Block from '@modules/subjects/infra/typeorm/entities/Block';
+import CreateBlockDTO from '../dtos/CreateBlockDTO';
 
-export default interface IMilestonesRepository {
-  findById(id: string): Promise<Milestone | undefined>;
-  create(data: CreateMilestoneDTO): Promise<Milestone>;
-  save(subject: Milestone): Promise<Milestone>;
+export default interface IBlocksRepository {
+  findById(id: string): Promise<Block | undefined>;
+  create(data: CreateBlockDTO): Promise<Block>;
+  save(subject: Block): Promise<Block>;
 }

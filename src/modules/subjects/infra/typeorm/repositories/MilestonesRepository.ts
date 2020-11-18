@@ -13,7 +13,7 @@ class MilestonesRepository implements IMilestonesRepository {
   public async findById(id: string): Promise<Milestone | undefined> {
     const milestone = this.ormRepository.findOne({
       where: { id },
-      relations: ['tasks', 'subjectclasses'],
+      relations: ['blocks'],
     });
 
     return milestone;
