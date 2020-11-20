@@ -13,7 +13,7 @@ class SubjectRepository implements ISubjectsRepository {
   }
 
   public async findById(id: string): Promise<Subject | undefined> {
-    const subject = this.ormRepository.findOne({
+    const subject = await this.ormRepository.findOne({
       where: { id },
       relations: ['students'],
     });
@@ -21,7 +21,7 @@ class SubjectRepository implements ISubjectsRepository {
   }
 
   public async findAllByTeacherId(id: string): Promise<Subject[] | undefined> {
-    const subjects = this.ormRepository.find({
+    const subjects = await this.ormRepository.find({
       where: { teacher: id },
       relations: ['students'],
     });
