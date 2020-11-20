@@ -19,6 +19,9 @@ class Block {
   id: string;
 
   @Column()
+  name: string;
+
+  @Column()
   milestone_id: string;
 
   @ManyToOne(() => Milestone, () => Block)
