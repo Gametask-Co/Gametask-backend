@@ -8,6 +8,7 @@ import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAut
 import MilestonesRoutes from './milestones.routes';
 import BlocksRoutes from './blocks.routes';
 import TasksRoutes from './tasks.routes';
+import SubjectClassesRoutes from './subjectclasses.routes';
 
 const subjectsRouter = Router();
 const subjectsController = new SubjectsController();
@@ -46,4 +47,7 @@ subjectsRouter.use('/blocks', BlocksRoutes);
 
 subjectsRouter.use('/tasks', TasksRoutes);
 
+// SUBJECT CLASSES
+
+subjectsRouter.use('/subjectclasses', SubjectClassesRoutes);
 export default subjectsRouter;
