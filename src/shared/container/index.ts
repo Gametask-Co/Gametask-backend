@@ -17,6 +17,11 @@ import SubjectsRepository from '@modules/subjects/infra/typeorm/repositories/Sub
 import IMilestonesRepository from '@modules/subjects/repositories/IMilestoneRepository';
 import MilestonesRepository from '@modules/subjects/infra/typeorm/repositories/MilestonesRepository';
 
+import TasksRepository from '@modules/subjects/infra/typeorm/repositories/TasksRepository';
+import ITasksRepository from '@modules/subjects/repositories/ITasksRepository';
+import BlocksRepository from '@modules/subjects/infra/typeorm/repositories/BlocksRepository';
+import IBlocksRepository from '@modules/subjects/repositories/IBlocksRepository';
+
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository,
@@ -40,4 +45,14 @@ container.registerSingleton<ISubjectsRepository>(
 container.registerSingleton<IMilestonesRepository>(
   'MilestonesRepository',
   MilestonesRepository,
+);
+
+container.registerSingleton<IBlocksRepository>(
+  'BlocksRepository',
+  BlocksRepository,
+);
+
+container.registerSingleton<ITasksRepository>(
+  'TasksRepository',
+  TasksRepository,
 );
