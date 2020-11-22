@@ -16,8 +16,6 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import Student from '@modules/students/infra/typeorm/entities/Student';
 import CreateStudentService from '@modules/students/services/CreateStudentService';
 import IStudentsRepository from '@modules/students/repositories/IStudentsRepository';
-import SubjectRepository from '@modules/subjects/repositories/fakes/fakeSubjectsRepository';
-import ChangeToNullableUserFields1604777803719 from '@shared/infra/typeorm/migrations/1604777803719-ChangeToNullableUserFields';
 import ISubjectsRepository from '../repositories/ISubjectsRepository';
 import Subject from '../infra/typeorm/entities/Subject';
 import AddStudentToSubjectService from './AddStudentToSubjectService';
