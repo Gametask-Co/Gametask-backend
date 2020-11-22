@@ -1,5 +1,3 @@
-import ITeachersRepository from '@modules/teachers/repositories/ITeachersRepository';
-
 import { inject, injectable } from 'tsyringe';
 import IStudentsRepository from '@modules/students/repositories/IStudentsRepository';
 import AppError from '@shared/errors/AppError';
@@ -14,36 +12,24 @@ interface RequestDTO {
 
 @injectable()
 class RemoveStudentFromSubjectService {
-  private teachersRepository: ITeachersRepository;
-
   private studentsRepository: IStudentsRepository;
 
   private subjectsRepository: ISubjectsRepository;
 
   constructor(
-    @inject('TeachersRepository')
-    teachersRepository: ITeachersRepository,
     @inject('StudentsRepository')
     studentsRepository: IStudentsRepository,
     @inject('SubjectsRepository')
     subjectsRepository: ISubjectsRepository,
   ) {
-    this.teachersRepository = teachersRepository;
     this.studentsRepository = studentsRepository;
     this.subjectsRepository = subjectsRepository;
   }
 
   public async execute({
-    teacher_id,
     student_id,
     subject_id,
   }: RequestDTO): Promise<Subject | undefined> {
-    const teacher = await this.teachersRepository.findById(teacher_id);
-
-    if (!teacher) {
-      throw new AppError('Not enough permission!');
-    }
-
     const student = await this.studentsRepository.findById(student_id);
 
     if (!student) {
@@ -54,10 +40,6 @@ class RemoveStudentFromSubjectService {
 
     if (!subject) {
       throw new AppError('Subject not found!');
-    }
-
-    if (subject.teacher_id !== teacher.id) {
-      throw new AppError('Not enough permission!');
     }
 
     const students = subject.students.filter(st => {

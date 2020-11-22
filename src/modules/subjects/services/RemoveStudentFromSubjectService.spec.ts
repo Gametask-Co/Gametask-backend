@@ -95,7 +95,6 @@ describe('RemoveStudentFromSubject', () => {
 
   it('Should remove a student from a subject', async () => {
     const removeStudentFromSubjectService = new RemoveStudentFromSubjectService(
-      fakeTeachersRepository,
       fakeStudentsRepository,
       fakeSubjectsRepository,
     );
