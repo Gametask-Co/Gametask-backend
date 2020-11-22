@@ -19,8 +19,12 @@ import MilestonesRepository from '@modules/subjects/infra/typeorm/repositories/M
 
 import TasksRepository from '@modules/subjects/infra/typeorm/repositories/TasksRepository';
 import ITasksRepository from '@modules/subjects/repositories/ITasksRepository';
+
 import BlocksRepository from '@modules/subjects/infra/typeorm/repositories/BlocksRepository';
 import IBlocksRepository from '@modules/subjects/repositories/IBlocksRepository';
+
+import SubjectClassesRepository from '@modules/subjects/repositories/fakes/fakeSubjectClassesRepository';
+import ISubjectClassesRepository from '@modules/subjects/repositories/ISubjectClassesRepository';
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -55,4 +59,9 @@ container.registerSingleton<IBlocksRepository>(
 container.registerSingleton<ITasksRepository>(
   'TasksRepository',
   TasksRepository,
+);
+
+container.registerSingleton<ISubjectClassesRepository>(
+  'SubjectClassesRepository',
+  SubjectClassesRepository,
 );
