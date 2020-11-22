@@ -24,14 +24,14 @@ class Block {
   @Column()
   milestone_id: string;
 
-  @ManyToOne(() => Milestone, () => Block)
+  @ManyToOne(() => Milestone, milestone => milestone.blocks)
   @JoinColumn({ name: 'milestone_id' })
   milestone: Milestone;
 
-  @OneToMany(() => Task, () => Block)
+  @OneToMany(() => Task, task => task.block)
   tasks: Task[];
 
-  @OneToMany(() => SubjectClass, () => Block)
+  @OneToMany(() => SubjectClass, subjectClass => subjectClass.block)
   subjectclasses: SubjectClass[];
 
   @CreateDateColumn()

@@ -30,11 +30,12 @@ export default class SubjectController {
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
-    const { id } = request.user;
+    const teachersRepository = new TeachersRepository();
+    const teacher = await teachersRepository.findByUserId(request.user.id);
 
     const subjectsRepository = new SubjectsRepository();
 
-    const subjects = await subjectsRepository.findAllByTeacherId(id);
+    const subjects = await subjectsRepository.findAllByTeacherId(teacher.id);
 
     return response.json(subjects);
   }
