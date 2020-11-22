@@ -19,9 +19,9 @@ import IStudentsRepository from '@modules/students/repositories/IStudentsReposit
 import ISubjectsRepository from '../repositories/ISubjectsRepository';
 import Subject from '../infra/typeorm/entities/Subject';
 
-import AddStudentToSubjectService from './AddStudentToSubjectService';
+import AddStudentToSubjectByEmailService from './AddStudentToSubjectByEmailService';
 
-describe('AddStudentToSubject', () => {
+describe('AddStudentToSubjectByEmail', () => {
   let fakeUsersRepository: IUsersRepository;
   let fakeTeachersRepository: ITeachersRepository;
   let fakeSubjectsRepository: ISubjectsRepository;
@@ -84,14 +84,14 @@ describe('AddStudentToSubject', () => {
   });
 
   it('Should add a student to a subject', async () => {
-    const addStudentToSubject = new AddStudentToSubjectService(
+    const addStudentToSubject = new AddStudentToSubjectByEmailService(
       fakeSubjectsRepository,
       fakeStudentsRepository,
     );
 
     const response = await addStudentToSubject.execute({
       subject_id: subject.id,
-      student_id: student.id,
+      student_email: 'johndoestudent@example.com',
     });
 
     expect(response).toHaveProperty('id');

@@ -1,72 +1,56 @@
-// import { getCustomRepository } from 'typeorm';
+import { inject, injectable } from 'tsyringe';
+import IStudentsRepository from '@modules/students/repositories/IStudentsRepository';
+import AppError from '@shared/errors/AppError';
+import ISubjectsRepository from '../repositories/ISubjectsRepository';
+import Subject from '../infra/typeorm/entities/Subject';
 
-// import SubjectRepository from '../repositories/SubjectRepository';
-// import StudentRepository from '../repositories/StudentRepository';
+interface RequestDTO {
+  teacher_id: string;
+  student_id: string;
+  subject_id: string;
+}
 
-// import Student from '../models/Student';
-// import TeacherRepository from '../repositories/TeacherRepository';
+@injectable()
+class RemoveStudentFromSubjectService {
+  private studentsRepository: IStudentsRepository;
 
-// interface RequestDTO {
-//   user_id: string;
-//   student_id: string;
-//   subject_id: string;
-// }
+  private subjectsRepository: ISubjectsRepository;
 
-// class RemoveStudentFromSubjectService {
-//   public async execute({
-//     user_id,
-//     student_id,
-//     subject_id,
-//   }: RequestDTO): Promise<Student | null> {
-//     // CHECK IF TEACHER EXISTS
-//     const teacherRepository = getCustomRepository(TeacherRepository);
-//     const teacher = await teacherRepository.findOne({
-//       where: { user_id },
-//     });
+  constructor(
+    @inject('StudentsRepository')
+    studentsRepository: IStudentsRepository,
+    @inject('SubjectsRepository')
+    subjectsRepository: ISubjectsRepository,
+  ) {
+    this.studentsRepository = studentsRepository;
+    this.subjectsRepository = subjectsRepository;
+  }
 
-//     if (!teacher) {
-//       throw new Error('Not enough permission!');
-//     }
+  public async execute({
+    student_id,
+    subject_id,
+  }: RequestDTO): Promise<Subject | undefined> {
+    const student = await this.studentsRepository.findById(student_id);
 
-//     // CHECK IF STUDENT EXISTS
+    if (!student) {
+      throw new AppError('Student not found!');
+    }
 
-//     const studentRepository = getCustomRepository(StudentRepository);
-//     const student = await studentRepository.findOne({
-//       where: { id: student_id },
-//     });
+    const subject = await this.subjectsRepository.findById(subject_id);
 
-//     if (!student) {
-//       throw new Error('Student not found!');
-//     }
+    if (!subject) {
+      throw new AppError('Subject not found!');
+    }
 
-//     // CHECK IF SUBJECT EXISTS
+    const students = subject.students.filter(st => {
+      return st.id !== student.id;
+    });
 
-//     const subjectRepository = getCustomRepository(SubjectRepository);
+    subject.students = students;
+    await this.subjectsRepository.save(subject);
 
-//     const subject = await subjectRepository.findOne({
-//       relations: ['students'],
-//       where: { id: subject_id },
-//     });
+    return subject;
+  }
+}
 
-//     if (!subject) {
-//       throw new Error('Subject not found!');
-//     }
-
-//     // CHECK IF TEACHER IS OWNER OF SUBJECT
-
-//     if (subject.teacher_id !== teacher.id) {
-//       throw new Error('Not enough permission!');
-//     }
-
-//     const students = subject.students.filter(st => {
-//       return st.id !== student.id;
-//     });
-
-//     subject.students = students;
-//     await subjectRepository.save(subject);
-
-//     return student;
-//   }
-// }
-
-// export default RemoveStudentFromSubjectService;
+export default RemoveStudentFromSubjectService;

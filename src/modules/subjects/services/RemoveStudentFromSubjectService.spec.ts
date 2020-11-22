@@ -18,10 +18,10 @@ import CreateStudentService from '@modules/students/services/CreateStudentServic
 import IStudentsRepository from '@modules/students/repositories/IStudentsRepository';
 import ISubjectsRepository from '../repositories/ISubjectsRepository';
 import Subject from '../infra/typeorm/entities/Subject';
-
 import AddStudentToSubjectService from './AddStudentToSubjectService';
+import RemoveStudentFromSubjectService from './RemoveStudentFromSubjectService';
 
-describe('AddStudentToSubject', () => {
+describe('RemoveStudentFromSubject', () => {
   let fakeUsersRepository: IUsersRepository;
   let fakeTeachersRepository: ITeachersRepository;
   let fakeSubjectsRepository: ISubjectsRepository;
@@ -81,20 +81,31 @@ describe('AddStudentToSubject', () => {
     );
 
     student = await createStudent.execute({ id: user_student.id });
-  });
 
-  it('Should add a student to a subject', async () => {
     const addStudentToSubject = new AddStudentToSubjectService(
       fakeSubjectsRepository,
       fakeStudentsRepository,
     );
 
-    const response = await addStudentToSubject.execute({
+    await addStudentToSubject.execute({
       subject_id: subject.id,
       student_id: student.id,
     });
+  });
+
+  it('Should remove a student from a subject', async () => {
+    const removeStudentFromSubjectService = new RemoveStudentFromSubjectService(
+      fakeStudentsRepository,
+      fakeSubjectsRepository,
+    );
+
+    const response = await removeStudentFromSubjectService.execute({
+      teacher_id: teacher.id,
+      student_id: student.id,
+      subject_id: subject.id,
+    });
 
     expect(response).toHaveProperty('id');
-    expect(response.students).toHaveLength(1);
+    expect(response.students).toHaveLength(0);
   });
 });

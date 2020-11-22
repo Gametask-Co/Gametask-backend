@@ -7,6 +7,7 @@ import FakeSubjectsRepository from '@modules/subjects/repositories/fakes/fakeSub
 import FakeTeachersRepository from '@modules/teachers/repositories/fakes/fakeTeachersRepository';
 import FakeUsersRepository from '@modules/users/repositories/fakes/fakeUsersRepository';
 import FakeStudentsRepository from '@modules/students/repositories/fakes/fakeStudentsRepository';
+import FakeMilestonesRepository from '@modules/subjects/repositories/fakes/fakeMilestonesRepository';
 
 import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
 import ITeachersRepository from '@modules/teachers/repositories/ITeachersRepository';
@@ -16,19 +17,25 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import Student from '@modules/students/infra/typeorm/entities/Student';
 import CreateStudentService from '@modules/students/services/CreateStudentService';
 import IStudentsRepository from '@modules/students/repositories/IStudentsRepository';
+import FakeBlocksRepository from '@modules/subjects/repositories/fakes/fakeBlocksRepository';
 import ISubjectsRepository from '../repositories/ISubjectsRepository';
 import Subject from '../infra/typeorm/entities/Subject';
 
-import AddStudentToSubjectService from './AddStudentToSubjectService';
+import CreateMilestoneService from './CreateMilestoneService';
+import IMilestonesRepository from '../repositories/IMilestoneRepository';
+import Milestone from '../infra/typeorm/entities/Milestone';
+import CreateBlockService from './CreateBlockService';
 
-describe('AddStudentToSubject', () => {
+describe('CreateBlock', () => {
   let fakeUsersRepository: IUsersRepository;
   let fakeTeachersRepository: ITeachersRepository;
   let fakeSubjectsRepository: ISubjectsRepository;
   let fakeStudentsRepository: IStudentsRepository;
+  let fakeMilestonesRepository: IMilestonesRepository;
   let teacher: Teacher;
   let student: Student;
   let subject: Subject;
+  let milestone: Milestone;
 
   beforeAll(async () => {
     fakeUsersRepository = new FakeUsersRepository();
@@ -81,20 +88,34 @@ describe('AddStudentToSubject', () => {
     );
 
     student = await createStudent.execute({ id: user_student.id });
-  });
 
-  it('Should add a student to a subject', async () => {
-    const addStudentToSubject = new AddStudentToSubjectService(
+    fakeMilestonesRepository = new FakeMilestonesRepository();
+
+    const createMilestoneService = new CreateMilestoneService(
+      fakeMilestonesRepository,
       fakeSubjectsRepository,
-      fakeStudentsRepository,
     );
 
-    const response = await addStudentToSubject.execute({
+    milestone = await createMilestoneService.execute({
       subject_id: subject.id,
-      student_id: student.id,
+      name: 'Milestone Test',
+      description: 'Description Test',
+    });
+  });
+
+  it('Should create a block', async () => {
+    const fakeBlocksRepository = new FakeBlocksRepository();
+
+    const createBlockService = new CreateBlockService(
+      fakeBlocksRepository,
+      fakeMilestonesRepository,
+    );
+
+    const response = await createBlockService.execute({
+      name: 'Block name',
+      milestone_id: milestone.id,
     });
 
     expect(response).toHaveProperty('id');
-    expect(response.students).toHaveLength(1);
   });
 });

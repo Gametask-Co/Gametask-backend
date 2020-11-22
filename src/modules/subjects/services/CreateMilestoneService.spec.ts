@@ -7,6 +7,7 @@ import FakeSubjectsRepository from '@modules/subjects/repositories/fakes/fakeSub
 import FakeTeachersRepository from '@modules/teachers/repositories/fakes/fakeTeachersRepository';
 import FakeUsersRepository from '@modules/users/repositories/fakes/fakeUsersRepository';
 import FakeStudentsRepository from '@modules/students/repositories/fakes/fakeStudentsRepository';
+import FakeMilestonesRepository from '@modules/subjects/repositories/fakes/fakeMilestonesRepository';
 
 import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
 import ITeachersRepository from '@modules/teachers/repositories/ITeachersRepository';
@@ -19,7 +20,7 @@ import IStudentsRepository from '@modules/students/repositories/IStudentsReposit
 import ISubjectsRepository from '../repositories/ISubjectsRepository';
 import Subject from '../infra/typeorm/entities/Subject';
 
-import AddStudentToSubjectService from './AddStudentToSubjectService';
+import CreateMilestoneService from './CreateMilestoneService';
 
 describe('AddStudentToSubject', () => {
   let fakeUsersRepository: IUsersRepository;
@@ -83,18 +84,20 @@ describe('AddStudentToSubject', () => {
     student = await createStudent.execute({ id: user_student.id });
   });
 
-  it('Should add a student to a subject', async () => {
-    const addStudentToSubject = new AddStudentToSubjectService(
+  it('Should create a milestone', async () => {
+    const fakeMilestonesRepository = new FakeMilestonesRepository();
+
+    const createMilestoneService = new CreateMilestoneService(
+      fakeMilestonesRepository,
       fakeSubjectsRepository,
-      fakeStudentsRepository,
     );
 
-    const response = await addStudentToSubject.execute({
+    const response = await createMilestoneService.execute({
       subject_id: subject.id,
-      student_id: student.id,
+      name: 'Milestone Test',
+      description: 'Description Test',
     });
 
     expect(response).toHaveProperty('id');
-    expect(response.students).toHaveLength(1);
   });
 });
