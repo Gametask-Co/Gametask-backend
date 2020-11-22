@@ -118,6 +118,7 @@ describe('CreateSubjectClass', () => {
     block = await createBlockService.execute({
       name: 'Block name',
       milestone_id: milestone.id,
+      subject_id: subject.id,
     });
   });
 
@@ -132,6 +133,7 @@ describe('CreateSubjectClass', () => {
     const response = await createSubjectClassService.execute({
       name: 'Subject Class Name',
       block_id: block.id,
+      subject_id: subject.id,
     });
 
     expect(response).toHaveProperty('id');

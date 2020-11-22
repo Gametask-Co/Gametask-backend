@@ -118,6 +118,7 @@ describe('CreateTask', () => {
     block = await createBlockService.execute({
       name: 'Block name',
       milestone_id: milestone.id,
+      subject_id: subject.id,
     });
   });
 
@@ -135,6 +136,7 @@ describe('CreateTask', () => {
       description: 'Task Description',
       total_score: 0,
       due: new Date(Date.now()),
+      subject_id: subject.id,
     });
 
     expect(response).toHaveProperty('id');

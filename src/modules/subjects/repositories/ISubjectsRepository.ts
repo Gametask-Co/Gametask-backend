@@ -7,4 +7,5 @@ export default interface ISubjectsRepository {
   findById(id: string): Promise<Subject | undefined>;
   create(data: CreateSubjectDTO): Promise<Subject>;
   save(subject: Subject): Promise<Subject>;
+  isOwner(teacher_id: string, subject_id: string): Promise<Subject | undefined>;
 }

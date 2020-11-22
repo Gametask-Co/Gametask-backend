@@ -114,6 +114,7 @@ describe('CreateBlock', () => {
     const response = await createBlockService.execute({
       name: 'Block name',
       milestone_id: milestone.id,
+      subject_id: subject.id,
     });
 
     expect(response).toHaveProperty('id');

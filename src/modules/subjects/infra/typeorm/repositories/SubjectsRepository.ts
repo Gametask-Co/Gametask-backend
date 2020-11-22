@@ -38,6 +38,17 @@ class SubjectRepository implements ISubjectsRepository {
   public async save(subject: Subject): Promise<Subject> {
     return this.ormRepository.save(subject);
   }
+
+  public async isOwner(
+    teacher_id: string,
+    subject_id: string,
+  ): Promise<Subject | undefined> {
+    const subject = await this.ormRepository.findOne({
+      where: { id: subject_id, teacher_id },
+      relations: ['students'],
+    });
+    return subject;
+  }
 }
 
 export default SubjectRepository;
