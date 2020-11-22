@@ -7,7 +7,7 @@ import FakeSubjectsRepository from '@modules/subjects/repositories/fakes/fakeSub
 import FakeTeachersRepository from '@modules/teachers/repositories/fakes/fakeTeachersRepository';
 import FakeUsersRepository from '@modules/users/repositories/fakes/fakeUsersRepository';
 import FakeStudentsRepository from '@modules/students/repositories/fakes/fakeStudentsRepository';
-import FakeMilestonesRepository from '@modules/subjects/repositories/fakes/fakeMilestoneRepository';
+import FakeMilestonesRepository from '@modules/subjects/repositories/fakes/fakeMilestonesRepository';
 
 import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
 import ITeachersRepository from '@modules/teachers/repositories/ITeachersRepository';
