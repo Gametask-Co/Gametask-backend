@@ -28,3 +28,6 @@ dist
 ormconfig.json
 
 coverage
+
+tmp/*
+!tmp/.gitkeep
