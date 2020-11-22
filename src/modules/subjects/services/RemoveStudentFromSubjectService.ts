@@ -1,72 +1,74 @@
-// import { getCustomRepository } from 'typeorm';
+import ITeachersRepository from '@modules/teachers/repositories/ITeachersRepository';
 
-// import SubjectRepository from '../repositories/SubjectRepository';
-// import StudentRepository from '../repositories/StudentRepository';
+import { inject, injectable } from 'tsyringe';
+import IStudentsRepository from '@modules/students/repositories/IStudentsRepository';
+import AppError from '@shared/errors/AppError';
+import ISubjectsRepository from '../repositories/ISubjectsRepository';
+import Subject from '../infra/typeorm/entities/Subject';
 
-// import Student from '../models/Student';
-// import TeacherRepository from '../repositories/TeacherRepository';
+interface RequestDTO {
+  teacher_id: string;
+  student_id: string;
+  subject_id: string;
+}
 
-// interface RequestDTO {
-//   user_id: string;
-//   student_id: string;
-//   subject_id: string;
-// }
+@injectable()
+class RemoveStudentFromSubjectService {
+  private teachersRepository: ITeachersRepository;
 
-// class RemoveStudentFromSubjectService {
-//   public async execute({
-//     user_id,
-//     student_id,
-//     subject_id,
-//   }: RequestDTO): Promise<Student | null> {
-//     // CHECK IF TEACHER EXISTS
-//     const teacherRepository = getCustomRepository(TeacherRepository);
-//     const teacher = await teacherRepository.findOne({
-//       where: { user_id },
-//     });
+  private studentsRepository: IStudentsRepository;
 
-//     if (!teacher) {
-//       throw new Error('Not enough permission!');
-//     }
+  private subjectsRepository: ISubjectsRepository;
 
-//     // CHECK IF STUDENT EXISTS
+  constructor(
+    @inject('TeachersRepository')
+    teachersRepository: ITeachersRepository,
+    @inject('StudentsRepository')
+    studentsRepository: IStudentsRepository,
+    @inject('SubjectsRepository')
+    subjectsRepository: ISubjectsRepository,
+  ) {
+    this.teachersRepository = teachersRepository;
+    this.studentsRepository = studentsRepository;
+    this.subjectsRepository = subjectsRepository;
+  }
 
-//     const studentRepository = getCustomRepository(StudentRepository);
-//     const student = await studentRepository.findOne({
-//       where: { id: student_id },
-//     });
+  public async execute({
+    teacher_id,
+    student_id,
+    subject_id,
+  }: RequestDTO): Promise<Subject | undefined> {
+    const teacher = await this.teachersRepository.findById(teacher_id);
 
-//     if (!student) {
-//       throw new Error('Student not found!');
-//     }
+    if (!teacher) {
+      throw new AppError('Not enough permission!');
+    }
 
-//     // CHECK IF SUBJECT EXISTS
+    const student = await this.studentsRepository.findById(student_id);
 
-//     const subjectRepository = getCustomRepository(SubjectRepository);
+    if (!student) {
+      throw new AppError('Student not found!');
+    }
 
-//     const subject = await subjectRepository.findOne({
-//       relations: ['students'],
-//       where: { id: subject_id },
-//     });
+    const subject = await this.subjectsRepository.findById(subject_id);
 
-//     if (!subject) {
-//       throw new Error('Subject not found!');
-//     }
+    if (!subject) {
+      throw new AppError('Subject not found!');
+    }
 
-//     // CHECK IF TEACHER IS OWNER OF SUBJECT
+    if (subject.teacher_id !== teacher.id) {
+      throw new AppError('Not enough permission!');
+    }
 
-//     if (subject.teacher_id !== teacher.id) {
-//       throw new Error('Not enough permission!');
-//     }
+    const students = subject.students.filter(st => {
+      return st.id !== student.id;
+    });
 
-//     const students = subject.students.filter(st => {
-//       return st.id !== student.id;
-//     });
+    subject.students = students;
+    await this.subjectsRepository.save(subject);
 
-//     subject.students = students;
-//     await subjectRepository.save(subject);
+    return subject;
+  }
+}
 
-//     return student;
-//   }
-// }
-
-// export default RemoveStudentFromSubjectService;
+export default RemoveStudentFromSubjectService;
