@@ -7,6 +7,7 @@ import SubjectStudentsByEmailController from '@modules/subjects/infra/controller
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 import MilestonesRoutes from './milestones.routes';
 import BlocksRoutes from './blocks.routes';
+import TasksRoutes from './tasks.routes';
 
 const subjectsRouter = Router();
 const subjectsController = new SubjectsController();
@@ -40,5 +41,9 @@ subjectsRouter.use('/milestones', MilestonesRoutes);
 // BLOCKS
 
 subjectsRouter.use('/blocks', BlocksRoutes);
+
+// TASKS
+
+subjectsRouter.use('/tasks', TasksRoutes);
 
 export default subjectsRouter;
