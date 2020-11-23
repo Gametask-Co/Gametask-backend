@@ -26,11 +26,11 @@ class Milestone {
   @Column()
   subject_id: string;
 
-  @ManyToOne(() => Subject, () => Block)
+  @ManyToOne(() => Subject, subject => subject.milestones)
   @JoinColumn({ name: 'subject_id' })
   subject: Subject;
 
-  @OneToMany(() => Block, () => Subject)
+  @OneToMany(() => Block, block => block.milestone)
   blocks: Block[];
 
   @CreateDateColumn()

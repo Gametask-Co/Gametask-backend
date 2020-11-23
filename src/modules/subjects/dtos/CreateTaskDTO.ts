@@ -5,4 +5,5 @@ export default interface CreateTaskDTO {
   attachment_url?: string;
   total_score?: number;
   block_id: string;
+  subject_id: string;
 }

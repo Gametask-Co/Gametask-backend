@@ -5,6 +5,10 @@ import SubjectStudentsController from '@modules/subjects/infra/controllers/Subje
 import SubjectStudentsByEmailController from '@modules/subjects/infra/controllers/SubjectStudentsByEmailController';
 
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
+import MilestonesRoutes from './milestones.routes';
+import BlocksRoutes from './blocks.routes';
+import TasksRoutes from './tasks.routes';
+import SubjectClassesRoutes from './subjectclasses.routes';
 
 const subjectsRouter = Router();
 const subjectsController = new SubjectsController();
@@ -31,26 +35,19 @@ subjectsRouter.post(
   subjectStudentsByEmailController.create,
 );
 
-// subjectsRouter.delete(
-//   '/student',
-//   ensureAuthenticated,
-//   async (request, response) => {
-//     try {
-//       const { subject_id, student_id } = request.body;
-//       const user_id = request.user.id;
+// MILESTONES
 
-//       const removeStudentFromSubjectService = new RemoveStudentFromSubjectService();
-//       await removeStudentFromSubjectService.execute({
-//         user_id,
-//         subject_id,
-//         student_id,
-//       });
+subjectsRouter.use('/milestones', MilestonesRoutes);
 
-//       return response.json({ message: 'ok' });
-//     } catch (err) {
-//       return response.status(400).json({ error: err.message });
-//     }
-//   },
-// );
+// BLOCKS
 
+subjectsRouter.use('/blocks', BlocksRoutes);
+
+// TASKS
+
+subjectsRouter.use('/tasks', TasksRoutes);
+
+// SUBJECT CLASSES
+
+subjectsRouter.use('/subjectclasses', SubjectClassesRoutes);
 export default subjectsRouter;

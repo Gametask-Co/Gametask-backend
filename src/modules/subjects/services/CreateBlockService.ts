@@ -21,7 +21,11 @@ class CreateBlockService {
     this.milestonesRepository = milestonesRepository;
   }
 
-  public async execute({ name, milestone_id }: CreateBlockDTO): Promise<Block> {
+  public async execute({
+    name,
+    milestone_id,
+    subject_id,
+  }: CreateBlockDTO): Promise<Block> {
     const findMilestone = await this.milestonesRepository.findById(
       milestone_id,
     );
@@ -30,7 +34,11 @@ class CreateBlockService {
       throw new AppError('Milestone not found');
     }
 
-    const block = await this.blocksRepository.create({ name, milestone_id });
+    const block = await this.blocksRepository.create({
+      name,
+      milestone_id,
+      subject_id,
+    });
     return block;
   }
 }

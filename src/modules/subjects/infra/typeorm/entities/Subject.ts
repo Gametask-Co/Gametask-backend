@@ -40,7 +40,7 @@ class Subject {
   @JoinTable()
   students: Student[];
 
-  @OneToMany(() => Milestone, () => Subject)
+  @OneToMany(() => Milestone, milestone => milestone.subject)
   milestones: Milestone[];
 
   @CreateDateColumn()

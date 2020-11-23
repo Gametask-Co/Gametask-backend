@@ -38,6 +38,16 @@ class SubjectRepository implements ISubjectsRepository {
     this.subjects[findIndex] = subject;
     return subject;
   }
+
+  public async isOwner(
+    teacher_id: string,
+    subject_id: string,
+  ): Promise<Subject | undefined> {
+    const findSubject = this.subjects.find(
+      subject => subject.id === subject_id && subject.teacher_id === teacher_id,
+    );
+    return findSubject;
+  }
 }
 
 export default SubjectRepository;
