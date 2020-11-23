@@ -33,6 +33,10 @@ export default class SubjectController {
     const teachersRepository = new TeachersRepository();
     const teacher = await teachersRepository.findByUserId(request.user.id);
 
+    if (!teacher) {
+      throw new AppError('Teacher not found');
+    }
+
     const subjectsRepository = new SubjectsRepository();
 
     const subjects = await subjectsRepository.findAllByTeacherId(teacher.id);
