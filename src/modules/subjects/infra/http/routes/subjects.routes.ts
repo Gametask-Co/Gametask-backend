@@ -5,6 +5,8 @@ import SubjectStudentsController from '@modules/subjects/infra/controllers/Subje
 import SubjectStudentsByEmailController from '@modules/subjects/infra/controllers/SubjectStudentsByEmailController';
 
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
+import ensureAccountType from '@modules/users/infra/http/middlewares/ensureAccountType';
+
 import MilestonesRoutes from './milestones.routes';
 import BlocksRoutes from './blocks.routes';
 import TasksRoutes from './tasks.routes';
@@ -17,7 +19,12 @@ const subjectStudentsByEmailController = new SubjectStudentsByEmailController();
 
 subjectsRouter.post('/', ensureAuthenticated, subjectsController.create);
 
-subjectsRouter.get('/', ensureAuthenticated, subjectsController.show);
+subjectsRouter.get(
+  '/',
+  ensureAuthenticated,
+  ensureAccountType,
+  subjectsController.show,
+);
 
 // SubjectStudentsController
 

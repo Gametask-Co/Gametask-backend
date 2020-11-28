@@ -6,6 +6,8 @@ import TeachersRepository from '@modules/teachers/infra/typeorm/repositories/Tea
 
 import CreateSubjectService from '@modules/subjects/services/CreateSubjectService';
 import AppError from '@shared/errors/AppError';
+import StudentsRepository from '@modules/students/infra/typeorm/repositories/StudentsRepository';
+import Subject from '../typeorm/entities/Subject';
 
 export default class SubjectController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -30,17 +32,41 @@ export default class SubjectController {
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
-    const teachersRepository = new TeachersRepository();
-    const teacher = await teachersRepository.findByUserId(request.user.id);
-
-    if (!teacher) {
-      throw new AppError('Teacher not found');
-    }
+    let subjects_teacher: Subject[] = [];
+    let subjects_student: Subject[] = [];
 
     const subjectsRepository = new SubjectsRepository();
 
-    const subjects = await subjectsRepository.findAllByTeacherId(teacher.id);
+    console.log(request.user);
+    if (request.user.student) {
+      const studentsRepository = new StudentsRepository();
+      const student = await studentsRepository.findById(request.user.student);
 
-    return response.json(subjects);
+      if (!student) {
+        throw new AppError('Student not found');
+      }
+
+      subjects_student = await subjectsRepository.findAllbyStudentId(
+        student.id,
+      );
+    }
+
+    if (request.user.teacher) {
+      const teachersRepository = new TeachersRepository();
+      const teacher = await teachersRepository.findById(request.user.teacher);
+
+      if (!teacher) {
+        throw new AppError('Teacher not found');
+      }
+
+      subjects_teacher = await subjectsRepository.findAllByTeacherId(
+        teacher.id,
+      );
+    }
+
+    return response.json({
+      student_user: subjects_student,
+      teacher_user: subjects_teacher,
+    });
   }
 }
