@@ -37,7 +37,6 @@ export default class SubjectController {
 
     const subjectsRepository = new SubjectsRepository();
 
-    console.log(request.user);
     if (request.user.student) {
       const studentsRepository = new StudentsRepository();
       const student = await studentsRepository.findById(request.user.student);
