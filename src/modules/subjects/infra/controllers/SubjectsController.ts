@@ -45,7 +45,7 @@ export default class SubjectController {
         throw new AppError('Student not found');
       }
 
-      subjects_student = await subjectsRepository.findAllbyStudentId(
+      subjects_student = await subjectsRepository.findAllByStudentId(
         student.id,
       );
     }
