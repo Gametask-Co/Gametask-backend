@@ -24,6 +24,16 @@ class SubjectRepository implements ISubjectsRepository {
     return findSubjects;
   }
 
+  public async findAllByStudentId(id: string): Promise<Subject[] | undefined> {
+    const findSubjects = this.subjects.map(subject => {
+      if (subject.students.find(student => student.id === id)) {
+        return subject;
+      }
+      return undefined;
+    });
+    return findSubjects;
+  }
+
   public async create(data: CreateSubjectDTO): Promise<Subject> {
     const subject = new Subject();
     Object.assign(subject, { id: v4() }, data);

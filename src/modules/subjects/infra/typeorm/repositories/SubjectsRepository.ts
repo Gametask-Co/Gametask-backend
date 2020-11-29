@@ -28,6 +28,16 @@ class SubjectRepository implements ISubjectsRepository {
     return subjects;
   }
 
+  public async findAllByStudentId(id: string): Promise<Subject[] | undefined> {
+    const subjects = await this.ormRepository.query(`
+      SELECT * FROM subjects
+        WHERE id =
+          (SELECT subject_id FROM subjects_students WHERE student_id = '${id}');
+
+    `);
+    return subjects;
+  }
+
   public async create(data: CreateSubjectDTO): Promise<Subject> {
     const subject = this.ormRepository.create(data);
 

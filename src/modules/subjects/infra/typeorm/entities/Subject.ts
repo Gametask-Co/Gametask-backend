@@ -37,7 +37,17 @@ class Subject {
   teacher: Teacher;
 
   @ManyToMany(() => Student)
-  @JoinTable()
+  @JoinTable({
+    name: 'subjects_students',
+    joinColumn: {
+      name: 'subject_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'student_id',
+      referencedColumnName: 'id',
+    },
+  })
   students: Student[];
 
   @OneToMany(() => Milestone, milestone => milestone.subject)
