@@ -43,10 +43,14 @@ class TeachersRepository implements ITeachersRepository {
   }
 
   public async create(userId: string): Promise<Teacher> {
-    const user = this.teachersRepository.create({ user_id: userId });
-    await this.teachersRepository.save(user);
+    const teacher = this.teachersRepository.create({ user_id: userId });
+    await this.teachersRepository.save(teacher);
 
-    return user;
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    user.teacher_id = teacher.id;
+    await this.usersRepository.save(user);
+
+    return teacher;
   }
 
   public async save(teacher: Teacher): Promise<Teacher> {

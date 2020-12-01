@@ -9,8 +9,11 @@ import User from '@modules/users/infra/typeorm/entities/User';
 class StudentsRepository implements IStudentsRepository {
   private ormRepository: Repository<Student>;
 
+  private usersRepository: Repository<User>;
+
   constructor() {
     this.ormRepository = getRepository(Student);
+    this.usersRepository = getRepository(User);
   }
 
   public async findByUserId(id: string): Promise<Student | undefined> {
@@ -53,6 +56,11 @@ class StudentsRepository implements IStudentsRepository {
   public async create(id: string): Promise<Student> {
     const student = this.ormRepository.create({ user_id: id });
     await this.ormRepository.save(student);
+
+    const user = await this.usersRepository.findOne({ where: { id } });
+    user.student_id = student.id;
+    await this.usersRepository.save(user);
+
     return student;
   }
 
