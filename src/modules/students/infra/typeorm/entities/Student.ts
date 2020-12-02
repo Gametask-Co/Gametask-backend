@@ -14,6 +14,9 @@ class Student {
   id: string;
 
   @Column()
+  name: string;
+
+  @Column()
   user_id: string;
 
   @OneToOne(() => User)

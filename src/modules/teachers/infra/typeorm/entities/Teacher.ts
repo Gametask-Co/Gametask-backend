@@ -15,6 +15,9 @@ class Teacher {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column()
+  name: string;
+
   @OneToMany(() => Subject, () => Teacher)
   subjects: Subject[];
 

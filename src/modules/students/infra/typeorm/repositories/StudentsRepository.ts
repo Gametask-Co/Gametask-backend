@@ -54,10 +54,11 @@ class StudentsRepository implements IStudentsRepository {
   }
 
   public async create(id: string): Promise<Student> {
-    const student = this.ormRepository.create({ user_id: id });
+    const user = await this.usersRepository.findOne({ where: { id } });
+
+    const student = this.ormRepository.create({ user_id: id, name: user.name });
     await this.ormRepository.save(student);
 
-    const user = await this.usersRepository.findOne({ where: { id } });
     user.student_id = student.id;
     await this.usersRepository.save(user);
 
