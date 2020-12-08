@@ -9,11 +9,26 @@ GT-API is a simple API allowing front-end to consume data.
 
 ### Fetch Resource [GET]
 
++ Request 200 (application/json)
+
+        {
+        
+        }
+
 + Response 200 (application/json)
 
-        [
-            
-        ]
+        {
+            "id": "31097c40-b05c-43fa-b189-07575673a07b",
+            "name": "Maria",
+            "email": "maria@gmail.com",
+            "birthday": "1994-05-15T00:00:00.000Z",
+            "gender": "feminino",
+            "avatar_url": null,
+            "teacher_id": null,
+            "student_id": "d5f54ac3-9f53-4507-8d63-33cc3392103a",
+            "created_at": "2020-12-03T19:17:18.743Z",
+            "updated_at": "2020-12-03T19:18:02.552Z"
+        }
 
 ### Create Resource [POST]
 
@@ -42,50 +57,22 @@ GT-API is a simple API allowing front-end to consume data.
             "created_at": "2020-12-03T17:44:30.503Z",
             "updated_at": "2020-12-03T17:44:30.503Z"
         }
-
+        
 ### Update Resource [PUT]
 
 + Request 200 (application/json)
 
         {
-        
+            
         }
         
 + Response 200 (application/json)
 
         {
-        
-        }
-        
-### Delete Resource [DELETE]
-
-+ Request 200 (application/json)
-
-        {
-        
-        }
-        
-+ Response 200 (application/json)
-
-        {
-        
+            
         }
         
 ## Sessions [/sessions]
-
-### Fetch Resource [GET]
-
-+ Request 200 (application/json)
-
-        {
-        
-        }
-            
-+ Response 200 (application/json)
-
-        {
-        
-        }
 
 ### Create Resource [POST]
 
@@ -112,33 +99,6 @@ GT-API is a simple API allowing front-end to consume data.
             "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDcwMTc5NzMsImV4cCI6MTYwNzEwNDM3Mywic3ViIjoiZDFlZjQzMGItNzg0NS00ZTZlLTg0NDQtMGM3NzI4NmMzNDQyIn0.dWS7_KgvHmw2QaMWf4y8kEYwmVekiRxDTbkSwP_IfZ0"
         }
 
-### Update Resource [PUT]
-
-+ Request 200 (application/json)
-
-        {
-        
-        }
- 
-+ Response 200 (application/json)
-
-        {
-        
-        }
-        
-### Delete Resource [DELETE]
-
-+ Request 200 (application/json)
-
-        {
-        
-        }
-        
-+ Response 200 (application/json)
-
-        {
-        
-        }
 ## Students [/students]
 
 ### Fetch Resource [GET]
@@ -184,34 +144,6 @@ GT-API is a simple API allowing front-end to consume data.
             "user_id": "d1ef430b-7845-4e6e-8444-0c77286c3442"
         }
 
-### Update Resource [PUT]
-
-+ Request 200 (application/json)
-
-        {
-        
-        }
-        
-+ Response 200 (application/json)
-
-        {
-        
-        }
-  
-### Delete Resource [DELETE]
-
-+ Request 200 (application/json)
-
-        {
-        
-        }
-
-+ Response 200 (application/json)
-
-        {
-        
-        }
-
 ## Teachers [/teachers]
 
 ### Fetch Resource [GET]
@@ -220,6 +152,14 @@ GT-API is a simple API allowing front-end to consume data.
 
         {
             
+        }
+
++ Response 200 (application/json)
+
+        {
+            "id": "653350b6-b49c-4c44-a2a8-7c59765e2189",
+            "name": "Felipe",
+            "user_id": "e46f341c-8c08-4dfb-b97b-16ef3abd68c8"
         }
 
 ### Create Resource [POST]
@@ -238,34 +178,6 @@ GT-API is a simple API allowing front-end to consume data.
             "user_id": "287b41fc-32ec-492e-b90d-9812c176b667"
         }
 
-### Update Resource [PUT]
-
-+ Request 200 (application/json)
-
-        {
-        
-        }
-        
-+ Response 200 (application/json)
-
-        {
-        
-        }
-  
-### Delete Resource [DELETE]
-
-+ Request 200 (application/json)
-
-        {
-        
-        }
-        
-+ Response 200 (application/json)
-
-        {
-        
-        }
-
 ## Subjects [/subjects]
 
 ### Fetch Resource [GET]
@@ -273,13 +185,65 @@ GT-API is a simple API allowing front-end to consume data.
 + Request 200 (application/json)
 
         {
-            
+            "name": "Arquitetura de Software",
+            "description": "Disciplina do 4 semestre"
         }
         
 + Response 200 (application/json)
 
         {
-        
+            "student_user": [],
+            "teacher_user": [
+                {
+                    "id": "eac392c7-e915-40ff-a635-f07faa67986c",
+                    "name": "Arquitetura de Software",
+                    "description": "Disciplina do 4 semestre",
+                    "background_url": null,
+                    "teacher_id": "653350b6-b49c-4c44-a2a8-7c59765e2189",
+                    "students": [
+                        {
+                            "id": "d126780c-f1fb-4492-8b23-5b9c210a2ed8",
+                            "name": "Breno Alves",
+                            "user_id": "f3b78b1b-9c5f-4830-98ae-8e00ed56c162"
+                        },
+                        {
+                            "id": "d5f54ac3-9f53-4507-8d63-33cc3392103a",
+                            "name": "Maria",
+                            "user_id": "31097c40-b05c-43fa-b189-07575673a07b"
+                        }
+                    ],
+                    "milestones": [
+                        {
+                            "id": "3cf6e006-e97e-4d1f-873a-039c71ae51e8",
+                            "name": "Padrões de Projeto",
+                            "description": "",
+                            "subject_id": "eac392c7-e915-40ff-a635-f07faa67986c",
+                            "blocks": [],
+                            "created_at": "2020-12-08T17:31:25.577Z",
+                            "updated_at": "2020-12-08T17:31:25.577Z"
+                        },
+                        {
+                            "id": "5f79afd9-5dc9-49d3-9576-d14ff923aa5e",
+                            "name": "Primeiro Bimestre",
+                            "description": "",
+                            "subject_id": "eac392c7-e915-40ff-a635-f07faa67986c",
+                            "blocks": [
+                                {
+                                    "id": "097fbc34-f6e4-4731-a2ed-f51112c9fff7",
+                                    "name": "Padrões de Projeto",
+                                    "milestone_id": "5f79afd9-5dc9-49d3-9576-d14ff923aa5e",
+                                    "created_at": "2020-12-08T17:56:40.489Z",
+                                    "updated_at": "2020-12-08T17:56:40.489Z"
+                                }
+                            ],
+                            "created_at": "2020-12-08T17:53:09.868Z",
+                            "updated_at": "2020-12-08T17:53:09.868Z"
+                        }
+                    ],
+                    "created_at": "2020-12-08T16:28:42.519Z",
+                    "updated_at": "2020-12-08T16:28:42.519Z"
+                }
+            ]
         }
 
 ### Create Resource [POST]
@@ -287,41 +251,152 @@ GT-API is a simple API allowing front-end to consume data.
 + Request 200 (application/json)
 
         {
-            
+            "name": "Arquitetura de Software",
+            "description": "Disciplina do 4 semestre"
         }
         
 + Response 200 (application/json)
 
         {
-        
+            "id": "eac392c7-e915-40ff-a635-f07faa67986c",
+            "name": "Arquitetura de Software",
+            "description": "Disciplina do 4 semestre",
+            "background_url": null,
+            "teacher_id": "653350b6-b49c-4c44-a2a8-7c59765e2189",
+            "created_at": "2020-12-08T16:28:42.519Z",
+            "updated_at": "2020-12-08T16:28:42.519Z"
         }
         
-+ Response 200 (application/json)
+## Subjects/Students/Email [/subjects/student/email]
 
-### Update Resource [PUT]
+### Create Resource [POST]
 
 + Request 200 (application/json)
 
         {
-        
+            "subject_id": "eac392c7-e915-40ff-a635-f07faa67986c",
+            "student_email": "maria@gmail.com"
         }
         
 + Response 200 (application/json)
 
         {
-        
+            "id": "eac392c7-e915-40ff-a635-f07faa67986c",
+            "name": "Arquitetura de Software",
+            "description": "Disciplina do 4 semestre",
+            "background_url": null,
+            "teacher_id": "653350b6-b49c-4c44-a2a8-7c59765e2189",
+            "students": [
+                {
+                    "id": "d126780c-f1fb-4492-8b23-5b9c210a2ed8",
+                    "name": "Breno Alves",
+                    "user_id": "f3b78b1b-9c5f-4830-98ae-8e00ed56c162"
+                },
+                {
+                    "id": "d5f54ac3-9f53-4507-8d63-33cc3392103a",
+                    "name": "Maria",
+                    "user_id": "31097c40-b05c-43fa-b189-07575673a07b"
+                }
+            ],
+            "created_at": "2020-12-08T16:28:42.519Z",
+            "updated_at": "2020-12-08T16:28:42.519Z"
         }
-  
-### Delete Resource [DELETE]
+        
+        
+## Milestones [/subjects/milestones]
+        
+### Create Resource [POST]
 
 + Request 200 (application/json)
 
         {
-        
+            "name": "Primeiro Bimestre", 
+            "description": "", 
+            "subject_id": "eac392c7-e915-40ff-a635-f07faa67986c"
         }
         
 + Response 200 (application/json)
 
         {
+            "id": "5f79afd9-5dc9-49d3-9576-d14ff923aa5e",
+            "name": "Primeiro Bimestre",
+            "description": "",
+            "subject_id": "eac392c7-e915-40ff-a635-f07faa67986c",
+            "created_at": "2020-12-08T17:53:09.868Z",
+            "updated_at": "2020-12-08T17:53:09.868Z"
+        }
         
+## Blocks [/subjects/blocks]
+        
+### Create Resource [POST]
+
++ Request 200 (application/json)
+
+        {
+            "name": "Padrões de Projeto", 
+            "milestone_id": "5f79afd9-5dc9-49d3-9576-d14ff923aa5e", 
+            "subject_id": "eac392c7-e915-40ff-a635-f07faa67986c"
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "id": "097fbc34-f6e4-4731-a2ed-f51112c9fff7",
+            "name": "Padrões de Projeto",
+            "milestone_id": "5f79afd9-5dc9-49d3-9576-d14ff923aa5e",
+            "created_at": "2020-12-08T17:56:40.489Z",
+            "updated_at": "2020-12-08T17:56:40.489Z"
+        }
+        
+## Task [/subjects/task]
+
+        
+### Create Resource [POST]
+
++ Request 200 (application/json)
+
+        {
+            "name": "Seminário de Padrões de Projeto",
+            "description": "Elaborar uma videoaula referente às características de um Padrão de projeto sorteado por equipe.",
+            "attachment_url": "",
+            "due": "12/12/2020",
+            "block_id": "097fbc34-f6e4-4731-a2ed-f51112c9fff7",
+            "subject_id": "eac392c7-e915-40ff-a635-f07faa67986c"
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "id": "12ec7acd-6b27-488d-b70b-d30e1c013b83",
+            "name": "Seminário de Padrões de Projeto",
+            "description": "Elaborar uma videoaula referente às características de um Padrão de projeto sorteado por equipe.",
+            "due": "12/12/2020",
+            "attachment_url": "",
+            "total_score": 0,
+            "block_id": "097fbc34-f6e4-4731-a2ed-f51112c9fff7",
+            "created_at": "2020-12-08T18:14:57.563Z",
+            "updated_at": "2020-12-08T18:14:57.563Z"
+        }
+        
+## SubjectClass [/subjects/subjectclasses]
+
+### Create Resource [POST]
+
++ Request 200 (application/json)
+
+        {
+            "name": "Padrões de Projeto", 
+            "block_id": "097fbc34-f6e4-4731-a2ed-f51112c9fff7", 
+            "subject_id": "eac392c7-e915-40ff-a635-f07faa67986c", 
+            "attachment_url": ""
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "id": "11d3d778-26d1-492a-92c7-9d2af08a992d",
+            "name": "Padrões de Projeto",
+            "attachment_url": "",
+            "block_id": "097fbc34-f6e4-4731-a2ed-f51112c9fff7",
+            "subject_id": "eac392c7-e915-40ff-a635-f07faa67986c"
         }
