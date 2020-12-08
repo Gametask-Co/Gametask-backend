@@ -20,25 +20,27 @@ GT-API is a simple API allowing front-end to consume data.
 + Request 200 (application/json)
 
         {
-            "name": "João",
-            "email": "joao11@gmail.com",
+            "name": "José",
+            "email": "jose@gmail.com",
             "birthday": "02/21/2000",
             "gender": "masculino",
             "avatar_url": "",
-            "password": "Jo@o123456"
+            "password": "Jose123456"
         }
         
 + Response 200 (application/json)
 
         {
-            "id": "577830b2-5ba0-4fb9-b670-3f50e68e1061",
-            "name": "João",
-            "email": "joao11@gmail.com",
+            "id": "d1ef430b-7845-4e6e-8444-0c77286c3442",
+            "name": "José",
+            "email": "jose@gmail.com",
             "birthday": "02/21/2000",
             "gender": "masculino",
             "avatar_url": null,
-            "created_at": "2020-11-17T19:12:58.767Z",
-            "updated_at": "2020-11-17T19:12:58.767Z"
+            "teacher_id": null,
+            "student_id": null,
+            "created_at": "2020-12-03T17:44:30.503Z",
+            "updated_at": "2020-12-03T17:44:30.503Z"
         }
 
 ### Update Resource [PUT]
@@ -49,9 +51,21 @@ GT-API is a simple API allowing front-end to consume data.
         
         }
         
++ Response 200 (application/json)
+
+        {
+        
+        }
+        
 ### Delete Resource [DELETE]
 
 + Request 200 (application/json)
+
+        {
+        
+        }
+        
++ Response 200 (application/json)
 
         {
         
@@ -63,31 +77,39 @@ GT-API is a simple API allowing front-end to consume data.
 
 + Request 200 (application/json)
 
-        [
+        {
+        
+        }
             
-        ]
++ Response 200 (application/json)
+
+        {
+        
+        }
 
 ### Create Resource [POST]
 
 + Request 200 (application/json)
 
         {
-            "email": "joao11@gmail.com",
-            "password": "Jo@o123456"
+            "email": "jose@gmail.com",
+            "password": "Jose123456"
         }
 
 + Response 200 (application/json)
 
         {
-            "id": "577830b2-5ba0-4fb9-b670-3f50e68e1061",
-            "name": "João",
-            "email": "joao11@gmail.com",
+            "id": "d1ef430b-7845-4e6e-8444-0c77286c3442",
+            "name": "José",
+            "email": "jose@gmail.com",
             "birthday": "2000-02-21T00:00:00.000Z",
             "gender": "masculino",
             "avatar_url": null,
-            "created_at": "2020-11-17T19:12:58.767Z",
-            "updated_at": "2020-11-17T19:12:58.767Z",
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDU2NDA1MTMsImV4cCI6MTYwNTcyNjkxMywic3ViIjoiNTc3ODMwYjItNWJhMC00ZmI5LWI2NzAtM2Y1MGU2OGUxMDYxIn0.5zYwdoy-G0dfDMg-TzNST8Pxk9RwVDVca2MdGSdcgbQ"
+            "teacher_id": null,
+            "student_id": null,
+            "created_at": "2020-12-03T17:44:30.503Z",
+            "updated_at": "2020-12-03T17:44:30.503Z",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDcwMTc5NzMsImV4cCI6MTYwNzEwNDM3Mywic3ViIjoiZDFlZjQzMGItNzg0NS00ZTZlLTg0NDQtMGM3NzI4NmMzNDQyIn0.dWS7_KgvHmw2QaMWf4y8kEYwmVekiRxDTbkSwP_IfZ0"
         }
 
 ### Update Resource [PUT]
@@ -97,7 +119,13 @@ GT-API is a simple API allowing front-end to consume data.
         {
         
         }
-  
+ 
++ Response 200 (application/json)
+
+        {
+        
+        }
+        
 ### Delete Resource [DELETE]
 
 + Request 200 (application/json)
@@ -106,16 +134,39 @@ GT-API is a simple API allowing front-end to consume data.
         
         }
         
++ Response 200 (application/json)
+
+        {
         
+        }
 ## Students [/students]
 
 ### Fetch Resource [GET]
 
 + Request 200 (application/json)
 
-        [
+        {
             
-        ]
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "id": "f78ef9b3-b732-4296-a88c-60f4871ef4da",
+            "name": "José",
+            "user": {
+                "id": "d1ef430b-7845-4e6e-8444-0c77286c3442",
+                "name": "José",
+                "email": "jose@gmail.com",
+                "birthday": "2000-02-21T00:00:00.000Z",
+                "gender": "masculino",
+                "avatar_url": null,
+                "teacher_id": null,
+                "student_id": "f78ef9b3-b732-4296-a88c-60f4871ef4da",
+                "created_at": "2020-12-03T17:44:30.503Z",
+                "updated_at": "2020-12-03T18:44:21.037Z"
+            }
+        }
 
 ### Create Resource [POST]
 
@@ -123,6 +174,14 @@ GT-API is a simple API allowing front-end to consume data.
 
         {
             
+        }
+        
++ Response 200 (application/json)
+
+        {
+            "id": "f78ef9b3-b732-4296-a88c-60f4871ef4da",
+            "name": "José",
+            "user_id": "d1ef430b-7845-4e6e-8444-0c77286c3442"
         }
 
 ### Update Resource [PUT]
@@ -132,10 +191,22 @@ GT-API is a simple API allowing front-end to consume data.
         {
         
         }
+        
++ Response 200 (application/json)
+
+        {
+        
+        }
   
 ### Delete Resource [DELETE]
 
 + Request 200 (application/json)
+
+        {
+        
+        }
+
++ Response 200 (application/json)
 
         {
         
@@ -147,43 +218,9 @@ GT-API is a simple API allowing front-end to consume data.
 
 + Request 200 (application/json)
 
-        [
-            
-        ]
-
-### Create Resource [POST]
-
-+ Request 200 (application/json)
-
         {
             
         }
-
-### Update Resource [PUT]
-
-+ Request 200 (application/json)
-
-        {
-        
-        }
-  
-### Delete Resource [DELETE]
-
-+ Request 200 (application/json)
-
-        {
-        
-        }
-
-## Subjects [/subjects]
-
-### Fetch Resource [GET]
-
-+ Request 200 (application/json)
-
-        [
-            
-        ]
 
 ### Create Resource [POST]
 
@@ -195,9 +232,21 @@ GT-API is a simple API allowing front-end to consume data.
         
 + Response 200 (application/json)
 
+        {
+            "id": "b5cf0060-82e7-4fa3-b182-3f6372911255",
+            "name": "João",
+            "user_id": "287b41fc-32ec-492e-b90d-9812c176b667"
+        }
+
 ### Update Resource [PUT]
 
 + Request 200 (application/json)
+
+        {
+        
+        }
+        
++ Response 200 (application/json)
 
         {
         
@@ -206,6 +255,72 @@ GT-API is a simple API allowing front-end to consume data.
 ### Delete Resource [DELETE]
 
 + Request 200 (application/json)
+
+        {
+        
+        }
+        
++ Response 200 (application/json)
+
+        {
+        
+        }
+
+## Subjects [/subjects]
+
+### Fetch Resource [GET]
+
++ Request 200 (application/json)
+
+        {
+            
+        }
+        
++ Response 200 (application/json)
+
+        {
+        
+        }
+
+### Create Resource [POST]
+
++ Request 200 (application/json)
+
+        {
+            
+        }
+        
++ Response 200 (application/json)
+
+        {
+        
+        }
+        
++ Response 200 (application/json)
+
+### Update Resource [PUT]
+
++ Request 200 (application/json)
+
+        {
+        
+        }
+        
++ Response 200 (application/json)
+
+        {
+        
+        }
+  
+### Delete Resource [DELETE]
+
++ Request 200 (application/json)
+
+        {
+        
+        }
+        
++ Response 200 (application/json)
 
         {
         
