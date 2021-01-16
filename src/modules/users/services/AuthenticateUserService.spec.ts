@@ -1,23 +1,34 @@
-import FakeUsersRepository from '../repositories/fakes/fakeUsersRepository';
+import connection from '@shared/helper/connection';
 
-import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
+import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
+import HashProvider from '../providers/HashProvider/implementations/BCryptHashProvider';
 
 import AuthenticateUserService from './AuthenticateUserService';
 import CreateUserService from './CreateUserService';
 
+beforeAll(async () => {
+  await connection.create();
+});
+
+afterAll(async () => {
+  await connection.clear();
+  await connection.close();
+});
+
+beforeEach(async () => {
+  await connection.clear();
+});
+
 describe('AuthenticateUser', () => {
   it('Should be able to authenticate', async () => {
-    const fakeUsersRepository = new FakeUsersRepository();
-    const fakeHashProvider = new FakeHashProvider();
+    const usersRepository = new UsersRepository();
+    const hashProvider = new HashProvider();
 
-    const createUser = new CreateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
-    );
+    const createUser = new CreateUserService(usersRepository, hashProvider);
 
     const authenticateUser = new AuthenticateUserService(
-      fakeUsersRepository,
-      fakeHashProvider,
+      usersRepository,
+      hashProvider,
     );
 
     const user = await createUser.execute({

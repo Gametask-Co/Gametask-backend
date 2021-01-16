@@ -30,7 +30,7 @@ const connection = {
   },
 
   async clear(): Promise<void> {
-    const con = getConnection();
+    const con = getConnection('default');
     const entities = con.entityMetadatas;
 
     const entityDeletionPromises = entities.map(entity => async () => {

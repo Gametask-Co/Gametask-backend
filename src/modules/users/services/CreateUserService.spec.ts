@@ -8,10 +8,11 @@ import HashProvider from '../providers/HashProvider/implementations/BCryptHashPr
 import CreateUserService from './CreateUserService';
 
 beforeAll(async () => {
-  return connection.create();
+  await connection.create();
 });
 
 afterAll(async () => {
+  await connection.clear();
   await connection.close();
 });
 
