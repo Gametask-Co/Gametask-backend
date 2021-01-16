@@ -16,10 +16,6 @@ describe('AuthenticateUser', () => {
     await connection.close();
   });
 
-  beforeEach(async () => {
-    await connection.clear();
-  });
-
   it('Should be able to authenticate', async () => {
     const usersRepository = new UsersRepository();
     const hashProvider = new HashProvider();

@@ -17,10 +17,6 @@ describe('CreateUser', () => {
     await connection.close();
   });
 
-  beforeEach(async () => {
-    await connection.clear();
-  });
-
   it('Should be able to create a new user', async () => {
     const usersRepository = new UsersRepository();
     const hashProvider = new HashProvider();

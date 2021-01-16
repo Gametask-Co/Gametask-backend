@@ -1,35 +1,41 @@
 import 'reflect-metadata';
 
+import connection from '@shared/helper/connection';
 import CreateTeacherService from '@modules/teachers/services/CreateTeacherService';
-
-import FakeTeachersRepository from '@modules/teachers/repositories/fakes/fakeTeachersRepository';
-import FakeUsersRepository from '@modules/users/repositories/fakes/fakeUsersRepository';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import AppError from '@shared/errors/AppError';
+import TeachersRepository from '@modules/teachers/infra/typeorm/repositories/TeachersRepository';
+import User from '@modules/users/infra/typeorm/entities/User';
+
+import { createUser } from '@shared/helper/testHelper';
+import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 
 describe('CreateTeacher', () => {
-  let fakeUsersRepository: IUsersRepository;
+  let usersRepository: IUsersRepository;
+  let user: User;
 
-  beforeEach(async () => {
-    fakeUsersRepository = new FakeUsersRepository();
-    fakeUsersRepository.create({
+  beforeAll(async () => {
+    await connection.create();
+    user = await createUser({
       name: 'John Doe',
       email: 'johndoe@example.com',
       password: '123123',
     });
+    usersRepository = new UsersRepository();
+  });
+
+  afterAll(async () => {
+    await connection.clear();
+    await connection.close();
   });
 
   it('Should create a teacher', async () => {
-    const user = await fakeUsersRepository.findByEmail('johndoe@example.com');
-
-    const fakeTeachersRepository = new FakeTeachersRepository(
-      fakeUsersRepository,
-    );
+    const teachersRepository = new TeachersRepository();
 
     const createTeacher = new CreateTeacherService(
-      fakeTeachersRepository,
-      fakeUsersRepository,
+      teachersRepository,
+      usersRepository,
     );
     const teacher = await createTeacher.execute(user.id);
 
@@ -37,17 +43,11 @@ describe('CreateTeacher', () => {
   });
 
   it('Should not be able to create a new user with a used email', async () => {
-    const user = {
-      id: '1',
-    };
-
-    const fakeTeachersRepository = new FakeTeachersRepository(
-      fakeUsersRepository,
-    );
+    const teachersRepository = new TeachersRepository();
 
     const createTeacher = new CreateTeacherService(
-      fakeTeachersRepository,
-      fakeUsersRepository,
+      teachersRepository,
+      usersRepository,
     );
 
     expect(createTeacher.execute(user.id)).rejects.toBeInstanceOf(AppError);
