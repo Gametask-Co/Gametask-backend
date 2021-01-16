@@ -1,5 +1,3 @@
-import { createConnection, getConnection } from 'typeorm';
-
 import ICreateUser from '@modules/users/dtos/ICreateUserDTO';
 
 import TeachersRepository from '@modules/teachers/infra/typeorm/repositories/TeachersRepository';
