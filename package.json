@@ -11,7 +11,9 @@
     "prod:database:run": "node ./node_modules/typeorm/cli.js migration:run",
     "dev:server": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules ./src/shared/infra/http/server.ts",
     "typeorm": "ts-node-dev -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "test": "jest"
+    "test": "jest",
+    "test-env": "cross-env-shell jest --verbose false --runInBand",
+    "test1": "cross-env NODE_ENV=test yarn test-env"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.1",
@@ -47,6 +49,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",

@@ -1,3 +1,7 @@
+import 'dotenv/config';
+
 import { createConnection } from 'typeorm';
 
-createConnection();
+if (process.env.NODE_ENV !== 'test') {
+  createConnection();
+}
