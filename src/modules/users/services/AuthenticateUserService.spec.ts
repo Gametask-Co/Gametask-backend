@@ -6,20 +6,20 @@ import HashProvider from '../providers/HashProvider/implementations/BCryptHashPr
 import AuthenticateUserService from './AuthenticateUserService';
 import CreateUserService from './CreateUserService';
 
-beforeAll(async () => {
-  await connection.create();
-});
-
-afterAll(async () => {
-  await connection.clear();
-  await connection.close();
-});
-
-beforeEach(async () => {
-  await connection.clear();
-});
-
 describe('AuthenticateUser', () => {
+  beforeAll(async () => {
+    await connection.create();
+  });
+
+  afterAll(async () => {
+    await connection.clear();
+    await connection.close();
+  });
+
+  beforeEach(async () => {
+    await connection.clear();
+  });
+
   it('Should be able to authenticate', async () => {
     const usersRepository = new UsersRepository();
     const hashProvider = new HashProvider();
