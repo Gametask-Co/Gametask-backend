@@ -1,92 +1,59 @@
 import 'reflect-metadata';
 
-import CreateTeacherService from '@modules/teachers/services/CreateTeacherService';
-import CreateSubjectService from '@modules/subjects/services/CreateSubjectService';
-
-import FakeSubjectsRepository from '@modules/subjects/repositories/fakes/fakeSubjectsRepository';
-import FakeTeachersRepository from '@modules/teachers/repositories/fakes/fakeTeachersRepository';
-import FakeUsersRepository from '@modules/users/repositories/fakes/fakeUsersRepository';
-import FakeStudentsRepository from '@modules/students/repositories/fakes/fakeStudentsRepository';
-
-import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
-import ITeachersRepository from '@modules/teachers/repositories/ITeachersRepository';
-
-import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import connection from '@shared/helper/connection';
 
 import Student from '@modules/students/infra/typeorm/entities/Student';
-import CreateStudentService from '@modules/students/services/CreateStudentService';
 import IStudentsRepository from '@modules/students/repositories/IStudentsRepository';
+import { createSubject, createStudent } from '@shared/helper/testHelper';
+import SubjectsRepository from '@modules/subjects/infra/typeorm/repositories/SubjectsRepository';
+import StudentsRepository from '@modules/students/infra/typeorm/repositories/StudentsRepository';
 import ISubjectsRepository from '../repositories/ISubjectsRepository';
 import Subject from '../infra/typeorm/entities/Subject';
 
 import AddStudentToSubjectService from './AddStudentToSubjectService';
 
 describe('AddStudentToSubject', () => {
-  let fakeUsersRepository: IUsersRepository;
-  let fakeTeachersRepository: ITeachersRepository;
-  let fakeSubjectsRepository: ISubjectsRepository;
-  let fakeStudentsRepository: IStudentsRepository;
-  let teacher: Teacher;
+  let subjectsRepository: ISubjectsRepository;
+  let studentsRepository: IStudentsRepository;
   let student: Student;
   let subject: Subject;
 
   beforeAll(async () => {
-    fakeUsersRepository = new FakeUsersRepository();
-    fakeUsersRepository.create({
-      name: 'John Doe',
-      email: 'johndoe@example.com',
+    await connection.create();
+  });
+
+  afterAll(async () => {
+    await connection.clear();
+    await connection.close();
+  });
+
+  beforeAll(async () => {
+    subjectsRepository = new SubjectsRepository();
+    studentsRepository = new StudentsRepository();
+
+    subject = await createSubject({
+      userData: {
+        name: 'John Doe',
+        email: 'johndoe@example.com',
+        password: '123123',
+      },
+      subjectData: {
+        name: 'Subject Test',
+        description: 'Test',
+      },
+    });
+
+    student = await createStudent({
+      name: 'Doe John',
+      email: 'doejohn@example.com',
       password: '123123',
     });
-
-    const user_teacher = await fakeUsersRepository.findByEmail(
-      'johndoe@example.com',
-    );
-
-    fakeTeachersRepository = new FakeTeachersRepository(fakeUsersRepository);
-
-    const createTeacher = new CreateTeacherService(
-      fakeTeachersRepository,
-      fakeUsersRepository,
-    );
-
-    teacher = await createTeacher.execute(user_teacher.id);
-
-    fakeSubjectsRepository = new FakeSubjectsRepository();
-    const createSubject = new CreateSubjectService(
-      fakeSubjectsRepository,
-      fakeTeachersRepository,
-    );
-
-    subject = await createSubject.execute({
-      name: 'Subject Test',
-      description: 'Test',
-      teacher_id: teacher.id,
-    });
-
-    fakeUsersRepository.create({
-      name: 'John Doe Student',
-      email: 'johndoestudent@example.com',
-      password: '123123',
-    });
-
-    const user_student = await fakeUsersRepository.findByEmail(
-      'johndoestudent@example.com',
-    );
-
-    fakeStudentsRepository = new FakeStudentsRepository(fakeUsersRepository);
-
-    const createStudent = new CreateStudentService(
-      fakeStudentsRepository,
-      fakeUsersRepository,
-    );
-
-    student = await createStudent.execute({ id: user_student.id });
   });
 
   it('Should add a student to a subject', async () => {
     const addStudentToSubject = new AddStudentToSubjectService(
-      fakeSubjectsRepository,
-      fakeStudentsRepository,
+      subjectsRepository,
+      studentsRepository,
     );
 
     const response = await addStudentToSubject.execute({
