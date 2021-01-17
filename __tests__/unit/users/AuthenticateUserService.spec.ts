@@ -1,10 +1,10 @@
-import connection from '@shared/helper/connection';
+import connection from '../../../src/shared/helper/connection';
 
-import UsersRepository from '../infra/typeorm/repositories/UsersRepository';
-import HashProvider from '../providers/HashProvider/implementations/BCryptHashProvider';
+import UsersRepository from '../../../src/modules/users/infra/typeorm/repositories/UsersRepository';
+import HashProvider from '../../../src/modules/users/providers/HashProvider/implementations/BCryptHashProvider';
 
-import AuthenticateUserService from './AuthenticateUserService';
-import CreateUserService from './CreateUserService';
+import AuthenticateUserService from '../../../src/modules/users/services/AuthenticateUserService';
+import CreateUserService from '../../../src/modules/users/services/CreateUserService';
 
 describe('AuthenticateUser', () => {
   beforeAll(async () => {

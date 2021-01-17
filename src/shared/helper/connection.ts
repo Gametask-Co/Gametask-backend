@@ -20,8 +20,6 @@ const connection = {
         entitiesDir: './src/modules/*/infra/typeorm/entities/*.ts',
       },
     });
-
-    getConnection('default');
   },
 
   async close(): Promise<void> {

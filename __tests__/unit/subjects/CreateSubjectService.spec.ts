@@ -1,15 +1,14 @@
 import 'reflect-metadata';
 
-import connection from '@shared/helper/connection';
+import Teacher from '../../../src/modules/teachers/infra/typeorm/entities/Teacher';
+import CreateSubjectService from '../../../src/modules/subjects/services/CreateSubjectService';
+import TeachersRepository from '../../../src/modules/teachers/infra/typeorm/repositories/TeachersRepository';
 
-import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
-import CreateSubjectService from '@modules/subjects/services/CreateSubjectService';
-import { createTeacher } from '@shared/helper/testHelper';
-import TeachersRepository from '@modules/teachers/infra/typeorm/repositories/TeachersRepository';
+import SubjectsRepository from '../../../src/modules/subjects/infra/typeorm/repositories/SubjectsRepository';
 
-import SubjectsRepository from '@modules/subjects/infra/typeorm/repositories/SubjectsRepository';
-
-import ITeachersRepository from '@modules/teachers/repositories/ITeachersRepository';
+import ITeachersRepository from '../../../src/modules/teachers/repositories/ITeachersRepository';
+import { createTeacher } from '../../../src/shared/helper/testHelper';
+import connection from '../../../src/shared/helper/connection';
 
 describe('CreateSubject', () => {
   let teachersRepository: ITeachersRepository;

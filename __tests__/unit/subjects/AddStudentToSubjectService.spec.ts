@@ -1,16 +1,18 @@
 import 'reflect-metadata';
 
-import connection from '@shared/helper/connection';
+import {
+  createSubject,
+  createStudent,
+} from '../../../src/shared/helper/testHelper';
+import Student from '../../../src/modules/students/infra/typeorm/entities/Student';
+import IStudentsRepository from '../../../src/modules/students/repositories/IStudentsRepository';
+import SubjectsRepository from '../../../src/modules/subjects/infra/typeorm/repositories/SubjectsRepository';
+import StudentsRepository from '../../../src/modules/students/infra/typeorm/repositories/StudentsRepository';
+import connection from '../../../src/shared/helper/connection';
+import ISubjectsRepository from '../../../src/modules/subjects/repositories/ISubjectsRepository';
+import Subject from '../../../src/modules/subjects/infra/typeorm/entities/Subject';
 
-import Student from '@modules/students/infra/typeorm/entities/Student';
-import IStudentsRepository from '@modules/students/repositories/IStudentsRepository';
-import { createSubject, createStudent } from '@shared/helper/testHelper';
-import SubjectsRepository from '@modules/subjects/infra/typeorm/repositories/SubjectsRepository';
-import StudentsRepository from '@modules/students/infra/typeorm/repositories/StudentsRepository';
-import ISubjectsRepository from '../repositories/ISubjectsRepository';
-import Subject from '../infra/typeorm/entities/Subject';
-
-import AddStudentToSubjectService from './AddStudentToSubjectService';
+import AddStudentToSubjectService from '../../../src/modules/subjects/services/AddStudentToSubjectService';
 
 describe('AddStudentToSubject', () => {
   let subjectsRepository: ISubjectsRepository;
