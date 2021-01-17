@@ -1,16 +1,16 @@
 import 'reflect-metadata';
 
-import BlocksRepository from '../../../src/modules/subjects/infra/typeorm/repositories/BlocksRepository';
-import MilestonesRepository from '../../../src/modules/subjects/infra/typeorm/repositories/MilestonesRepository';
+import BlocksRepository from '../../../modules/subjects/infra/typeorm/repositories/BlocksRepository';
+import MilestonesRepository from '../../../modules/subjects/infra/typeorm/repositories/MilestonesRepository';
 
-import Subject from '../../../src/modules/subjects/infra/typeorm/entities/Subject';
+import Subject from '../../../modules/subjects/infra/typeorm/entities/Subject';
 
-import IMilestonesRepository from '../../../src/modules/subjects/repositories/IMilestoneRepository';
-import Milestone from '../../../src/modules/subjects/infra/typeorm/entities/Milestone';
-import CreateBlockService from '../../../src/modules/subjects/services/CreateBlockService';
+import IMilestonesRepository from '../../../modules/subjects/repositories/IMilestoneRepository';
+import Milestone from '../../../modules/subjects/infra/typeorm/entities/Milestone';
+import CreateBlockService from '../../../modules/subjects/services/CreateBlockService';
 
-import connection from '../../../src/shared/helper/connection';
-import { createMilestone } from '../../../src/shared/helper/testHelper';
+import connection from '../../../shared/helper/connection';
+import { createMilestone } from '../../../shared/helper/testHelper';
 
 describe('Blocks', () => {
   let milestonesRepository: IMilestonesRepository;

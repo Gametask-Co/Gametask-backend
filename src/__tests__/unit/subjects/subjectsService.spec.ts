@@ -1,14 +1,14 @@
 import 'reflect-metadata';
 
-import Teacher from '../../../src/modules/teachers/infra/typeorm/entities/Teacher';
-import CreateSubjectService from '../../../src/modules/subjects/services/CreateSubjectService';
-import TeachersRepository from '../../../src/modules/teachers/infra/typeorm/repositories/TeachersRepository';
+import Teacher from '../../../modules/teachers/infra/typeorm/entities/Teacher';
+import CreateSubjectService from '../../../modules/subjects/services/CreateSubjectService';
+import TeachersRepository from '../../../modules/teachers/infra/typeorm/repositories/TeachersRepository';
 
-import SubjectsRepository from '../../../src/modules/subjects/infra/typeorm/repositories/SubjectsRepository';
+import SubjectsRepository from '../../../modules/subjects/infra/typeorm/repositories/SubjectsRepository';
 
-import ITeachersRepository from '../../../src/modules/teachers/repositories/ITeachersRepository';
-import { createTeacher } from '../../../src/shared/helper/testHelper';
-import connection from '../../../src/shared/helper/connection';
+import ITeachersRepository from '../../../modules/teachers/repositories/ITeachersRepository';
+import { createTeacher } from '../../../shared/helper/testHelper';
+import connection from '../../../shared/helper/connection';
 
 describe('Subject', () => {
   describe('CreateSubject', () => {

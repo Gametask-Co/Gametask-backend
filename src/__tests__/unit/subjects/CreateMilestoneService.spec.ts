@@ -1,16 +1,16 @@
 import 'reflect-metadata';
 
-import SubjectsRepository from '../../../src/modules/subjects/infra/typeorm/repositories/SubjectsRepository';
+import SubjectsRepository from '../../../modules/subjects/infra/typeorm/repositories/SubjectsRepository';
 
-import MilestonesRepository from '../../../src/modules/subjects/infra/typeorm/repositories/MilestonesRepository';
+import MilestonesRepository from '../../../modules/subjects/infra/typeorm/repositories/MilestonesRepository';
 
-import ISubjectsRepository from '../../../src/modules/subjects/repositories/ISubjectsRepository';
-import Subject from '../../../src/modules/subjects/infra/typeorm/entities/Subject';
+import ISubjectsRepository from '../../../modules/subjects/repositories/ISubjectsRepository';
+import Subject from '../../../modules/subjects/infra/typeorm/entities/Subject';
 
-import CreateMilestoneService from '../../../src/modules/subjects/services/CreateMilestoneService';
+import CreateMilestoneService from '../../../modules/subjects/services/CreateMilestoneService';
 
-import connection from '../../../src/shared/helper/connection';
-import { createSubject } from '../../../src/shared/helper/testHelper';
+import connection from '../../../shared/helper/connection';
+import { createSubject } from '../../../shared/helper/testHelper';
 
 describe('Milestones', () => {
   let subjectsRepository: ISubjectsRepository;

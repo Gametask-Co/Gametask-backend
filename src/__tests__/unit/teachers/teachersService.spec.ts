@@ -1,15 +1,15 @@
 import 'reflect-metadata';
 
-import connection from '../../../src/shared/helper/connection';
-import AppError from '../../../src/shared/errors/AppError';
-import { createUser } from '../../../src/shared/helper/testHelper';
-import CreateTeacherService from '../../../src/modules/teachers/services/CreateTeacherService';
+import connection from '../../../shared/helper/connection';
+import AppError from '../../../shared/errors/AppError';
+import { createUser } from '../../../shared/helper/testHelper';
+import CreateTeacherService from '../../../modules/teachers/services/CreateTeacherService';
 
-import IUsersRepository from '../../../src/modules/users/repositories/IUsersRepository';
-import TeachersRepository from '../../../src/modules/teachers/infra/typeorm/repositories/TeachersRepository';
-import User from '../../../src/modules/users/infra/typeorm/entities/User';
+import IUsersRepository from '../../../modules/users/repositories/IUsersRepository';
+import TeachersRepository from '../../../modules/teachers/infra/typeorm/repositories/TeachersRepository';
+import User from '../../../modules/users/infra/typeorm/entities/User';
 
-import UsersRepository from '../../../src/modules/users/infra/typeorm/repositories/UsersRepository';
+import UsersRepository from '../../../modules/users/infra/typeorm/repositories/UsersRepository';
 
 describe('Teachers', () => {
   describe('CreateTeacher', () => {

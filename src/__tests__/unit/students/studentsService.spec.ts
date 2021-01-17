@@ -1,12 +1,12 @@
 import 'reflect-metadata';
 
-import connection from '../../../src/shared/helper/connection';
-import CreateStudentService from '../../../src/modules/students/services/CreateStudentService';
-import UsersRepository from '../../../src/modules/users/infra/typeorm/repositories/UsersRepository';
-import StudentsRepository from '../../../src/modules/students/infra/typeorm/repositories/StudentsRepository';
-import IUsersRepository from '../../../src/modules/users/repositories/IUsersRepository';
-import User from '../../../src/modules/users/infra/typeorm/entities/User';
-import { createUser } from '../../../src/shared/helper/testHelper';
+import connection from '../../../shared/helper/connection';
+import CreateStudentService from '../../../modules/students/services/CreateStudentService';
+import UsersRepository from '../../../modules/users/infra/typeorm/repositories/UsersRepository';
+import StudentsRepository from '../../../modules/students/infra/typeorm/repositories/StudentsRepository';
+import IUsersRepository from '../../../modules/users/repositories/IUsersRepository';
+import User from '../../../modules/users/infra/typeorm/entities/User';
+import { createUser } from '../../../shared/helper/testHelper';
 
 describe('Students', () => {
   let usersRepository: IUsersRepository;

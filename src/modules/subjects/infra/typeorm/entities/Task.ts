@@ -34,7 +34,7 @@ class Task {
   block_id: string;
 
   @ManyToOne(() => Block, block => block.tasks, {
-    eager: true
+    eager: true,
   })
   @JoinColumn({ name: 'block_id' })
   block: Block;

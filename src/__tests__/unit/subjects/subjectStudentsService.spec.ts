@@ -1,19 +1,19 @@
 import 'reflect-metadata';
 
-import AddStudentToSubjectByEmailService from '../../../src/modules/subjects/services/AddStudentToSubjectByEmailService';
+import AddStudentToSubjectByEmailService from '../../../modules/subjects/services/AddStudentToSubjectByEmailService';
 import {
   createSubject,
   createStudent,
-} from '../../../src/shared/helper/testHelper';
-import Student from '../../../src/modules/students/infra/typeorm/entities/Student';
-import IStudentsRepository from '../../../src/modules/students/repositories/IStudentsRepository';
-import SubjectsRepository from '../../../src/modules/subjects/infra/typeorm/repositories/SubjectsRepository';
-import StudentsRepository from '../../../src/modules/students/infra/typeorm/repositories/StudentsRepository';
-import connection from '../../../src/shared/helper/connection';
-import ISubjectsRepository from '../../../src/modules/subjects/repositories/ISubjectsRepository';
-import Subject from '../../../src/modules/subjects/infra/typeorm/entities/Subject';
+} from '../../../shared/helper/testHelper';
+import Student from '../../../modules/students/infra/typeorm/entities/Student';
+import IStudentsRepository from '../../../modules/students/repositories/IStudentsRepository';
+import SubjectsRepository from '../../../modules/subjects/infra/typeorm/repositories/SubjectsRepository';
+import StudentsRepository from '../../../modules/students/infra/typeorm/repositories/StudentsRepository';
+import connection from '../../../shared/helper/connection';
+import ISubjectsRepository from '../../../modules/subjects/repositories/ISubjectsRepository';
+import Subject from '../../../modules/subjects/infra/typeorm/entities/Subject';
 
-import AddStudentToSubjectService from '../../../src/modules/subjects/services/AddStudentToSubjectService';
+import AddStudentToSubjectService from '../../../modules/subjects/services/AddStudentToSubjectService';
 
 const studentExtraEmail = 'extrastudent@example.com';
 
