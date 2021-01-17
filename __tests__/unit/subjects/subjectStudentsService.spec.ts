@@ -17,7 +17,7 @@ import AddStudentToSubjectService from '../../../src/modules/subjects/services/A
 
 const studentExtraEmail = 'extrastudent@example.com';
 
-describe('AddStudentToSubject', () => {
+describe('subjectStudent', () => {
   let subjectsRepository: ISubjectsRepository;
   let studentsRepository: IStudentsRepository;
   let student: Student;
@@ -62,33 +62,35 @@ describe('AddStudentToSubject', () => {
     });
   });
 
-  it('Should add a student to a subject', async () => {
-    const addStudentToSubject = new AddStudentToSubjectService(
-      subjectsRepository,
-      studentsRepository,
-    );
+  describe('AddStudentToSubject', () => {
+    it('Should add a student to a subject', async () => {
+      const addStudentToSubject = new AddStudentToSubjectService(
+        subjectsRepository,
+        studentsRepository,
+      );
 
-    const response = await addStudentToSubject.execute({
-      subject_id: subject.id,
-      student_id: student.id,
+      const response = await addStudentToSubject.execute({
+        subject_id: subject.id,
+        student_id: student.id,
+      });
+
+      expect(response).toHaveProperty('id');
+      expect(response.students).toHaveLength(1);
     });
 
-    expect(response).toHaveProperty('id');
-    expect(response.students).toHaveLength(1);
-  });
+    it('Should add a student to a subject with students email', async () => {
+      const addStudentToSubject = new AddStudentToSubjectByEmailService(
+        subjectsRepository,
+        studentsRepository,
+      );
 
-  it('Should add a student to a subject with students email', async () => {
-    const addStudentToSubject = new AddStudentToSubjectByEmailService(
-      subjectsRepository,
-      studentsRepository,
-    );
+      const response = await addStudentToSubject.execute({
+        subject_id: subject.id,
+        student_email: studentExtraEmail,
+      });
 
-    const response = await addStudentToSubject.execute({
-      subject_id: subject.id,
-      student_email: studentExtraEmail,
+      expect(response).toHaveProperty('id');
+      expect(response.students).toHaveLength(2);
     });
-
-    expect(response).toHaveProperty('id');
-    expect(response.students).toHaveLength(2);
   });
 });

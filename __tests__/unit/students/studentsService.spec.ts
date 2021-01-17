@@ -8,7 +8,7 @@ import IUsersRepository from '../../../src/modules/users/repositories/IUsersRepo
 import User from '../../../src/modules/users/infra/typeorm/entities/User';
 import { createUser } from '../../../src/shared/helper/testHelper';
 
-describe('CreateStudent', () => {
+describe('Students', () => {
   let usersRepository: IUsersRepository;
   let user: User;
 
@@ -27,16 +27,18 @@ describe('CreateStudent', () => {
     await connection.close();
   });
 
-  it('Should create a student', async () => {
-    const studentsRepository = new StudentsRepository();
+  describe('CreateStudent', () => {
+    it('Should create a student', async () => {
+      const studentsRepository = new StudentsRepository();
 
-    const createStudent = new CreateStudentService(
-      studentsRepository,
-      usersRepository,
-    );
+      const createStudent = new CreateStudentService(
+        studentsRepository,
+        usersRepository,
+      );
 
-    const student = await createStudent.execute({ id: user.id });
+      const student = await createStudent.execute({ id: user.id });
 
-    expect(student).toHaveProperty('id');
+      expect(student).toHaveProperty('id');
+    });
   });
 });

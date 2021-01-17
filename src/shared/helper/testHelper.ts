@@ -4,6 +4,7 @@ import SubjectsRepository from '@modules/subjects/infra/typeorm/repositories/Sub
 import TeachersRepository from '@modules/teachers/infra/typeorm/repositories/TeachersRepository';
 import StudentsRepository from '@modules/students/infra/typeorm/repositories/StudentsRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
+import MilestonesRepository from '@modules/subjects/infra/typeorm/repositories/MilestonesRepository';
 
 import HashProvider from '@modules/users/providers/HashProvider/implementations/BCryptHashProvider';
 
@@ -11,6 +12,17 @@ import User from '@modules/users/infra/typeorm/entities/User';
 import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
 import Subject from '@modules/subjects/infra/typeorm/entities/Subject';
 import Student from '@modules/students/infra/typeorm/entities/Student';
+import Milestone from '@modules/subjects/infra/typeorm/entities/Milestone';
+
+interface ICreateSubject {
+  userData?: ICreateUser;
+  teacherData?: Teacher;
+  subjectData: { name: string; description: string };
+}
+
+interface ICreateMilestone extends ICreateSubject {
+  milestoneData: { name: string; description: string };
+}
 
 export const createUser = async ({
   name,
@@ -86,11 +98,9 @@ export const createTeacher = async ({
 export const createSubject = async ({
   userData,
   subjectData,
-}: {
-  userData: ICreateUser;
-  subjectData: { name: string; description: string };
-}): Promise<Subject> => {
-  const teacher = await createTeacher(userData);
+  teacherData,
+}: ICreateSubject): Promise<Subject> => {
+  const teacher = teacherData || (await createTeacher(userData));
 
   const subjectsRepository = new SubjectsRepository();
 
@@ -100,4 +110,22 @@ export const createSubject = async ({
   });
 
   return subject;
+};
+
+export const createMilestone = async ({
+  userData,
+  teacherData,
+  subjectData,
+  milestoneData,
+}: ICreateMilestone): Promise<{ milestone: Milestone; subject: Subject }> => {
+  const subject = await createSubject({ subjectData, teacherData, userData });
+
+  const milestonesRepository = new MilestonesRepository();
+
+  const milestone = await milestonesRepository.create({
+    ...milestoneData,
+    subject_id: subject.id,
+  });
+
+  return { milestone, subject };
 };
