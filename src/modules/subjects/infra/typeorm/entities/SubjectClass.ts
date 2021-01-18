@@ -25,7 +25,7 @@ class SubjectClass {
   block_id: string;
 
   @ManyToOne(() => Block, block => block.subjectclasses, {
-    eager: true
+    eager: true,
   })
   @JoinColumn({ name: 'block_id' })
   block: Block;

@@ -31,7 +31,7 @@ class Milestone {
   subject: Subject;
 
   @OneToMany(() => Block, block => block.milestone, {
-    eager: true
+    eager: true,
   })
   blocks: Block[];
 

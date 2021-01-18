@@ -7,7 +7,7 @@ import 'express-async-errors';
 
 import uploadConfig from '@config/upload';
 
-import '@shared/infra/typeorm/';
+import '@shared/infra/typeorm';
 import '@shared/container';
 
 import AppError from '@shared/errors/AppError';
@@ -37,6 +37,7 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
     message: 'Internal server error',
   });
 });
+
 app.listen(process.env.PORT || 3333, () => {
   console.log(`Server started on port ${process.env.PORT || 3333}!!`);
 });
