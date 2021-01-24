@@ -13,8 +13,6 @@ import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
 import Subject from '@modules/subjects/infra/typeorm/entities/Subject';
 import Student from '@modules/students/infra/typeorm/entities/Student';
 import Milestone from '@modules/subjects/infra/typeorm/entities/Milestone';
-import BlocksRepository from '@modules/subjects/infra/typeorm/repositories/BlocksRepository';
-import Block from '@modules/subjects/infra/typeorm/entities/Block';
 
 interface ICreateSubject {
   userData?: ICreateUser;
@@ -26,9 +24,6 @@ interface ICreateMilestone extends ICreateSubject {
   milestoneData: { name: string; description: string };
 }
 
-interface ICreateBlock extends ICreateMilestone {
-  blockData: { name: string };
-}
 export const createUser = async ({
   name,
   email,
@@ -133,33 +128,4 @@ export const createMilestone = async ({
   });
 
   return { milestone, subject };
-};
-
-export const createSubjectBlock = async ({
-  userData,
-  teacherData,
-  subjectData,
-  milestoneData,
-  blockData,
-}: ICreateBlock): Promise<{
-  milestone: Milestone;
-  subject: Subject;
-  block: Block;
-}> => {
-  const { milestone, subject } = await createMilestone({
-    userData,
-    teacherData,
-    subjectData,
-    milestoneData,
-  });
-
-  const blocksRepository = new BlocksRepository();
-
-  const block = await blocksRepository.create({
-    name: blockData.name,
-    milestone_id: milestone.id,
-    subject_id: subject.id,
-  });
-
-  return { block, milestone, subject };
 };
