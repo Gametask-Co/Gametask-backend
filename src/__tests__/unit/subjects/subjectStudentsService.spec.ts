@@ -1,19 +1,20 @@
 import 'reflect-metadata';
 
-import AddStudentToSubjectByEmailService from '../../../modules/subjects/services/AddStudentToSubjectByEmailService';
-import {
-  createSubject,
-  createStudent,
-} from '../../../shared/helper/testHelper';
-import Student from '../../../modules/students/infra/typeorm/entities/Student';
-import IStudentsRepository from '../../../modules/students/repositories/IStudentsRepository';
-import SubjectsRepository from '../../../modules/subjects/infra/typeorm/repositories/SubjectsRepository';
-import StudentsRepository from '../../../modules/students/infra/typeorm/repositories/StudentsRepository';
-import connection from '../../../shared/helper/connection';
-import ISubjectsRepository from '../../../modules/subjects/repositories/ISubjectsRepository';
-import Subject from '../../../modules/subjects/infra/typeorm/entities/Subject';
+import AddStudentToSubjectByEmailService from '@modules/subjects/services/AddStudentToSubjectByEmailService';
+import RemoveStudentFromSubjectService from '@modules/subjects/services/RemoveStudentFromSubjectService';
+import AddStudentToSubjectService from '@modules/subjects/services/AddStudentToSubjectService';
 
-import AddStudentToSubjectService from '../../../modules/subjects/services/AddStudentToSubjectService';
+import Student from '@modules/students/infra/typeorm/entities/Student';
+import Subject from '@modules/subjects/infra/typeorm/entities/Subject';
+
+import IStudentsRepository from '@modules/students/repositories/IStudentsRepository';
+import SubjectsRepository from '@modules/subjects/infra/typeorm/repositories/SubjectsRepository';
+import StudentsRepository from '@modules/students/infra/typeorm/repositories/StudentsRepository';
+import ISubjectsRepository from '@modules/subjects/repositories/ISubjectsRepository';
+
+import connection from '@shared/helper/connection';
+import { createSubject, createStudent } from '@shared/helper/testHelper';
+import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
 
 const studentExtraEmail = 'extrastudent@example.com';
 
@@ -23,6 +24,7 @@ describe('subjectStudent', () => {
   let student: Student;
   let studentExtra: Student;
   let subject: Subject;
+  let teacher: Teacher;
 
   beforeAll(async () => {
     await connection.create();
@@ -37,7 +39,7 @@ describe('subjectStudent', () => {
     subjectsRepository = new SubjectsRepository();
     studentsRepository = new StudentsRepository();
 
-    subject = await createSubject({
+    const creationSubject = await createSubject({
       userData: {
         name: 'John Doe',
         email: 'johndoe@example.com',
@@ -48,6 +50,9 @@ describe('subjectStudent', () => {
         description: 'Test',
       },
     });
+
+    teacher = creationSubject.teacher;
+    subject = creationSubject.subject;
 
     student = await createStudent({
       name: 'Doe John',
@@ -91,6 +96,24 @@ describe('subjectStudent', () => {
 
       expect(response).toHaveProperty('id');
       expect(response.students).toHaveLength(2);
+    });
+  });
+
+  describe('RemoveStudentFromSubject', () => {
+    it('Should remove a student from a subject', async () => {
+      const removeStudentFromSubjectService = new RemoveStudentFromSubjectService(
+        studentsRepository,
+        subjectsRepository,
+      );
+
+      const response = await removeStudentFromSubjectService.execute({
+        teacher_id: teacher.id,
+        student_id: student.id,
+        subject_id: subject.id,
+      });
+
+      expect(response).toHaveProperty('id');
+      expect(response.students).toHaveLength(1);
     });
   });
 });

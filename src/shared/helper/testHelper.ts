@@ -13,6 +13,8 @@ import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
 import Subject from '@modules/subjects/infra/typeorm/entities/Subject';
 import Student from '@modules/students/infra/typeorm/entities/Student';
 import Milestone from '@modules/subjects/infra/typeorm/entities/Milestone';
+import BlocksRepository from '@modules/subjects/infra/typeorm/repositories/BlocksRepository';
+import Block from '@modules/subjects/infra/typeorm/entities/Block';
 
 interface ICreateSubject {
   userData?: ICreateUser;
@@ -22,6 +24,10 @@ interface ICreateSubject {
 
 interface ICreateMilestone extends ICreateSubject {
   milestoneData: { name: string; description: string };
+}
+
+interface ICreateBlock extends ICreateMilestone {
+  blockData: { name: string };
 }
 
 export const createUser = async ({
@@ -99,7 +105,7 @@ export const createSubject = async ({
   userData,
   subjectData,
   teacherData,
-}: ICreateSubject): Promise<Subject> => {
+}: ICreateSubject): Promise<{ subject: Subject; teacher: Teacher }> => {
   const teacher = teacherData || (await createTeacher(userData));
 
   const subjectsRepository = new SubjectsRepository();
@@ -109,7 +115,7 @@ export const createSubject = async ({
     teacher_id: teacher.id,
   });
 
-  return subject;
+  return { subject, teacher };
 };
 
 export const createMilestone = async ({
@@ -118,7 +124,11 @@ export const createMilestone = async ({
   subjectData,
   milestoneData,
 }: ICreateMilestone): Promise<{ milestone: Milestone; subject: Subject }> => {
-  const subject = await createSubject({ subjectData, teacherData, userData });
+  const { subject } = await createSubject({
+    subjectData,
+    teacherData,
+    userData,
+  });
 
   const milestonesRepository = new MilestonesRepository();
 
@@ -128,4 +138,33 @@ export const createMilestone = async ({
   });
 
   return { milestone, subject };
+};
+
+export const createSubjectBlock = async ({
+  userData,
+  teacherData,
+  subjectData,
+  milestoneData,
+  blockData,
+}: ICreateBlock): Promise<{
+  milestone: Milestone;
+  subject: Subject;
+  block: Block;
+}> => {
+  const { milestone, subject } = await createMilestone({
+    userData,
+    teacherData,
+    subjectData,
+    milestoneData,
+  });
+
+  const blocksRepository = new BlocksRepository();
+
+  const block = await blocksRepository.create({
+    name: blockData.name,
+    milestone_id: milestone.id,
+    subject_id: subject.id,
+  });
+
+  return { block, milestone, subject };
 };
