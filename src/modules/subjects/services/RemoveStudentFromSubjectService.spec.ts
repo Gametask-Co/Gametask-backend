@@ -93,19 +93,5 @@ describe('RemoveStudentFromSubject', () => {
     });
   });
 
-  it('Should remove a student from a subject', async () => {
-    const removeStudentFromSubjectService = new RemoveStudentFromSubjectService(
-      fakeStudentsRepository,
-      fakeSubjectsRepository,
-    );
 
-    const response = await removeStudentFromSubjectService.execute({
-      teacher_id: teacher.id,
-      student_id: student.id,
-      subject_id: subject.id,
-    });
-
-    expect(response).toHaveProperty('id');
-    expect(response.students).toHaveLength(0);
-  });
 });

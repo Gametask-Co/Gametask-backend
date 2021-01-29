@@ -5,3 +5,4 @@ Dockerfile
 .git
 .gitignore
 .env
+ormconfig.json
