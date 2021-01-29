@@ -1,0 +1,29 @@
+version: "3.3"
+
+services:
+  gametask-psql:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5432:5432"
+    volumes:
+      - /home/breno/Documents/Docker-Compose/Gametask-psql:/var/lib/postgresql/data
+    networks:
+      - gametask-network
+
+  gametask-pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "breno550@hotmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    ports:
+      - "16543:80"
+    depends_on:
+      - gametask-psql
+    networks:
+      - gametask-network
+
+networks:
+  gametask-network:
+    driver: bridge
