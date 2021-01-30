@@ -9,6 +9,7 @@ COPY package.json /usr/app/
 RUN yarn
 
 COPY .env.prod /usr/app/.env
+COPY .env.prod /usr/app/.env.prod
 
 COPY . /usr/app
 
