@@ -12,7 +12,7 @@ services:
       - .:/app/
       - /usr/app/node_modules
     env_file:
-      - '{{ configDir }}/.env'
+      - '{{ configDir }}/.env.prod'
     networks:
       - gametask-network
 
