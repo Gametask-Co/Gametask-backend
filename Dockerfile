@@ -17,4 +17,4 @@ RUN yarn build
 
 CMD ["yarn", "start"]
 
-EXPOSE 3333
+EXPOSE 8080
