@@ -1,14 +1,16 @@
 import connection from '@shared/helper/connection';
 import { createUser } from '@shared/helper/testHelper';
 import ResetUserPassword from '@modules/users/services/ResetUserPassword';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import IHashProvider from '@modules/users/providers/HashProvider/models/IHashProvider';
 import HashProvider from '../../../modules/users/providers/HashProvider/implementations/BCryptHashProvider';
 import UsersRepository from '../../../modules/users/infra/typeorm/repositories/UsersRepository';
 
 describe('ResetUserPassword', () => {
   const userEmail = 'test@gametask.com';
   const userPassword = 'test123';
-  let usersRepository;
-  let hashProvider;
+  let usersRepository: IUsersRepository;
+  let hashProvider: IHashProvider;
 
   beforeAll(async () => {
     await connection.create();
