@@ -28,10 +28,12 @@ class Block {
   @JoinColumn({ name: 'milestone_id' })
   milestone: Milestone;
 
-  @OneToMany(() => Task, task => task.block)
+  @OneToMany(() => Task, task => task.block, { eager: true })
   tasks: Task[];
 
-  @OneToMany(() => SubjectClass, subjectClass => subjectClass.block)
+  @OneToMany(() => SubjectClass, subjectClass => subjectClass.block, {
+    eager: true,
+  })
   subjectclasses: SubjectClass[];
 
   @CreateDateColumn()
