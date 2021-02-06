@@ -1,0 +1,50 @@
+version: '3.3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: always
+    depends_on:
+      - db
+      - db_test
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/usr/app/
+      - /usr/app/node_modules
+    networks:
+      - gametask-network
+
+  db:
+    container_name: 'db'
+    image: postgres
+    environment:
+      POSTGRES_DB: gametask_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - gametask-network
+
+  db_test:
+    container_name: 'db_test'
+    image: postgres
+    environment:
+      POSTGRES_DB: gametask_db_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5433:5432
+    networks:
+      - gametask-network
+
+networks:
+  gametask-network:
+
+volumes:
+  pg_data:
