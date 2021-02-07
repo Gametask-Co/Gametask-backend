@@ -6,6 +6,11 @@
 const { pathsToModuleNameMapper } = require('ts-jest/utils');
 const { compilerOptions } = require('./tsconfig.json');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
+const test_type = process.env.TESTS;
+
 module.exports = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
@@ -149,9 +154,7 @@ module.exports = {
   // testLocationInResults: false,
 
   // The glob patterns Jest uses to detect test files
-  testMatch: [
-    "<rootDir>/src/__tests__/**/*.spec.ts",
-  ],
+  testMatch: test_type ? [`<rootDir>/src/__tests__/${test_type}/**/*.spec.ts`] : ['<rootDir>/src/__tests__/**/*.spec.ts'],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [
