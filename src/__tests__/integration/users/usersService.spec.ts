@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '@shared/infra/http/server';
-import connection from '../../../shared/helper/connection';
+import connection from '@shared/helper/connection';
 
 describe('Users', () => {
   beforeAll(async () => {
