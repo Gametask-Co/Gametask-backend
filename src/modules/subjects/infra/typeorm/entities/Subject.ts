@@ -9,7 +9,11 @@ import {
   JoinTable,
   OneToMany,
   JoinColumn,
+  InsertEvent,
+  BeforeInsert,
 } from 'typeorm';
+
+import { v4 as uuid_v4 } from 'uuid';
 
 import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
 import Student from '@modules/students/infra/typeorm/entities/Student';
@@ -53,11 +57,19 @@ class Subject {
   @OneToMany(() => Milestone, milestone => milestone.subject)
   milestones: Milestone[];
 
+  @Column({ nullable: true })
+  code: string;
+
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @BeforeInsert()
+  beforeInsert(_: InsertEvent<Subject>): void {
+    this.code = uuid_v4();
+  }
 }
 
 export default Subject;
