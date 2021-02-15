@@ -1,5 +1,7 @@
 import ICreateUser from '@modules/users/dtos/ICreateUserDTO';
 
+import AuthenticateUserService from '@modules/users/services/AuthenticateUserService';
+
 import SubjectsRepository from '@modules/subjects/infra/typeorm/repositories/SubjectsRepository';
 import TeachersRepository from '@modules/teachers/infra/typeorm/repositories/TeachersRepository';
 import StudentsRepository from '@modules/students/infra/typeorm/repositories/StudentsRepository';
@@ -28,6 +30,11 @@ interface ICreateMilestone extends ICreateSubject {
 
 interface ICreateBlock extends ICreateMilestone {
   blockData: { name: string };
+}
+
+interface IAuthenticateUse {
+  user: User;
+  token: string;
 }
 
 export const createUser = async ({
@@ -167,4 +174,63 @@ export const createSubjectBlock = async ({
   });
 
   return { block, milestone, subject };
+};
+
+export const createAndLoginAsTeacher = async ({
+  name,
+  email,
+  birthday,
+  gender,
+  avatar_url,
+  password,
+}: ICreateUser): Promise<IAuthenticateUse> => {
+  await createTeacher({
+    name,
+    email,
+    birthday,
+    gender,
+    avatar_url,
+    password,
+  });
+
+  const usersRepository = new UsersRepository();
+  const hashProvider = new HashProvider();
+
+  const authenticateUserService = new AuthenticateUserService(
+    usersRepository,
+    hashProvider,
+  );
+
+  const { token, user } = await authenticateUserService.execute({
+    email,
+    password,
+  });
+
+  return { token, user };
+};
+
+export const createAndLoginAsStudent = async ({
+  name,
+  email,
+  birthday,
+  gender,
+  avatar_url,
+  password,
+}: ICreateUser): Promise<IAuthenticateUse> => {
+  await createStudent({ name, email, birthday, gender, avatar_url, password });
+
+  const usersRepository = new UsersRepository();
+  const hashProvider = new HashProvider();
+
+  const authenticateUserService = new AuthenticateUserService(
+    usersRepository,
+    hashProvider,
+  );
+
+  const { token, user } = await authenticateUserService.execute({
+    email,
+    password,
+  });
+
+  return { token, user };
 };
