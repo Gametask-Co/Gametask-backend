@@ -12,7 +12,7 @@ export default class UsersTokensRepository implements IUsersTokensRepository {
 
   public async generate(id: string): Promise<UserToken> {
     const userToken = this.ormRepository.create({ user_id: id });
-    this.ormRepository.save(userToken);
+    await this.ormRepository.save(userToken);
     return userToken;
   }
 

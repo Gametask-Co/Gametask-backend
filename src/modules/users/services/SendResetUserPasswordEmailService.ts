@@ -16,7 +16,7 @@ class SendResetUserPasswordEmailService {
 
   private usersTokensRepository: UsersTokensRepository;
 
-  private emailProvider: IMailProvider;
+  private mailProvider: IMailProvider;
 
   constructor(
     @inject('UsersRepository')
@@ -25,12 +25,12 @@ class SendResetUserPasswordEmailService {
     @inject('UsersTokensRepository')
     usersTokensRepository: UsersTokensRepository,
 
-    @inject('EmailProvider')
-    emailProvider: IMailProvider,
+    @inject('MailProvider')
+    mailProvider: IMailProvider,
   ) {
     this.usersRepository = usersRepository;
     this.usersTokensRepository = usersTokensRepository;
-    this.emailProvider = emailProvider;
+    this.mailProvider = mailProvider;
   }
 
   public async execute({ email }: IRequestDTO): Promise<void> {
@@ -40,11 +40,14 @@ class SendResetUserPasswordEmailService {
       throw new AppError('User does not exists!');
     }
 
-    const userToken = await this.usersTokensRepository.generate(
+    const { token } = await this.usersTokensRepository.generate(
       checkUsersExists.id,
     );
 
-    await this.emailProvider.sendMail(email, 'body');
+    await this.mailProvider.sendMail(
+      email,
+      `Pedido de recuperação de senha: ${token}`,
+    );
   }
 }
 
