@@ -5,12 +5,10 @@ import uploadConfig from '@config/upload';
 
 import UserController from '@modules/users/infra/controller/UsersController';
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
-import UserPasswordController from '@modules/users/infra/controller/UserPasswordController';
 import UserAvatarController from '@modules/users/infra/controller/UserAvatarController';
 
 const userRouter = Router();
 const userController = new UserController();
-const userPasswordController = new UserPasswordController();
 const userAvatarController = new UserAvatarController();
 
 const upload = multer(uploadConfig);
@@ -25,8 +23,6 @@ userRouter.patch(
   upload.single('avatar'),
   userAvatarController.update,
 );
-
-userRouter.patch('/password', userPasswordController.update);
 
 // userRouter.delete('/', ensureAuthenticated, async (request, response) => {
 //   try {

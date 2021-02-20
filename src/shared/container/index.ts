@@ -26,9 +26,17 @@ import IBlocksRepository from '@modules/subjects/repositories/IBlocksRepository'
 import SubjectClassesRepository from '@modules/subjects/repositories/fakes/fakeSubjectClassesRepository';
 import ISubjectClassesRepository from '@modules/subjects/repositories/ISubjectClassesRepository';
 
+import IUsersTokensRepository from '@modules/users/repositories/IUsersTokensRepository';
+import UsersTokensRepository from '@modules/users/infra/typeorm/repositories/UsersTokensRepository';
+
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository,
+);
+
+container.registerSingleton<IUsersTokensRepository>(
+  'UsersTokensRepository',
+  UsersTokensRepository,
 );
 
 container.registerSingleton<ITeacherRepository>(
