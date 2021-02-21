@@ -1,9 +1,7 @@
 import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
-import User from '@modules/users/infra/typeorm/entities/User';
-import IHashProvider from '@modules/users/providers/HashProvider/models/IHashProvider';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
-import IMailProvider from '@shared/container/providers/EmailProvider/models/IMailProvider';
+import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 import UsersTokensRepository from '../infra/typeorm/repositories/UsersTokensRepository';
 
 interface IRequestDTO {
@@ -44,10 +42,20 @@ class SendResetUserPasswordEmailService {
       checkUsersExists.id,
     );
 
-    await this.mailProvider.sendMail(
-      email,
-      `Pedido de recuperação de senha: ${token}`,
-    );
+    await this.mailProvider.sendMail({
+      to: {
+        name: checkUsersExists.name,
+        email: checkUsersExists.email,
+      },
+      subject: '[Gametask] Recuperação de senha',
+      templateData: {
+        template: 'Ola, {{name}}: {{token}}',
+        variables: {
+          name: checkUsersExists.name,
+          token,
+        },
+      },
+    });
   }
 }
 
