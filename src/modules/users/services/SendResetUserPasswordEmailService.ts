@@ -2,6 +2,7 @@ import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
+import UsersViews from '@modules/users/views';
 import UsersTokensRepository from '../infra/typeorm/repositories/UsersTokensRepository';
 
 interface IRequestDTO {
@@ -42,6 +43,8 @@ class SendResetUserPasswordEmailService {
       checkUsersExists.id,
     );
 
+    const usersView = new UsersViews();
+
     await this.mailProvider.sendMail({
       to: {
         name: checkUsersExists.name,
@@ -49,10 +52,10 @@ class SendResetUserPasswordEmailService {
       },
       subject: '[Gametask] Recuperação de senha',
       templateData: {
-        template: 'Ola, {{name}}: {{token}}',
+        file: usersView.findMailTemplate('forgot_password'),
         variables: {
           name: checkUsersExists.name,
-          token,
+          link: `http://gametask.devops.ifrn.edu.br/password/reset_password?token=${token}`,
         },
       },
     });
