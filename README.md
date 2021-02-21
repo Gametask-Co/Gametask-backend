@@ -13,3 +13,7 @@ API da plataforma Gametask
 ## Run App in development
 
     yarn dev:server
+
+## Run migrations
+
+    yarn typeorm migrations:run
