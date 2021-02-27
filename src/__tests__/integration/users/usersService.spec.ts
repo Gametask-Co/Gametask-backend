@@ -2,9 +2,21 @@ import request from 'supertest';
 import app from '@shared/infra/http/server';
 import connection from '@shared/helper/connection';
 
+import { createUserAndLogin } from '@shared/helper/testHelper';
+
 describe('Users', () => {
+  let userToken: string;
+
   beforeAll(async () => {
     await connection.create();
+
+    const creationUser = await createUserAndLogin({
+      email: 'test2@gametask.com',
+      name: 'Teste',
+      password: 'test123',
+    });
+
+    userToken = creationUser.token;
   });
 
   afterAll(async () => {
@@ -32,6 +44,31 @@ describe('Users', () => {
           'teacher_id',
           'student_id',
           'id',
+          'created_at',
+          'updated_at',
+        ]),
+      );
+    });
+  });
+
+  describe('IndexUser', () => {
+    it('Should get user data', async () => {
+      const response = await request(app)
+        .get('/users')
+        .set('Authorization', `Bearer ${userToken}`);
+
+      const model = response.body;
+      expect(typeof model).toBe('object');
+      expect(Object.keys(model)).toEqual(
+        expect.arrayContaining([
+          'id',
+          'name',
+          'email',
+          'birthday',
+          'gender',
+          'avatar_url',
+          'teacher_id',
+          'student_id',
           'created_at',
           'updated_at',
         ]),
