@@ -2,10 +2,13 @@ import request from 'supertest';
 import app from '@shared/infra/http/server';
 import connection from '@shared/helper/connection';
 
-import { createAndLoginAsTeacher } from '@shared/helper/testHelper';
+import {
+  createAndLoginAsTeacher,
+  createSubject,
+} from '@shared/helper/testHelper';
 import User from '@modules/users/infra/typeorm/entities/User';
 
-describe('Users', () => {
+describe('Subjects', () => {
   let userToken: string;
   let user: User;
 
