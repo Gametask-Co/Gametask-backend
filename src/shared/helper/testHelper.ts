@@ -178,6 +178,39 @@ export const createSubjectBlock = async ({
   return { block, milestone, subject };
 };
 
+export const createUserAndLogin = async ({
+  name,
+  email,
+  birthday,
+  gender,
+  avatar_url,
+  password,
+}: ICreateUser): Promise<IAuthenticateUse> => {
+  await createUser({
+    name,
+    email,
+    birthday,
+    gender,
+    avatar_url,
+    password,
+  });
+
+  const usersRepository = new UsersRepository();
+  const hashProvider = new HashProvider();
+
+  const authenticateUserService = new AuthenticateUserService(
+    usersRepository,
+    hashProvider,
+  );
+
+  const { token, user } = await authenticateUserService.execute({
+    email,
+    password,
+  });
+
+  return { token, user };
+};
+
 export const createAndLoginAsTeacher = async ({
   name,
   email,
