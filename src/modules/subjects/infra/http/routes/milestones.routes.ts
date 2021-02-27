@@ -3,7 +3,7 @@ import { Router } from 'express';
 import ensureTeacherPermission from '@modules/subjects/infra/http/middlewares/ensureTeacherPermission';
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 
-import MilestoneValidator from '@modules/subjects/infra/validators/MilestoneValidator';
+import MilestoneValidator from '@modules/subjects/infra/http/validators/MilestoneValidator';
 import MilestonesController from '../../controllers/MilestonesController';
 
 const milestonesRouter = Router();
