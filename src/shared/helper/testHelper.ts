@@ -35,6 +35,8 @@ interface ICreateBlock extends ICreateMilestone {
 interface IAuthenticateUse {
   user: User;
   token: string;
+  teacher?: Teacher;
+  student?: Student;
 }
 
 export const createUser = async ({
@@ -184,7 +186,7 @@ export const createAndLoginAsTeacher = async ({
   avatar_url,
   password,
 }: ICreateUser): Promise<IAuthenticateUse> => {
-  await createTeacher({
+  const teacher = await createTeacher({
     name,
     email,
     birthday,
@@ -206,7 +208,7 @@ export const createAndLoginAsTeacher = async ({
     password,
   });
 
-  return { token, user };
+  return { token, user, teacher };
 };
 
 export const createAndLoginAsStudent = async ({
@@ -233,4 +235,14 @@ export const createAndLoginAsStudent = async ({
   });
 
   return { token, user };
+};
+
+export const getDateNow = (): string => {
+  const date = new Date(Date.now());
+
+  const formatedDate = `${
+    date.getMonth() + 1
+  }/${date.getDate()}/${date.getFullYear()}`;
+
+  return formatedDate;
 };

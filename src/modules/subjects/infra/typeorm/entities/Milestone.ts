@@ -35,6 +35,12 @@ class Milestone {
   })
   blocks: Block[];
 
+  @Column({ default: false })
+  isVisible: boolean;
+
+  @Column({ nullable: true })
+  deadline: Date;
+
   @CreateDateColumn()
   created_at: Date;
 

@@ -25,6 +25,8 @@ class CreateMilestoneService {
     name,
     subject_id,
     description,
+    isVisible,
+    deadline,
   }: CreateMilestoneDTO): Promise<Milestone> {
     const findSubject = this.subjectsRepository.findById(subject_id);
 
@@ -36,6 +38,8 @@ class CreateMilestoneService {
       name,
       description,
       subject_id,
+      isVisible,
+      deadline,
     });
 
     return milestone;
