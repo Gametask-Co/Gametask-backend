@@ -204,7 +204,6 @@ describe('Subject', () => {
         description: 'Task Description',
         total_score: 0,
         due: new Date(Date.now()),
-        subject_id: blockSubject.id,
       });
 
       expect(response).toHaveProperty('id');

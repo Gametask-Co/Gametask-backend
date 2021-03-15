@@ -8,6 +8,8 @@ import TasksController from '@modules/subjects/infra/controllers/TasksController
 const tasksRouter = Router();
 const tasksController = new TasksController();
 
+tasksRouter.get('/:task_id', ensureAuthenticated, tasksController.index);
+
 tasksRouter.post(
   '/',
   ensureAuthenticated,

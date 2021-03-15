@@ -17,6 +17,7 @@ import { v4 as uuid_v4 } from 'uuid';
 
 import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
 import Student from '@modules/students/infra/typeorm/entities/Student';
+import StudentActivity from '@modules/students/infra/typeorm/entities/StudentActivity';
 import Milestone from './Milestone';
 
 @Entity('subjects')
@@ -35,6 +36,15 @@ class Subject {
 
   @Column()
   teacher_id: string;
+
+  @Column({ nullable: true })
+  code: string;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @ManyToOne(() => Teacher, () => Subject)
   @JoinColumn({ name: 'teacher_id' })
@@ -57,14 +67,8 @@ class Subject {
   @OneToMany(() => Milestone, milestone => milestone.subject)
   milestones: Milestone[];
 
-  @Column({ nullable: true })
-  code: string;
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
+  @OneToMany(() => StudentActivity, studentActivity => studentActivity.subject)
+  activities: StudentActivity[];
 
   @BeforeInsert()
   beforeInsert(_: InsertEvent<Subject>): void {
