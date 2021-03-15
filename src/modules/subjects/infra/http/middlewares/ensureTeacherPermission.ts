@@ -6,7 +6,7 @@ import AppError from '@shared/errors/AppError';
 
 export default async function ensureAuthenticated(
   request: Request,
-  response: Response,
+  _: Response,
   next: NextFunction,
 ): Promise<void> {
   const user_id = request.user.id;

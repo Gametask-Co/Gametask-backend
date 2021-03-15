@@ -1,3 +1,4 @@
+import StudentActivity from '@modules/students/infra/typeorm/entities/StudentActivity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,6 +7,7 @@ import {
   ManyToOne,
   Column,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 import Block from './Block';
@@ -24,15 +26,22 @@ class SubjectClass {
   @Column()
   block_id: string;
 
-  @ManyToOne(() => Block, block => block.subjectclasses)
-  @JoinColumn({ name: 'block_id' })
-  block: Block;
-
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @ManyToOne(() => Block, block => block.subjectclasses)
+  @JoinColumn({ name: 'block_id' })
+  block: Block;
+
+  @OneToMany(
+    () => StudentActivity,
+    studentActivity => studentActivity.subjectclass,
+    { eager: true },
+  )
+  activities: StudentActivity[];
 }
 
 export default SubjectClass;
