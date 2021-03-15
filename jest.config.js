@@ -29,7 +29,8 @@ module.exports = {
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   collectCoverageFrom: [
-    '<rootDir>/src/modules/**/services/*.ts'
+    '<rootDir>/src/modules/**/services/*.ts',
+    '<rootDir>/src/modules/**/infra/**/*.ts'
   ],
 
   // The directory where Jest should output its coverage files
@@ -92,7 +93,7 @@ module.exports = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/src/' }),
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
-  // modulePathIgnorePatterns: [],
+  // modulePathIgnorePatterns: [''],
 
   // Activates notifications for test results
   // notify: false,

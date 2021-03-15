@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
+import { classToClass } from 'class-transformer';
+
 import SubjectsRepository from '@modules/subjects/infra/typeorm/repositories/SubjectsRepository';
 import TeachersRepository from '@modules/teachers/infra/typeorm/repositories/TeachersRepository';
 
@@ -65,7 +67,7 @@ export default class SubjectController {
 
     return response.json({
       student_user: subjects_student,
-      teacher_user: subjects_teacher,
+      teacher_user: classToClass(subjects_teacher),
     });
   }
 }

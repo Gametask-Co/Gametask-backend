@@ -1,6 +1,7 @@
 import { container } from 'tsyringe';
 
 import '@modules/users/providers';
+import '@shared/container/providers';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
@@ -26,9 +27,20 @@ import IBlocksRepository from '@modules/subjects/repositories/IBlocksRepository'
 import SubjectClassesRepository from '@modules/subjects/repositories/fakes/fakeSubjectClassesRepository';
 import ISubjectClassesRepository from '@modules/subjects/repositories/ISubjectClassesRepository';
 
+import IUsersTokensRepository from '@modules/users/repositories/IUsersTokensRepository';
+import UsersTokensRepository from '@modules/users/infra/typeorm/repositories/UsersTokensRepository';
+
+import IStudentsActivityRepository from '@modules/students/repositories/IStudentsActivityRepository';
+import StudentActivityRepository from '@modules/students/infra/typeorm/repositories/StudentsActivityRepository';
+
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
   UsersRepository,
+);
+
+container.registerSingleton<IUsersTokensRepository>(
+  'UsersTokensRepository',
+  UsersTokensRepository,
 );
 
 container.registerSingleton<ITeacherRepository>(
@@ -64,4 +76,9 @@ container.registerSingleton<ITasksRepository>(
 container.registerSingleton<ISubjectClassesRepository>(
   'SubjectClassesRepository',
   SubjectClassesRepository,
+);
+
+container.registerSingleton<IStudentsActivityRepository>(
+  'StudentsActivityRepository',
+  StudentActivityRepository,
 );

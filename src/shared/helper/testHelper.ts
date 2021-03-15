@@ -7,6 +7,8 @@ import TeachersRepository from '@modules/teachers/infra/typeorm/repositories/Tea
 import StudentsRepository from '@modules/students/infra/typeorm/repositories/StudentsRepository';
 import UsersRepository from '@modules/users/infra/typeorm/repositories/UsersRepository';
 import MilestonesRepository from '@modules/subjects/infra/typeorm/repositories/MilestonesRepository';
+import TasksRepository from '@modules/subjects/infra/typeorm/repositories/TasksRepository';
+import BlocksRepository from '@modules/subjects/infra/typeorm/repositories/BlocksRepository';
 
 import HashProvider from '@modules/users/providers/HashProvider/implementations/BCryptHashProvider';
 
@@ -15,8 +17,9 @@ import Teacher from '@modules/teachers/infra/typeorm/entities/Teacher';
 import Subject from '@modules/subjects/infra/typeorm/entities/Subject';
 import Student from '@modules/students/infra/typeorm/entities/Student';
 import Milestone from '@modules/subjects/infra/typeorm/entities/Milestone';
-import BlocksRepository from '@modules/subjects/infra/typeorm/repositories/BlocksRepository';
 import Block from '@modules/subjects/infra/typeorm/entities/Block';
+import Task from '@modules/subjects/infra/typeorm/entities/Task';
+import SubjectRepository from '@modules/subjects/infra/typeorm/repositories/SubjectsRepository';
 
 interface ICreateSubject {
   userData?: ICreateUser;
@@ -32,9 +35,19 @@ interface ICreateBlock extends ICreateMilestone {
   blockData: { name: string };
 }
 
+interface ICreateTask {
+  name: string;
+  description?: string;
+  block_id?: string;
+  attachment_url?: string;
+  total_score?: number;
+  due?: Date;
+}
 interface IAuthenticateUse {
   user: User;
   token: string;
+  teacher?: Teacher;
+  student?: Student;
 }
 
 export const createUser = async ({
@@ -176,7 +189,44 @@ export const createSubjectBlock = async ({
   return { block, milestone, subject };
 };
 
-export const createAndLoginAsTeacher = async ({
+export const createTaskInExistingBlock = async ({
+  blockData,
+  taskData,
+}: {
+  blockData: Block;
+  taskData: ICreateTask;
+}): Promise<Task> => {
+  const tasksRepository = new TasksRepository();
+
+  const task = await tasksRepository.create({
+    block_id: blockData.id,
+    name: taskData.name,
+    description: taskData.description,
+    due: taskData.due,
+    total_score: taskData.total_score,
+    attachment_url: taskData.attachment_url,
+  });
+
+  return task;
+};
+
+export const joinStudentInSubject = async ({
+  student_id,
+  subject_id,
+}: {
+  student_id: string;
+  subject_id: string;
+}): Promise<void> => {
+  const subjectsRepository = new SubjectRepository();
+  const studentsRepository = new StudentsRepository();
+
+  const subject = await subjectsRepository.findById(subject_id);
+  const student = await studentsRepository.findById(student_id);
+  subject.students.push(student);
+  await subjectsRepository.save(subject);
+};
+
+export const createUserAndLogin = async ({
   name,
   email,
   birthday,
@@ -184,7 +234,7 @@ export const createAndLoginAsTeacher = async ({
   avatar_url,
   password,
 }: ICreateUser): Promise<IAuthenticateUse> => {
-  await createTeacher({
+  await createUser({
     name,
     email,
     birthday,
@@ -207,6 +257,39 @@ export const createAndLoginAsTeacher = async ({
   });
 
   return { token, user };
+};
+
+export const createAndLoginAsTeacher = async ({
+  name,
+  email,
+  birthday,
+  gender,
+  avatar_url,
+  password,
+}: ICreateUser): Promise<IAuthenticateUse> => {
+  const teacher = await createTeacher({
+    name,
+    email,
+    birthday,
+    gender,
+    avatar_url,
+    password,
+  });
+
+  const usersRepository = new UsersRepository();
+  const hashProvider = new HashProvider();
+
+  const authenticateUserService = new AuthenticateUserService(
+    usersRepository,
+    hashProvider,
+  );
+
+  const { token, user } = await authenticateUserService.execute({
+    email,
+    password,
+  });
+
+  return { token, user, teacher };
 };
 
 export const createAndLoginAsStudent = async ({
@@ -233,4 +316,14 @@ export const createAndLoginAsStudent = async ({
   });
 
   return { token, user };
+};
+
+export const getDateNow = (): string => {
+  const date = new Date(Date.now());
+
+  const formatedDate = `${
+    date.getMonth() + 1
+  }/${date.getDate()}/${date.getFullYear()}`;
+
+  return formatedDate;
 };
