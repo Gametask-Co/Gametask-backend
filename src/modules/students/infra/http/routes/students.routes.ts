@@ -1,15 +1,26 @@
 import { Router } from 'express';
 
 import StudentsController from '@modules/students/infra/controllers/studentsControllers';
-
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
+import StudentActivityController from '../../controllers/studentActivityController';
+import StudentActivityValidator from '../validators/StudentActivityValidator';
 
 const studentsRouter = Router();
 const studentsController = new StudentsController();
+const studentActivityController = new StudentActivityController();
+
+const studentActivityValidator = new StudentActivityValidator();
 
 studentsRouter.post('/', ensureAuthenticated, studentsController.create);
 
 studentsRouter.get('/', ensureAuthenticated, studentsController.index);
+
+studentsRouter.post(
+  '/activity',
+  ensureAuthenticated,
+  studentActivityValidator.create,
+  studentActivityController.create,
+);
 
 // studentRouter.delete('/', ensureAuthenticated, async (request, response) => {
 //   try {

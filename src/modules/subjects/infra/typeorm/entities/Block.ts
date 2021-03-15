@@ -9,6 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
+import StudentActivity from '@modules/students/infra/typeorm/entities/StudentActivity';
 import Task from './Task';
 import SubjectClass from './SubjectClass';
 import Milestone from './Milestone';
@@ -24,6 +25,15 @@ class Block {
   @Column()
   milestone_id: string;
 
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @OneToMany(() => StudentActivity, studentActivity => studentActivity.block)
+  activities: StudentActivity[];
+
   @ManyToOne(() => Milestone, milestone => milestone.blocks)
   @JoinColumn({ name: 'milestone_id' })
   milestone: Milestone;
@@ -35,12 +45,6 @@ class Block {
     eager: true,
   })
   subjectclasses: SubjectClass[];
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
 }
 
 export default Block;

@@ -15,7 +15,7 @@ class SubjectRepository implements ISubjectsRepository {
   public async findById(id: string): Promise<Subject | undefined> {
     const subject = await this.ormRepository.findOne({
       where: { id },
-      relations: ['students'],
+      relations: ['students', 'milestones'],
     });
     return subject;
   }
