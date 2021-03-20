@@ -2,12 +2,14 @@ version: '3.3'
 
 services:
   app:
-    image: nexus.devops.ifrn.edu.br/{{ repository|lower }}:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     restart: always
     depends_on:
       - db
     ports:
-      - '{{ port }}:8080'
+      - '3000:3000'
     volumes:
       - .:/app/
       - /usr/app/node_modules
@@ -24,7 +26,7 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
     ports:
-      - '{{ port }}0:5432'
+      - '5432:5432'
     networks:
       - gametask-network
 
