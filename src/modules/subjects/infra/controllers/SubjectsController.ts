@@ -5,15 +5,27 @@ import { classToClass } from 'class-transformer';
 
 import SubjectsRepository from '@modules/subjects/infra/typeorm/repositories/SubjectsRepository';
 import TeachersRepository from '@modules/teachers/infra/typeorm/repositories/TeachersRepository';
-
-import CreateSubjectService from '@modules/subjects/services/CreateSubjectService';
-import AppError from '@shared/errors/AppError';
 import StudentsRepository from '@modules/students/infra/typeorm/repositories/StudentsRepository';
+
+import AppError from '@shared/errors/AppError';
+import IndexSubjectService from '@modules/subjects/services/IndexSubjectService';
+import CreateSubjectService from '@modules/subjects/services/CreateSubjectService';
 import Subject from '../typeorm/entities/Subject';
 
 export default class SubjectController {
+  public async index(request: Request, response: Response): Promise<Response> {
+    const { subjectId } = request.params;
+    const { student, teacher } = request.user;
+
+    const indexSubject = container.resolve(IndexSubjectService);
+
+    const subject = await indexSubject.execute({ subjectId, student, teacher });
+
+    return response.json(subject);
+  }
+
   public async create(request: Request, response: Response): Promise<Response> {
-    const { name, description } = request.body;
+    const { name, description, background_url } = request.body;
 
     const teachersRepository = new TeachersRepository();
     const teacher = await teachersRepository.findByUserId(request.user.id);
@@ -28,6 +40,7 @@ export default class SubjectController {
       name,
       description,
       teacher_id: teacher.id,
+      background_url,
     });
 
     return response.json(subject);

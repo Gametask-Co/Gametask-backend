@@ -24,7 +24,7 @@ import ITasksRepository from '@modules/subjects/repositories/ITasksRepository';
 import BlocksRepository from '@modules/subjects/infra/typeorm/repositories/BlocksRepository';
 import IBlocksRepository from '@modules/subjects/repositories/IBlocksRepository';
 
-import SubjectClassesRepository from '@modules/subjects/repositories/fakes/fakeSubjectClassesRepository';
+import SubjectClassesRepository from '@modules/subjects/infra/typeorm/repositories/SubjectClassesRepository';
 import ISubjectClassesRepository from '@modules/subjects/repositories/ISubjectClassesRepository';
 
 import IUsersTokensRepository from '@modules/users/repositories/IUsersTokensRepository';
