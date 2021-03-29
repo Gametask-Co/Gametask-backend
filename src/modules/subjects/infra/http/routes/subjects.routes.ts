@@ -26,6 +26,13 @@ subjectsRouter.get(
   subjectsController.show,
 );
 
+subjectsRouter.get(
+  '/:subjectId',
+  ensureAuthenticated,
+  ensureAccountType,
+  subjectsController.index,
+);
+
 // SubjectStudentsController
 
 subjectsRouter.post(
@@ -57,4 +64,5 @@ subjectsRouter.use('/tasks', TasksRoutes);
 // SUBJECT CLASSES
 
 subjectsRouter.use('/subjectclasses', SubjectClassesRoutes);
+
 export default subjectsRouter;

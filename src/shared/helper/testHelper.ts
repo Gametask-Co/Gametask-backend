@@ -19,7 +19,6 @@ import Student from '@modules/students/infra/typeorm/entities/Student';
 import Milestone from '@modules/subjects/infra/typeorm/entities/Milestone';
 import Block from '@modules/subjects/infra/typeorm/entities/Block';
 import Task from '@modules/subjects/infra/typeorm/entities/Task';
-import SubjectRepository from '@modules/subjects/infra/typeorm/repositories/SubjectsRepository';
 
 interface ICreateSubject {
   userData?: ICreateUser;
@@ -48,6 +47,11 @@ interface IAuthenticateUse {
   token: string;
   teacher?: Teacher;
   student?: Student;
+}
+
+interface IndexTeacher {
+  user_id?: string;
+  teacher_id?: string;
 }
 
 export const createUser = async ({
@@ -117,6 +121,23 @@ export const createTeacher = async ({
   });
 
   const teacher = await teachersRepository.create(user.id);
+
+  return teacher;
+};
+
+export const getTeacher = async ({
+  user_id,
+  teacher_id,
+}: IndexTeacher): Promise<Teacher | undefined> => {
+  const teachersRepository = new TeachersRepository();
+
+  let teacher: Teacher;
+
+  if (teacher_id) {
+    teacher = await teachersRepository.findById(teacher_id);
+  } else {
+    teacher = await teachersRepository.findByUserId(user_id);
+  }
 
   return teacher;
 };
@@ -217,7 +238,7 @@ export const joinStudentInSubject = async ({
   student_id: string;
   subject_id: string;
 }): Promise<void> => {
-  const subjectsRepository = new SubjectRepository();
+  const subjectsRepository = new SubjectsRepository();
   const studentsRepository = new StudentsRepository();
 
   const subject = await subjectsRepository.findById(subject_id);

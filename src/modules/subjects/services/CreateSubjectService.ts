@@ -10,6 +10,7 @@ interface RequestDTO {
   name: string;
   description: string;
   teacher_id: string;
+  background_url?: string;
 }
 
 @injectable()
@@ -32,6 +33,7 @@ class CreateSubjectService {
     name,
     description,
     teacher_id,
+    background_url,
   }: RequestDTO): Promise<Subject> {
     const teacher = await this.teachersRepository.findById(teacher_id);
 
@@ -43,6 +45,7 @@ class CreateSubjectService {
       name,
       description,
       teacher_id,
+      background_url,
     });
 
     return subject;
